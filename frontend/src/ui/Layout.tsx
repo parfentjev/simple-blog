@@ -1,35 +1,36 @@
-import { FC } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import Link from 'next/link'
+import { FC, ReactNode } from 'react'
+import './common.css'
 
-const Layout: FC = () => {
+const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <>
       <header>
         <nav>
           <ul>
             <li>
-              <NavLink to='/'>posts</NavLink>
+              <Link href='/'>posts</Link>
             </li>
             <li>
-              <NavLink to='mailto:contact@fakeplastictrees.ee'>contact</NavLink>
+              <Link href='mailto:contact@fakeplastictrees.ee'>contact</Link>
             </li>
           </ul>
         </nav>
       </header>
       <main>
         {/* {navigation.state === 'loading' && <p>Loading...</p>} */}
-        <Outlet />
+        {children}
       </main>
       <footer>
         <Link
           rel='license'
-          to='http://creativecommons.org/licenses/by/4.0/'
+          href='http://creativecommons.org/licenses/by/4.0/'
           target='_blank'
         >
           license
         </Link>
         <Link
-          to={process.env.REACT_APP_SERVICE_URL + `/swagger-ui/index.html#/`}
+          href={process.env.REACT_APP_SERVICE_URL + `/swagger-ui/index.html#/`}
           target='_blank'
         >
           api

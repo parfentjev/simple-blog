@@ -1,10 +1,10 @@
 import { FC } from 'react'
 import styles from './Post.module.css'
-import { NavLink } from 'react-router-dom'
 import PostPreview from '../../../api/models/PostPreview'
 import Post from '../../../api/models/Post'
 import { encodeTitle, jsonDateToString } from '../../../utils/string-utils'
 import MarkdownRenderer from './MarkdownRenderer'
+import Link from 'next/link'
 
 export const PostPreviewComponent: FC<{ post: PostPreview }> = ({ post }) => {
   const encodedTitle = encodeTitle(post.title)
@@ -13,9 +13,7 @@ export const PostPreviewComponent: FC<{ post: PostPreview }> = ({ post }) => {
   return (
     <article className={styles.post}>
       <h1 className={styles.title}>
-        <NavLink to={`/post/` + post.id + '/' + encodedTitle}>
-          {post.title}
-        </NavLink>
+        <Link href={`/post/` + post.id + '/' + encodedTitle}>{post.title}</Link>
       </h1>
       <div className={styles.text}>
         <MarkdownRenderer text={post.summary} />
@@ -23,9 +21,9 @@ export const PostPreviewComponent: FC<{ post: PostPreview }> = ({ post }) => {
       <div>
         <div className={styles.date}>{dateString}</div>
         <div className={styles.read}>
-          <NavLink to={`/post/` + post.id + '/' + encodedTitle}>
+          <Link href={`/post/` + post.id + '/' + encodedTitle}>
             Read more...
-          </NavLink>
+          </Link>
         </div>
       </div>
     </article>
@@ -39,9 +37,7 @@ export const PostComponent: FC<{ post: Post }> = ({ post }) => {
   return (
     <article className={styles.post}>
       <h1 className={styles.title}>
-        <NavLink to={`/post/` + post.id + '/' + encodedTitle}>
-          {post.title}
-        </NavLink>
+        <Link href={`/post/` + post.id + '/' + encodedTitle}>{post.title}</Link>
       </h1>
       <div className={styles.text}>
         <MarkdownRenderer text={post.text} />
