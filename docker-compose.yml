@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  backend:
+    image: sblog-backend
+    build: ./backend
+    ports:
+      - 8080:8080
+
+  frontend:
+    image: sblog-frontend
+    build: 
+      context: ./frontend
+    ports:
+      - 3000:3000
