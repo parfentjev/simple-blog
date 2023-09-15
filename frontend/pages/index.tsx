@@ -2,18 +2,19 @@ import { getPosts } from '@/api/api-executor'
 import Page from '@/api/models/Page'
 import PostPreview from '@/api/models/PostPreview'
 import PostListComponent from '@/ui/components/post/PostListComponent'
-import { FC, useEffect, useState } from 'react'
+import { GetServerSideProps } from 'next'
+import { FC } from 'react'
 
-const PostListPage: FC = () => {
-  const [page, setPage] = useState<Page<PostPreview>>()
+const PostListPage: FC<{ posts: Page<PostPreview> }> = ({ posts }) => {
+  return <PostListComponent posts={posts.items} />
+}
 
-  useEffect(() => {
-    getPosts().then((response) => setPage(response))
-  }, [])
+export const getServerSideProps: GetServerSideProps<{
+  posts: Page<PostPreview>
+}> = async () => {
+  const posts = await getPosts().then((response) => response)
 
-  return (
-    (page && <PostListComponent posts={page?.items} />) || <p>loading...</p>
-  )
+  return { props: { posts } }
 }
 
 export default PostListPage

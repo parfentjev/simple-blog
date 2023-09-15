@@ -5,9 +5,13 @@ import Page from './models/Page'
 import Post from './models/Post'
 
 export const getPosts = async () => {
-    return axios.get(endpoint(ApiEndpoints.POSTS)).then((response) => new Page<PostPreview>(response.data))
+  return await axios
+    .get<Page<PostPreview>>(endpoint(ApiEndpoints.POSTS))
+    .then((response) => response.data)
 }
 
 export const getPostById = async (postId: string) => {
-    return axios.get(endpoint(ApiEndpoints.POSTS_ID, postId)).then((response) => new Post(response.data))
+  return axios
+    .get<Post>(endpoint(ApiEndpoints.POSTS_ID, postId))
+    .then((response) => response.data)
 }

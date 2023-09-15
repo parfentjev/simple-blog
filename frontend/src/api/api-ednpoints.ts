@@ -1,4 +1,4 @@
-const baseUrl = process.env.NEXT_PUBLIC_SERVICE_URL
+const baseUrl = process.env.SERVICE_URL
 
 export enum ApiEndpoints {
   POSTS = '/posts',

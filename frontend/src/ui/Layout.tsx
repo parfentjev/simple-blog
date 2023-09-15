@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { FC, ReactNode } from 'react'
-import './common.css'
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -17,20 +16,21 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
           </ul>
         </nav>
       </header>
-      <main>
-        {/* {navigation.state === 'loading' && <p>Loading...</p>} */}
-        {children}
-      </main>
+      <main>{children}</main>
       <footer>
-        <Link
-          rel='license'
-          href='http://creativecommons.org/licenses/by/4.0/'
-          target='_blank'
-        >
+        <Link rel='license' href='/license'>
           license
         </Link>
         <Link
-          href={process.env.REACT_APP_SERVICE_URL + `/swagger-ui/index.html#/`}
+          href='https://codeberg.org/parfentjev/simple-blog'
+          target='_blank'
+        >
+          source
+        </Link>
+        <Link
+          href={
+            process.env.NEXTJS_PUBLIC_SERVICE_URL + `/swagger-ui/index.html#/`
+          }
           target='_blank'
         >
           api
