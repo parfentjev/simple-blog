@@ -1,7 +1,7 @@
 import { getPosts } from '@/api/api-executor'
 import Page from '@/api/models/Page'
 import PostPreview from '@/api/models/PostPreview'
-import PostListComponent from '@/ui/components/post/PostListComponent'
+import PostListComponent from '@/ui/post/PostListComponent'
 import { GetServerSideProps } from 'next'
 import { FC } from 'react'
 

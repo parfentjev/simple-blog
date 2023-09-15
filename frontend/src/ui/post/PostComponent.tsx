@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import styles from './Post.module.css'
-import PostPreview from '../../../api/models/PostPreview'
-import Post from '../../../api/models/Post'
-import { encodeTitle, jsonDateToString } from '../../../utils/string-utils'
+import PostPreview from '../../api/models/PostPreview'
+import Post from '../../api/models/Post'
+import { encodeTitle, jsonDateToString } from '../../utils/string-utils'
 import MarkdownRenderer from './MarkdownRenderer'
 import Link from 'next/link'
 

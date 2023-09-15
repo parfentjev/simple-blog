@@ -1,6 +1,6 @@
 import { getPostById } from '@/api/api-executor'
 import Post from '@/api/models/Post'
-import { PostComponent } from '@/ui/components/post/PostComponent'
+import { PostComponent } from '@/ui/post/PostComponent'
 import { GetServerSideProps } from 'next'
 import { FC } from 'react'
 

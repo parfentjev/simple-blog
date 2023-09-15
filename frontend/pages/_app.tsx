@@ -1,6 +1,6 @@
-import Layout from '@/ui/Layout'
+import Layout from '@/ui/layout/Layout'
 import { AppProps } from 'next/app'
-import './../src/ui/common.css'
+import './../src/ui/layout/common.css'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
