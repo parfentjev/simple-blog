@@ -1,4 +1,4 @@
-package org.simple.blog;
+package ee.fakeplastictrees.blog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

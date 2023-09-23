@@ -1,9 +1,9 @@
-package org.simple.blog.post;
+package ee.fakeplastictrees.blog.post;
 
-import org.simple.blog.post.model.Post;
-import org.simple.blog.post.model.PostDto;
-import org.simple.blog.post.model.PostPreviewDto;
-import org.simple.blog.core.Utils;
+import ee.fakeplastictrees.blog.core.Utils;
+import ee.fakeplastictrees.blog.post.model.Post;
+import ee.fakeplastictrees.blog.post.model.PostDto;
+import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
 
 public class PostMappers {
     public PostPreviewDto postToPostPreviewDto(Post post) {

@@ -1,11 +1,11 @@
-package org.simple.blog.post.service;
+package ee.fakeplastictrees.blog.post.service;
 
-import org.simple.blog.core.model.PageDto;
-import org.simple.blog.post.model.Post;
-import org.simple.blog.post.model.PostDto;
-import org.simple.blog.post.model.PostPreviewDto;
-import org.simple.blog.post.repository.PostRepository;
-import org.simple.blog.core.Utils;
+import ee.fakeplastictrees.blog.core.Utils;
+import ee.fakeplastictrees.blog.core.model.PageDto;
+import ee.fakeplastictrees.blog.post.model.Post;
+import ee.fakeplastictrees.blog.post.model.PostDto;
+import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
+import ee.fakeplastictrees.blog.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +22,7 @@ public class PostService {
 
     public PageDto<PostPreviewDto> getPosts(Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("date").descending());
-        Page<Post> postsPage = postRepository.findAll(pageRequest);
+        Page<Post> postsPage = postRepository.findByVisibleTrue(pageRequest);
 
         List<PostPreviewDto> postPreviewDtoList = postsPage
                 .stream()
@@ -37,6 +37,6 @@ public class PostService {
     }
 
     public Optional<PostDto> getPost(String postId) {
-        return postRepository.findById(postId).map(post -> Utils.mappers().post().postToPostDto(post));
+        return postRepository.findByIdAndVisibleTrue(postId).map(post -> Utils.mappers().post().postToPostDto(post));
     }
 }

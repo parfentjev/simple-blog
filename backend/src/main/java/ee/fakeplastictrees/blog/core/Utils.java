@@ -1,4 +1,4 @@
-package org.simple.blog.core;
+package ee.fakeplastictrees.blog.core;
 
 public class Utils {
     public static Builders builders() {

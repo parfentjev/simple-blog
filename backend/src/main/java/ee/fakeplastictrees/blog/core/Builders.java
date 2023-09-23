@@ -1,8 +1,8 @@
-package org.simple.blog.core;
+package ee.fakeplastictrees.blog.core;
 
-import org.simple.blog.core.model.PageDto;
-import org.simple.blog.core.response.ErrorResponse;
-import org.simple.blog.post.PostBuilders;
+import ee.fakeplastictrees.blog.post.PostBuilders;
+import ee.fakeplastictrees.blog.core.model.PageDto;
+import ee.fakeplastictrees.blog.core.response.ErrorResponse;
 
 public class Builders {
     public ErrorResponse.ErrorResponseBuilder errorResponse() {

@@ -1,19 +1,19 @@
-package org.simple.blog.post.model;
+package ee.fakeplastictrees.blog.core.model;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PostPreviewDto {
-    String id;
+public class PageDto<T> {
+    Integer page;
 
-    String title;
+    Integer totalPages;
 
-    String summary;
-
-    String date;
+    List<T> items;
 }

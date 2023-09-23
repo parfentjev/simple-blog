@@ -1,7 +1,7 @@
-package org.simple.blog.post;
+package ee.fakeplastictrees.blog.post;
 
-import org.simple.blog.post.model.PostDto;
-import org.simple.blog.post.model.PostPreviewDto;
+import ee.fakeplastictrees.blog.post.model.PostDto;
+import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
 
 public class PostBuilders {
     public PostDto.PostDtoBuilder postDto() {

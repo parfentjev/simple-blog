@@ -1,4 +1,4 @@
-package org.simple.blog.core.configuration;
+package ee.fakeplastictrees.blog.core.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

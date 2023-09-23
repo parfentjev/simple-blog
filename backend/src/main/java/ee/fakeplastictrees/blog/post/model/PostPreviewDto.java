@@ -1,24 +1,19 @@
-package org.simple.blog.post.model;
+package ee.fakeplastictrees.blog.post.model;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document("posts")
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Post {
-    @Id
+public class PostPreviewDto {
     String id;
 
     String title;
 
     String summary;
 
-    String text;
-
     String date;
 }
-

@@ -1,6 +1,6 @@
-package org.simple.blog.core;
+package ee.fakeplastictrees.blog.core;
 
-import org.simple.blog.post.PostMappers;
+import ee.fakeplastictrees.blog.post.PostMappers;
 
 public class Mappers {
     public PostMappers post() {

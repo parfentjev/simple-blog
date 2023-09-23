@@ -1,4 +1,4 @@
-package org.simple.blog.core.response;
+package ee.fakeplastictrees.blog.core.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,9 +1,9 @@
-package org.simple.blog.post.controller;
+package ee.fakeplastictrees.blog.post.controller;
 
-import org.simple.blog.core.model.PageDto;
-import org.simple.blog.post.model.PostDto;
-import org.simple.blog.post.model.PostPreviewDto;
-import org.simple.blog.post.service.PostService;
+import ee.fakeplastictrees.blog.core.model.PageDto;
+import ee.fakeplastictrees.blog.post.model.PostDto;
+import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
+import ee.fakeplastictrees.blog.post.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

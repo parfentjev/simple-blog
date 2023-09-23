@@ -1,13 +1,13 @@
-package org.simple.blog.core.configuration;
+package ee.fakeplastictrees.blog.core.configuration;
 
-import org.simple.blog.core.response.ErrorResponse;
+import ee.fakeplastictrees.blog.core.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static org.simple.blog.core.Utils.builders;
+import static ee.fakeplastictrees.blog.core.Utils.builders;
 
 @RestControllerAdvice
 public class ResponseEntityExceptionHandler {
