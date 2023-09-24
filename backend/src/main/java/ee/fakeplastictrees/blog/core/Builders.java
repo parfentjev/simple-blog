@@ -3,6 +3,7 @@ package ee.fakeplastictrees.blog.core;
 import ee.fakeplastictrees.blog.post.PostBuilders;
 import ee.fakeplastictrees.blog.core.model.PageDto;
 import ee.fakeplastictrees.blog.core.response.ErrorResponse;
+import ee.fakeplastictrees.blog.user.UserBuilders;
 
 public class Builders {
     public ErrorResponse.ErrorResponseBuilder errorResponse() {
@@ -15,5 +16,9 @@ public class Builders {
 
     public PostBuilders post() {
         return new PostBuilders();
+    }
+
+    public UserBuilders user() {
+        return new UserBuilders();
     }
 }

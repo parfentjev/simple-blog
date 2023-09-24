@@ -1,5 +1,6 @@
 package ee.fakeplastictrees.blog.post.controller;
 
+import ee.fakeplastictrees.blog.core.exceptions.ResourceNotFoundException;
 import ee.fakeplastictrees.blog.core.model.PageDto;
 import ee.fakeplastictrees.blog.post.model.PostDto;
 import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
@@ -11,15 +12,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping({"/posts"})
+@RequestMapping("/posts")
 public class PostController {
     @Autowired
     private PostService postService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageDto<PostPreviewDto>> getPosts(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size", defaultValue = "10") Integer size) {
-        if (size > 10) {
-            size = 10;
+        if (size > 100) {
+            size = 100;
         }
 
         return new ResponseEntity<>(postService.getPosts(page, size), HttpStatus.OK);
@@ -29,7 +30,7 @@ public class PostController {
     public ResponseEntity<PostDto> getPostBy(@PathVariable("postId") String postId) {
         return postService.getPost(postId)
                 .map(postDto -> new ResponseEntity<>(postDto, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Post", postId));
 
     }
 }

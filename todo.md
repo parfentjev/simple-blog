@@ -6,10 +6,10 @@
   - Feed: return only visible=true.
   - by ID: return only visible=true.
   - `db.posts.updateMany({}, { $set: { visible: true } })`
-- Token generation by username:password.
+- ✔️ Token generation by username:password (`token.secret`, `token.issuer`, `token.lifespan`)
+- Categories.
 - PUT posts.
 - DELETE posts.
-- Categories.
 - Add service tests.
 - Update frontend to support editing and categories.
 
