@@ -35,19 +35,19 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        try {
-            String token = getTokenFromRequest(httpServletRequest).orElseThrow(() -> new JWTVerificationException(""));
-            DecodedJWT decodedToken = userService.decodeToken(token).orElseThrow(() -> new JWTVerificationException(""));
-            Claim username = Optional.ofNullable(decodedToken.getClaim("username")).orElseThrow(() -> new JWTVerificationException(""));
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username.asString());
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-            SecurityContextHolder.getContext().setAuthentication(authToken);
-        } catch (Exception e) {
-            resolver.resolveException(httpServletRequest, httpServletResponse, null, e);
+        getTokenFromRequest(httpServletRequest).ifPresent(token -> {
+            try {
+                DecodedJWT decodedToken = userService.decodeToken(token).orElseThrow(() -> new JWTVerificationException("invalid token"));
+                Claim username = Optional.ofNullable(decodedToken.getClaim("username")).orElseThrow(() -> new JWTVerificationException("missing username"));
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username.asString());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            } catch (Exception e) {
+                resolver.resolveException(httpServletRequest, httpServletResponse, null, e);
+            }
+        });
 
-            return;
-        }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }

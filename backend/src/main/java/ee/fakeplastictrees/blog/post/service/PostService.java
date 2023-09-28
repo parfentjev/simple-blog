@@ -1,6 +1,5 @@
 package ee.fakeplastictrees.blog.post.service;
 
-import ee.fakeplastictrees.blog.core.Utils;
 import ee.fakeplastictrees.blog.core.model.PageDto;
 import ee.fakeplastictrees.blog.post.model.Post;
 import ee.fakeplastictrees.blog.post.model.PostDto;
@@ -15,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static ee.fakeplastictrees.blog.core.Utils.builders;
+import static ee.fakeplastictrees.blog.core.Utils.mappers;
+
 @Service
 public class PostService {
     @Autowired
@@ -26,10 +28,10 @@ public class PostService {
 
         List<PostPreviewDto> postPreviewDtoList = postsPage
                 .stream()
-                .map(post -> Utils.mappers().post().postToPostPreviewDto(post))
+                .map(post -> mappers().post().postToPostPreviewDto(post))
                 .toList();
 
-        return Utils.builders().<PostPreviewDto>pageDto()
+        return builders().<PostPreviewDto>pageDto()
                 .page(postsPage.getNumber() + 1)
                 .totalPages(postsPage.getTotalPages())
                 .items(postPreviewDtoList)
@@ -37,6 +39,6 @@ public class PostService {
     }
 
     public Optional<PostDto> getPost(String postId) {
-        return postRepository.findByIdAndVisibleTrue(postId).map(post -> Utils.mappers().post().postToPostDto(post));
+        return postRepository.findByIdAndVisibleTrue(postId).map(post -> mappers().post().postToPostDto(post));
     }
 }

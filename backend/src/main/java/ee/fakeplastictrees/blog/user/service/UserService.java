@@ -4,9 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import ee.fakeplastictrees.blog.core.exceptions.ResourceAlreadyExistsException;
 import ee.fakeplastictrees.blog.user.controller.request.PostUsersRequest;
-import ee.fakeplastictrees.blog.user.exception.UserAlreadyExistsException;
 import ee.fakeplastictrees.blog.user.model.TokenDto;
+import ee.fakeplastictrees.blog.user.model.User;
 import ee.fakeplastictrees.blog.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import static ee.fakeplastictrees.blog.core.Utils.builders;
-import static java.lang.String.format;
 
 @Service
 public class UserService {
@@ -42,7 +42,7 @@ public class UserService {
 
     public TokenDto createUser(PostUsersRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException(format("User with username '%s' already exists.", request.getUsername()));
+            throw new ResourceAlreadyExistsException(User.class, request.getUsername());
         }
 
         userRepository.save(builders().user().user()

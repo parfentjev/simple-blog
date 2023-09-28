@@ -2,14 +2,16 @@ package ee.fakeplastictrees.blog.core.configuration;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import ee.fakeplastictrees.blog.core.exceptions.ResourceAlreadyExistsException;
+import ee.fakeplastictrees.blog.core.exceptions.ResourceNotFoundException;
 import ee.fakeplastictrees.blog.core.response.ErrorResponse;
-import ee.fakeplastictrees.blog.user.exception.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,7 +48,12 @@ public class ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> userAlreadyExistsException(UserAlreadyExistsException e) {
+    public ResponseEntity<ErrorResponse> userAlreadyExistsException(ResourceAlreadyExistsException e) {
+        return errorResponse(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> resourceNotFoundException(ResourceNotFoundException e) {
         return errorResponse(e.getMessage(), HttpStatus.CONFLICT);
     }
 
@@ -62,7 +69,7 @@ public class ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> jwtVerificationException(JWTVerificationException e) {
-        return errorResponse("Token is not valid.", HttpStatus.UNAUTHORIZED);
+        return errorResponse("Authentication error: " + e.getMessage() + ".", HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
@@ -73,6 +80,11 @@ public class ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> httpMessageNotReadableException(HttpMessageNotReadableException e) {
         return errorResponse("Failed to deserialize the request body.", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        return errorResponse("Method is not supported.", HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     private ResponseEntity<ErrorResponse> errorResponse(String message, HttpStatus httpStatus) {

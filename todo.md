@@ -7,7 +7,8 @@
   - by ID: return only visible=true.
   - `db.posts.updateMany({}, { $set: { visible: true } })`
 - ✔️ Token generation by username:password (`token.secret`, `token.issuer`, `token.lifespan`)
-- Categories.
+- ✔️ Categories.
+  - `db.posts.updateMany({}, { $set: { category: "Miscellaneous" } })`
 - PUT posts.
 - DELETE posts.
 - Add service tests.

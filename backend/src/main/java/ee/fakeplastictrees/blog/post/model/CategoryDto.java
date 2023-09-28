@@ -8,16 +8,8 @@ import lombok.experimental.FieldDefaults;
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PostDto {
+public class CategoryDto {
     String id;
 
-    String title;
-
-    String summary;
-
-    String text;
-
-    String date;
-
-    String category;
+    String name;
 }

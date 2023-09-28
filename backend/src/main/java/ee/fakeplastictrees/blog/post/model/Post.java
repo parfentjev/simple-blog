@@ -22,5 +22,7 @@ public class Post {
     String date;
 
     Boolean visible;
+
+    String category;
 }
 

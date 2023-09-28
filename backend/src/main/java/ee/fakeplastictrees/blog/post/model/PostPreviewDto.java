@@ -16,4 +16,6 @@ public class PostPreviewDto {
     String summary;
 
     String date;
+
+    String category;
 }

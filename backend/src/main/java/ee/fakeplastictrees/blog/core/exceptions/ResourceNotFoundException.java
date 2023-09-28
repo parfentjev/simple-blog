@@ -4,10 +4,10 @@ import static java.lang.String.format;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String resource, String resourceIdentifier) {
-        super(format("%s was not found by '%s'", resource, resourceIdentifier));
+        super(format("%s was not found by identifier '%s'", resource, resourceIdentifier));
     }
 
-    public ResourceNotFoundException(Object resource, String resourceIdentifier) {
-        super(format("%s was not found by '%s'", resource.getClass().getSimpleName(), resourceIdentifier));
+    public ResourceNotFoundException(Class<?> resource, String resourceIdentifier) {
+        super(format("%s was not found by identifier '%s'", resource.getSimpleName(), resourceIdentifier));
     }
 }
