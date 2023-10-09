@@ -1,15 +1,13 @@
-package ee.fakeplastictrees.blog.post.controller.request;
+package ee.fakeplastictrees.blog.category.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PutPostsCategoriesRequest {
+public class PostCategoriesRequest {
     @NotBlank
-    @Size(min = 1, max = 32)
     String name;
 }

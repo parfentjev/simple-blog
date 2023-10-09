@@ -1,6 +1,8 @@
 package ee.fakeplastictrees.blog.post;
 
-import ee.fakeplastictrees.blog.post.model.*;
+import ee.fakeplastictrees.blog.post.model.Post;
+import ee.fakeplastictrees.blog.post.model.PostDto;
+import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
 
 import static ee.fakeplastictrees.blog.core.Utils.builders;
 
@@ -22,14 +24,20 @@ public class PostMappers {
                 .summary(post.getSummary())
                 .text(post.getText())
                 .date(post.getDate())
+                .visible(post.getVisible())
                 .category(post.getCategory())
                 .build();
     }
 
-    public CategoryDto categoryToCategoryDto(Category category) {
-        return builders().post().categoryDto()
-                .id(category.getId())
-                .name(category.getName())
+    public Post postDtoToPost(PostDto post) {
+        return builders().post().post()
+                .id(post.getId())
+                .title(post.getTitle())
+                .summary(post.getSummary())
+                .text(post.getText())
+                .date(post.getDate())
+                .visible(post.getVisible())
+                .category(post.getCategory())
                 .build();
     }
 }

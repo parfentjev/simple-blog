@@ -1,5 +1,6 @@
 package ee.fakeplastictrees.blog.post.service;
 
+import ee.fakeplastictrees.blog.core.exceptions.ResourceNotFoundException;
 import ee.fakeplastictrees.blog.core.model.PageDto;
 import ee.fakeplastictrees.blog.post.model.Post;
 import ee.fakeplastictrees.blog.post.model.PostDto;
@@ -40,5 +41,23 @@ public class PostService {
 
     public Optional<PostDto> getPost(String postId) {
         return postRepository.findByIdAndVisibleTrue(postId).map(post -> mappers().post().postToPostDto(post));
+    }
+
+    public PostDto createPost(PostDto postDto) {
+        return mappers().post().postToPostDto(postRepository.save(mappers().post().postDtoToPost(postDto)));
+    }
+
+    public PostDto updatePost(PostDto postDto) {
+        if (!postRepository.existsById(postDto.getId())) {
+            throw new ResourceNotFoundException(Post.class, postDto.getId());
+        }
+
+        return mappers().post().postToPostDto(postRepository.save(mappers().post().postDtoToPost(postDto)));
+    }
+
+    public void deletePost(String postId) {
+        postRepository.findById(postId).ifPresentOrElse(post -> postRepository.delete(post), () -> {
+            throw new ResourceNotFoundException(Post.class, postId);
+        });
     }
 }

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -19,5 +21,7 @@ public class PostDto {
 
     String date;
 
-    String category;
+    Boolean visible;
+
+    Set<String> category;
 }

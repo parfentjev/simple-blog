@@ -1,4 +1,4 @@
-package ee.fakeplastictrees.blog.post.model;
+package ee.fakeplastictrees.blog.category.model;
 
 import lombok.AccessLevel;
 import lombok.Builder;

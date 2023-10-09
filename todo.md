@@ -9,9 +9,8 @@
 - ✔️ Token generation by username:password (`token.secret`, `token.issuer`, `token.lifespan`)
 - ✔️ Categories.
   - `db.posts.updateMany({}, { $set: { category: "Miscellaneous" } })`
-- PUT posts.
-- DELETE posts.
-- Add service tests.
+- ✔️ POST/PUT/DELETE posts.
+- Add controller and service tests.
 - Update frontend to support editing and categories.
 
 ## Part 2 - content provision

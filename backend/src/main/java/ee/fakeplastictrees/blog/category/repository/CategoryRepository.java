@@ -1,6 +1,6 @@
-package ee.fakeplastictrees.blog.post.repository;
+package ee.fakeplastictrees.blog.category.repository;
 
-import ee.fakeplastictrees.blog.post.model.Category;
+import ee.fakeplastictrees.blog.category.model.Category;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
