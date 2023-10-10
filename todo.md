@@ -10,7 +10,8 @@
 - ✔️ Categories.
   - `db.posts.updateMany({}, { $set: { category: "Miscellaneous" } })`
 - ✔️ POST/PUT/DELETE posts.
-- Add controller and service tests.
+- Add service tests.
+- Add controller tests.
 - Update frontend to support editing and categories.
 
 ## Part 2 - content provision

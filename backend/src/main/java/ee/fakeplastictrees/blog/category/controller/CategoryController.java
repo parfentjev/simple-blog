@@ -18,7 +18,7 @@ import static ee.fakeplastictrees.blog.core.Utils.builders;
 
 @RestController
 @RequestMapping("/categories")
-public class CategoriesController {
+public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 

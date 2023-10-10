@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static ee.fakeplastictrees.blog.core.Utils.mappers;
+import static ee.fakeplastictrees.blog.testsupport.TestSupport.categoryTestSupport;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,8 +31,8 @@ public class CategoryServiceTest {
 
     @Test
     public void getCategories() {
-        Category category1 = CategoryTestSupport.generateCategory();
-        Category category2 = CategoryTestSupport.generateCategory();
+        Category category1 = categoryTestSupport().generateCategory();
+        Category category2 = categoryTestSupport().generateCategory();
 
         when(categoryRepository.findAll()).thenReturn(Arrays.asList(category1, category2));
 
@@ -43,7 +44,7 @@ public class CategoryServiceTest {
 
     @Test
     public void createCategory() {
-        CategoryDto inputCategoryDto = CategoryTestSupport.generateCategoryDto();
+        CategoryDto inputCategoryDto = categoryTestSupport().generateCategoryDto();
         inputCategoryDto.setId(null);
         Category inputCategory = mappers().category().categoryDtoToCategory(inputCategoryDto);
         Category outputCategory = mappers().category().categoryDtoToCategory(inputCategoryDto);
@@ -58,8 +59,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void putCategory() {
-        CategoryDto inputCategoryDto = CategoryTestSupport.generateCategoryDto();
+    public void updateCategory() {
+        CategoryDto inputCategoryDto = categoryTestSupport().generateCategoryDto();
         Category category = mappers().category().categoryDtoToCategory(inputCategoryDto);
 
         when(categoryRepository.existsById(category.getId())).thenReturn(true);
@@ -72,8 +73,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void putCategoryThatDoesNotExist() {
-        CategoryDto categoryDto = CategoryTestSupport.generateCategoryDto();
+    public void updateCategoryThatDoesNotExist() {
+        CategoryDto categoryDto = categoryTestSupport().generateCategoryDto();
 
         when(categoryRepository.existsById(categoryDto.getId())).thenReturn(false);
 
@@ -85,7 +86,7 @@ public class CategoryServiceTest {
     @Test
     public void deleteCategory() {
         String categoryId = randomAlphanumeric(10);
-        Category category = CategoryTestSupport.generateCategory();
+        Category category = categoryTestSupport().generateCategory();
 
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
 
