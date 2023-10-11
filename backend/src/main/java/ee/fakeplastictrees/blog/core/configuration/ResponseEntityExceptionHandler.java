@@ -80,7 +80,7 @@ public class ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        return errorResponse("Failed to deserialize the request body.", HttpStatus.BAD_REQUEST);
+        return errorResponse("Invalid request body.", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler

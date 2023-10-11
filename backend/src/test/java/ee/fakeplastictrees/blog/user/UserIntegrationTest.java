@@ -4,12 +4,14 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import ee.fakeplastictrees.blog.testsupport.AbstractIntegrationTest;
-import ee.fakeplastictrees.blog.testsupport.ApiExecutor;
-import ee.fakeplastictrees.blog.testsupport.TestSupport;
+import ee.fakeplastictrees.blog.testsupport.TestCredentials;
 import ee.fakeplastictrees.blog.user.controller.request.PostUsersRequest;
 import ee.fakeplastictrees.blog.user.controller.request.PostUsersTokenRequest;
 import ee.fakeplastictrees.blog.user.model.UserRole;
+import io.restassured.http.ContentType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +21,6 @@ import java.time.Instant;
 import static ee.fakeplastictrees.blog.core.Utils.builders;
 import static org.assertj.core.api.Assertions.assertThat;
 
-// todo: do as in CategoryIntegrationTest
 public class UserIntegrationTest extends AbstractIntegrationTest {
     @Value("${token.secret}")
     private String tokenSecret;
@@ -32,32 +33,91 @@ public class UserIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void postUsers() {
-        ApiExecutor apiExecutor = TestSupport.apiExecutor(baseUrl());
+        PostUsersRequest request = postUsersRequest();
 
-        PostUsersRequest request = builders().user().request().postUsers()
-                .username(RandomStringUtils.randomAlphanumeric(10))
-                .password(RandomStringUtils.randomAlphanumeric(10))
-                .role(UserRole.EDITOR)
-                .build();
+        adminExecutor().postUsers(request)
+                .statusCode(201)
+                .responseConsumer(response -> {
+                    assertThat(response.getUsername()).isEqualTo(request.getUsername());
+                    assertThat(response.getRole()).isEqualTo(request.getRole());
+                });
+    }
 
-        apiExecutor.postUsers(request)
-                .statusCode(401); // todo: execute with ADMIN role and verify the token
+    @Test
+    public void postUsersAsAnonymous() {
+        anonymousExecutor().postUsers(postUsersRequest()).statusCode(401);
+    }
+
+    @Test
+    public void postUsersAsEditor() {
+        editorExecutor().postUsers(postUsersRequest()).statusCode(401);
+    }
+
+    @Test
+    public void postUsersWithNoBody() {
+        adminExecutor().postUsers(null).statusCode(415);
+    }
+
+    @Test
+    public void postUsersWithNullUsername() {
+        PostUsersRequest request = postUsersRequest();
+        request.setUsername(null);
+
+        adminExecutor().postUsers(request).statusCode(400);
+    }
+
+    @Test
+    public void postUsersWithBlankUsername() {
+        PostUsersRequest request = postUsersRequest();
+        request.setUsername(" ");
+
+        adminExecutor().postUsers(request).statusCode(400);
+    }
+
+    @Test
+    public void postUsersWithNullPassword() {
+        PostUsersRequest request = postUsersRequest();
+        request.setPassword(null);
+
+        adminExecutor().postUsers(request).statusCode(400);
+    }
+
+    @Test
+    public void postUsersWithBlankPassword() {
+        PostUsersRequest request = postUsersRequest();
+        request.setPassword(" ");
+
+        adminExecutor().postUsers(request).statusCode(400);
+    }
+
+    @Test
+    public void postUsersWithNullRole() {
+        PostUsersRequest request = postUsersRequest();
+        request.setRole(null);
+
+        adminExecutor().postUsers(request).statusCode(400);
+    }
+
+    @Test
+    public void postUsersWithNotExistingRole() {
+        PostUsersRequest request = postUsersRequest();
+        ObjectNode objectNode = new ObjectMapper().valueToTree(request);
+        objectNode.put("role", "NOT_EXISTING_ROLE");
+
+        adminExecutor()
+                .requestBuilder(r -> r.body(objectNode).contentType(ContentType.JSON).post("/users"), Void.class)
+                .statusCode(400)
+                .message("Invalid request body.");
     }
 
     @Test
     public void postUsersToken() {
-        ApiExecutor apiExecutor = TestSupport.apiExecutor(baseUrl());
-
-        PostUsersTokenRequest request = builders().user().request().postUsersToken()
-                .username("editor")
-                .password("test")
-                .build();
-
+        PostUsersTokenRequest request = postUsersTokenRequest();
         Instant targetExpirationDate = Instant.now().plusMillis(tokenLifespan);
         long minExpirationDate = targetExpirationDate.minusSeconds(10).toEpochMilli();
         long maxExpirationDate = targetExpirationDate.plusSeconds(10).toEpochMilli();
 
-        apiExecutor.postUsersToken(request)
+        anonymousExecutor().postUsersToken(request)
                 .statusCode(201)
                 .responseConsumer(response -> {
                     Algorithm algorithm = Algorithm.HMAC256(tokenSecret);
@@ -70,5 +130,36 @@ public class UserIntegrationTest extends AbstractIntegrationTest {
                     assertThat(expirationDate).isBetween(minExpirationDate, maxExpirationDate);
                     assertThat(response.getExpirationDate()).isEqualTo(expirationDate);
                 });
+    }
+
+    @Test
+    public void postUsersTokenInvalidUsername() {
+        PostUsersTokenRequest request = postUsersTokenRequest();
+        request.setUsername(RandomStringUtils.randomAlphanumeric(10));
+
+        anonymousExecutor().postUsersToken(request).statusCode(401);
+    }
+
+    @Test
+    public void postUsersTokenInvalidPassword() {
+        PostUsersTokenRequest request = postUsersTokenRequest();
+        request.setPassword(RandomStringUtils.randomAlphanumeric(10));
+
+        anonymousExecutor().postUsersToken(request).statusCode(401);
+    }
+
+    private PostUsersRequest postUsersRequest() {
+        return builders().user().request().postUsers()
+                .username(RandomStringUtils.randomAlphanumeric(10))
+                .password(RandomStringUtils.randomAlphanumeric(10))
+                .role(UserRole.EDITOR)
+                .build();
+    }
+
+    private PostUsersTokenRequest postUsersTokenRequest() {
+        return builders().user().request().postUsersToken()
+                .username(TestCredentials.EDITOR.getUsername())
+                .password(TestCredentials.EDITOR.getPassword())
+                .build();
     }
 }

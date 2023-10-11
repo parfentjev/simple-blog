@@ -9,6 +9,7 @@ public class UserMappers {
     public UserDto userToUserDto(User user) {
         return builders().user().userDto()
                 .username(user.getUsername())
+                .role(user.getRole())
                 .build();
     }
 }

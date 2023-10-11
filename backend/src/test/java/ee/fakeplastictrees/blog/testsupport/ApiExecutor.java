@@ -6,8 +6,12 @@ import ee.fakeplastictrees.blog.category.model.CategoryDto;
 import ee.fakeplastictrees.blog.user.controller.request.PostUsersRequest;
 import ee.fakeplastictrees.blog.user.controller.request.PostUsersTokenRequest;
 import ee.fakeplastictrees.blog.user.model.TokenDto;
+import ee.fakeplastictrees.blog.user.model.UserDto;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+
+import java.util.function.Function;
 
 import static io.restassured.RestAssured.given;
 
@@ -43,8 +47,12 @@ public class ApiExecutor {
         return restAssured().body(object).contentType(ContentType.JSON);
     }
 
-    public ExtendedResponse<TokenDto> postUsers(PostUsersRequest request) {
-        return new ExtendedResponse<>(restAssured(request).post("/users"), TokenDto.class);
+    public <T> ExtendedResponse<T> requestBuilder(Function<RequestSpecification, Response> responseFunction, Class<T> responseClass) {
+        return new ExtendedResponse<>(responseFunction.apply(restAssured()), responseClass);
+    }
+
+    public ExtendedResponse<UserDto> postUsers(PostUsersRequest request) {
+        return new ExtendedResponse<>(restAssured(request).post("/users"), UserDto.class);
     }
 
     public ExtendedResponse<TokenDto> postUsersToken(PostUsersTokenRequest request) {

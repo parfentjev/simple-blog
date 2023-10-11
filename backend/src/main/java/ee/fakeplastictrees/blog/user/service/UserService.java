@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 import ee.fakeplastictrees.blog.core.exceptions.ResourceAlreadyExistsException;
 import ee.fakeplastictrees.blog.user.model.TokenDto;
 import ee.fakeplastictrees.blog.user.model.User;
+import ee.fakeplastictrees.blog.user.model.UserDto;
 import ee.fakeplastictrees.blog.user.model.UserRole;
 import ee.fakeplastictrees.blog.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import static ee.fakeplastictrees.blog.core.Utils.builders;
+import static ee.fakeplastictrees.blog.core.Utils.mappers;
 
 @Service
 public class UserService {
@@ -40,18 +42,18 @@ public class UserService {
     @Value("${token.issuer}")
     private String tokenIssuer;
 
-    public TokenDto createUser(String username, String password, UserRole role) {
+    public UserDto createUser(String username, String password, UserRole role) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new ResourceAlreadyExistsException(User.class, username);
         }
 
-        userRepository.save(builders().user().user()
+        User user = userRepository.save(builders().user().user()
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .role(role)
                 .build());
 
-        return createToken(username, password);
+        return mappers().user().userToUserDto(user);
     }
 
     public TokenDto createToken(String username, String password) {

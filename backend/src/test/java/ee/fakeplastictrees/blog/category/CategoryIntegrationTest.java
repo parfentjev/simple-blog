@@ -153,11 +153,11 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void putCategoriesWithEmptyName() {
+    public void putCategoriesWithBlankName() {
         CategoryDto categoryDto = postCategories(postCategoriesRequest());
 
         PutCategoriesRequest request = putCategoriesRequest(categoryDto);
-        request.setName("");
+        request.setName(" ");
 
         editorExecutor().putCategoriesById(categoryDto.getId(), request).statusCode(400);
 

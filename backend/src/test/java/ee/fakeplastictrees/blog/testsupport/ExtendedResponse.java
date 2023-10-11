@@ -1,9 +1,12 @@
 package ee.fakeplastictrees.blog.testsupport;
 
+import ee.fakeplastictrees.blog.core.response.ErrorResponse;
 import io.restassured.response.Response;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExtendedResponse<T> {
     private final Response response;
@@ -24,6 +27,12 @@ public class ExtendedResponse<T> {
 
     public ExtendedResponse<T> responseConsumer(Consumer<T> consumer) {
         consumer.accept(response.as(responseClass));
+
+        return this;
+    }
+
+    public ExtendedResponse<T> message(String expectedMessage) {
+        assertThat(response.as(ErrorResponse.class).getMessage()).isEqualTo(expectedMessage);
 
         return this;
     }

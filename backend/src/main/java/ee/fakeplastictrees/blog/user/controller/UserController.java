@@ -4,6 +4,7 @@ import ee.fakeplastictrees.blog.core.annotation.AuthorizedUserManager;
 import ee.fakeplastictrees.blog.user.controller.request.PostUsersRequest;
 import ee.fakeplastictrees.blog.user.controller.request.PostUsersTokenRequest;
 import ee.fakeplastictrees.blog.user.model.TokenDto;
+import ee.fakeplastictrees.blog.user.model.UserDto;
 import ee.fakeplastictrees.blog.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,10 @@ public class UserController {
 
     @PostMapping
     @AuthorizedUserManager
-    public ResponseEntity<TokenDto> createUser(@Valid @RequestBody PostUsersRequest request) {
-        TokenDto tokenDto = userService.createUser(request.getUsername(), request.getPassword(), request.getRole());
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody PostUsersRequest request) {
+        UserDto userDto = userService.createUser(request.getUsername(), request.getPassword(), request.getRole());
 
-        return new ResponseEntity<>(tokenDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 
     @PostMapping("/token")
