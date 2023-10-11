@@ -1,14 +1,11 @@
 package ee.fakeplastictrees.blog.testsupport;
 
-import ee.fakeplastictrees.blog.category.CategoryTestSupport;
-import ee.fakeplastictrees.blog.post.PostTestSupport;
-
 public class TestSupport {
-    public static CategoryTestSupport categoryTestSupport() {
-        return new CategoryTestSupport();
+    public static ApiExecutor apiExecutor(String baseUrl) {
+        return new ApiExecutor(baseUrl);
     }
 
-    public static PostTestSupport postTestSupport() {
-        return new PostTestSupport();
+    public static ApiExecutor apiExecutor(String baseUrl, String token) {
+        return new ApiExecutor(baseUrl, token);
     }
 }

@@ -5,9 +5,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import ee.fakeplastictrees.blog.core.exceptions.ResourceAlreadyExistsException;
-import ee.fakeplastictrees.blog.user.controller.request.PostUsersRequest;
 import ee.fakeplastictrees.blog.user.model.TokenDto;
 import ee.fakeplastictrees.blog.user.model.User;
+import ee.fakeplastictrees.blog.user.model.UserRole;
 import ee.fakeplastictrees.blog.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,18 +40,18 @@ public class UserService {
     @Value("${token.issuer}")
     private String tokenIssuer;
 
-    public TokenDto createUser(PostUsersRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new ResourceAlreadyExistsException(User.class, request.getUsername());
+    public TokenDto createUser(String username, String password, UserRole role) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new ResourceAlreadyExistsException(User.class, username);
         }
 
         userRepository.save(builders().user().user()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .role(role)
                 .build());
 
-        return createToken(request.getUsername(), request.getPassword());
+        return createToken(username, password);
     }
 
     public TokenDto createToken(String username, String password) {

@@ -23,7 +23,7 @@ public class UserController {
     @PostMapping
     @AuthorizedUserManager
     public ResponseEntity<TokenDto> createUser(@Valid @RequestBody PostUsersRequest request) {
-        TokenDto tokenDto = userService.createUser(request);
+        TokenDto tokenDto = userService.createUser(request.getUsername(), request.getPassword(), request.getRole());
 
         return new ResponseEntity<>(tokenDto, HttpStatus.CREATED);
     }
