@@ -39,7 +39,7 @@ public class CategoryController {
 
     @PutMapping(value = "/{categoryId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @AuthorizedEditor
-    public ResponseEntity<CategoryDto> putCategories(@PathVariable("categoryId") String categoryId, @Valid @RequestBody PutCategoriesRequest request) {
+    public ResponseEntity<CategoryDto> putCategoriesById(@PathVariable("categoryId") String categoryId, @Valid @RequestBody PutCategoriesRequest request) {
         CategoryDto categoryDto = builders().category().categoryDto()
                 .id(categoryId)
                 .name(request.getName())
@@ -50,7 +50,7 @@ public class CategoryController {
 
     @DeleteMapping(value = "/{categoryId}")
     @AuthorizedEditor
-    public ResponseEntity<Void> deleteCategories(@PathVariable("categoryId") String categoryId) {
+    public ResponseEntity<Void> deleteCategoriesById(@PathVariable("categoryId") String categoryId) {
         categoryService.deleteCategory(categoryId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

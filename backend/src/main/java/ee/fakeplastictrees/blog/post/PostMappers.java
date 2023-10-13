@@ -16,6 +16,15 @@ public class PostMappers {
                 .category(post.getCategory())
                 .build();
     }
+    public PostPreviewDto postDtoToPostPreviewDto(PostDto postDto) {
+        return builders().post().postPreviewDto()
+                .id(postDto.getId())
+                .title(postDto.getTitle())
+                .summary(postDto.getSummary())
+                .date(postDto.getDate())
+                .category(postDto.getCategory())
+                .build();
+    }
 
     public PostDto postToPostDto(Post post) {
         return builders().post().postDto()

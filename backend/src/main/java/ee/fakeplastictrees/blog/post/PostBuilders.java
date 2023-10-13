@@ -1,6 +1,9 @@
 package ee.fakeplastictrees.blog.post;
 
-import ee.fakeplastictrees.blog.post.model.*;
+import ee.fakeplastictrees.blog.post.controller.request.PostRequestBuilders;
+import ee.fakeplastictrees.blog.post.model.Post;
+import ee.fakeplastictrees.blog.post.model.PostDto;
+import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
 
 public class PostBuilders {
     public PostDto.PostDtoBuilder postDto() {
@@ -13,5 +16,9 @@ public class PostBuilders {
 
     public PostPreviewDto.PostPreviewDtoBuilder postPreviewDto() {
         return PostPreviewDto.builder();
+    }
+
+    public PostRequestBuilders request() {
+        return new PostRequestBuilders();
     }
 }

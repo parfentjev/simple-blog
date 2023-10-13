@@ -12,7 +12,11 @@ public class ExtendedResponse<T> {
     private final Response response;
     private final Class<T> responseClass;
 
-    public ExtendedResponse(Response response, Class<T> responseClass) {
+    public static <T> ExtendedResponse<T> of(Response response, Class<T> responseClass) {
+        return new ExtendedResponse<>(response, responseClass);
+    }
+
+    private ExtendedResponse(Response response, Class<T> responseClass) {
         this.response = response;
         this.responseClass = responseClass;
 

@@ -6,10 +6,10 @@ import ee.fakeplastictrees.blog.user.model.TokenDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.MountableFile;
 
@@ -31,17 +31,35 @@ public abstract class AbstractIntegrationTest {
     private ApiExecutor editorExecutor;
     private ApiExecutor adminExecutor;
 
-    @Container
-    @ServiceConnection
-    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest")
-            .withCopyFileToContainer(MountableFile.forClasspathResource("/dump"), "/dump");
+//    @Container
+//    @ServiceConnection
+//    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest")
+//            .withCopyFileToContainer(MountableFile.forClasspathResource("/dump"), "/dump");
+//
+//    protected AbstractIntegrationTest() {
+//        try {
+//            mongoDBContainer.execInContainer("mongorestore", "/dump");
+//        } catch (IOException | InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
-    protected AbstractIntegrationTest() {
+    static final MongoDBContainer mongoDBContainer;
+
+    static {
         try {
+            mongoDBContainer = new MongoDBContainer("mongo:latest");
+            mongoDBContainer.start();
+            mongoDBContainer.copyFileToContainer(MountableFile.forClasspathResource("/dump"), "/dump");
             mongoDBContainer.execInContainer("mongorestore", "/dump");
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @DynamicPropertySource
+    static void initialize(DynamicPropertyRegistry registry) {
+        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
     }
 
     protected String baseUrl() {

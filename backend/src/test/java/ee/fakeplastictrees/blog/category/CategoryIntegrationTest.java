@@ -38,6 +38,15 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    public void getCategoriesEmptyList() {
+        anonymousExecutor().getCategories()
+                .statusCode(200)
+                .responseConsumer(response -> {
+                    assertThat(response).hasSize(0);
+                });
+    }
+
+    @Test
     public void postCategoriesAsAnonymous() {
         anonymousExecutor().postCategories(postCategoriesRequest()).statusCode(401);
 
@@ -71,7 +80,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void postCategoriesWithEmptyName() {
+    public void postCategoriesWithBlankName() {
         PostCategoriesRequest request = postCategoriesRequest();
         request.setName("");
         editorExecutor().postCategories(request).statusCode(400);
@@ -84,7 +93,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void putCategories() {
+    public void putCategoriesAsEditor() {
         CategoryDto categoryDto = postCategories(postCategoriesRequest());
         categoryDto.setName(RandomStringUtils.randomAlphanumeric(10));
 
@@ -108,7 +117,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void putCategoriesAsAnonymous() {
+    public void putCategoriesByIdAsAnonymous() {
         CategoryDto categoryDto = postCategories(postCategoriesRequest());
 
         PutCategoriesRequest request = putCategoriesRequest(categoryDto);
@@ -125,7 +134,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void putCategoriesWithNoBody() {
+    public void putCategoriesByIdWithNoBody() {
         CategoryDto categoryDto = postCategories(postCategoriesRequest());
 
         editorExecutor().putCategoriesById(categoryDto.getId(), null).statusCode(400);
@@ -139,7 +148,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void putCategoriesWithNullName() {
+    public void putCategoriesByIdWithNullName() {
         CategoryDto categoryDto = postCategories(postCategoriesRequest());
 
         editorExecutor().putCategoriesById(categoryDto.getId(), builders().category().request().putCategories().build()).statusCode(400);
@@ -153,7 +162,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void putCategoriesWithBlankName() {
+    public void putCategoriesByIdWithBlankName() {
         CategoryDto categoryDto = postCategories(postCategoriesRequest());
 
         PutCategoriesRequest request = putCategoriesRequest(categoryDto);
@@ -170,7 +179,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void deleteCategoriesAsAnonymous() {
+    public void deleteCategoriesByIdAsAnonymous() {
         CategoryDto categoryDto = postCategories(postCategoriesRequest());
         anonymousExecutor().deleteCategoriesById(categoryDto.getId()).statusCode(401);
 
@@ -183,7 +192,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void deleteCategoriesAsEditor() {
+    public void deleteCategoriesByIdAsEditor() {
         CategoryDto categoryDto = postCategories(postCategoriesRequest());
         editorExecutor().deleteCategoriesById(categoryDto.getId()).statusCode(204);
 
@@ -195,7 +204,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void deleteCategoriesWithoutId() {
+    public void deleteCategoriesByIdWithoutId() {
         CategoryDto categoryDto = postCategories(postCategoriesRequest());
         editorExecutor().deleteCategoriesById("").statusCode(404);
 
@@ -208,7 +217,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void deleteCategoriesThatDoNotExist() {
+    public void deleteCategoriesByIdWithIdThatDoNotExist() {
         CategoryDto categoryDto = postCategories(postCategoriesRequest());
         editorExecutor().deleteCategoriesById(RandomStringUtils.randomAlphanumeric(10)).statusCode(404);
 

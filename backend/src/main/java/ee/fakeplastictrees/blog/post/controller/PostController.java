@@ -33,7 +33,7 @@ public class PostController {
     }
 
     @GetMapping(value = "/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PostDto> getPostBy(@PathVariable("postId") String postId) {
+    public ResponseEntity<PostDto> getPostById(@PathVariable("postId") String postId) {
         return postService.getPost(postId)
                 .map(postDto -> new ResponseEntity<>(postDto, HttpStatus.OK))
                 .orElseThrow(() -> new ResourceNotFoundException("Post", postId));
@@ -56,7 +56,7 @@ public class PostController {
 
     @PutMapping(value = "/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @AuthorizedEditor
-    public ResponseEntity<PostDto> putPosts(@PathVariable("postId") String postId, @Valid @RequestBody PutPostsRequest request) {
+    public ResponseEntity<PostDto> putPostsById(@PathVariable("postId") String postId, @Valid @RequestBody PutPostsRequest request) {
         PostDto postDto = builders().post().postDto()
                 .id(postId)
                 .title(request.getTitle())
@@ -72,7 +72,7 @@ public class PostController {
 
     @DeleteMapping(value = "/{postId}")
     @AuthorizedEditor
-    public ResponseEntity<Void> deletePosts(@PathVariable("postId") String postId) {
+    public ResponseEntity<Void> deletePostsById(@PathVariable("postId") String postId) {
         postService.deletePost(postId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
