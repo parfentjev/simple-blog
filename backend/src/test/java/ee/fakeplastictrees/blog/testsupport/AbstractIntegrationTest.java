@@ -31,19 +31,6 @@ public abstract class AbstractIntegrationTest {
     private ApiExecutor editorExecutor;
     private ApiExecutor adminExecutor;
 
-//    @Container
-//    @ServiceConnection
-//    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest")
-//            .withCopyFileToContainer(MountableFile.forClasspathResource("/dump"), "/dump");
-//
-//    protected AbstractIntegrationTest() {
-//        try {
-//            mongoDBContainer.execInContainer("mongorestore", "/dump");
-//        } catch (IOException | InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     static final MongoDBContainer mongoDBContainer;
 
     static {
