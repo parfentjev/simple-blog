@@ -12,31 +12,34 @@ const LoginForm: FC<{}> = () => {
 
   const [errorMessage, setErrorMessage] = useState<string>()
 
-  const handleSubmit = useCallback(async (event: FormEvent) => {
-    event.preventDefault()
+  const handleSubmit = useCallback(
+    async (event: FormEvent) => {
+      event.preventDefault()
 
-    if (errorMessage) {
-      setErrorMessage(undefined)
-    }
+      if (errorMessage) {
+        setErrorMessage(undefined)
+      }
 
-    const username = usernameRef.current?.value
-    const password = passwordRef.current?.value
+      const username = usernameRef.current?.value
+      const password = passwordRef.current?.value
 
-    if (!username || !password) {
-      return
-    }
+      if (!username || !password) {
+        return
+      }
 
-    const result = await postUsersToken({
-      username,
-      password,
-    })
+      const result = await postUsersToken({
+        username,
+        password,
+      })
 
-    if (result.message) {
-      setErrorMessage(result.message)
-    } else {
-      signin(result)
-    }
-  }, [])
+      if (result.message) {
+        setErrorMessage(result.message)
+      } else {
+        signin(result)
+      }
+    },
+    [signin, errorMessage],
+  )
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>

@@ -9,7 +9,7 @@ const LogoutPage: FC<{}> = () => {
   useEffect(() => {
     signout()
     push('/')
-  }, [])
+  }, [push, signout])
 
   return null
 }

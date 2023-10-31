@@ -37,11 +37,14 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     }
   }, [])
 
-  const handleSingIn = useCallback((tokenDto: TokenDto) => {
-    setToken(tokenDto)
-    saveLocalToken(tokenDto)
-    push('/admin')
-  }, [])
+  const handleSingIn = useCallback(
+    (tokenDto: TokenDto) => {
+      setToken(tokenDto)
+      saveLocalToken(tokenDto)
+      push('/admin')
+    },
+    [push],
+  )
 
   const handleSignOut = useCallback(() => {
     setToken(undefined)
@@ -67,7 +70,7 @@ export const ProtectedRoute: FC<{ children: ReactNode }> = ({ children }) => {
     if (!token) {
       push('/admin/login')
     }
-  }, [])
+  }, [push, token])
 
   return (token && <>{children}</>) || <Redirecting />
 }
