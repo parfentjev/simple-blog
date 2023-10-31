@@ -44,8 +44,6 @@ nav li {
 footer {
   text-align: center;
   color: #866121;
-  margin-top: 3rem;
-  margin-bottom: 3rem;
 }
 
 footer a {
@@ -53,9 +51,13 @@ footer a {
   margin: 0 1rem 0 1rem;
 }
 
+main {
+  margin: 3rem;
+}
+
 @media (min-width: 840px) {
   main {
     max-width: 840px;
-    margin: 0 auto;
+    margin: 3rem auto;
   }
 }

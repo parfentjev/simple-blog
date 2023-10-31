@@ -1,0 +1,17 @@
+.container {
+  text-align: center;
+}
+
+@media (min-width: 840px) {
+  .container input {
+    width: 70%;
+  }
+}
+
+.container input {
+  background-color: rgb(200, 195, 188);
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem;
+  outline: none;
+}

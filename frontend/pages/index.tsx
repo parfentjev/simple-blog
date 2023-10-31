@@ -1,7 +1,7 @@
 import { getPosts } from '@/api/api-executor'
 import PageDto from '@/api/models/PageDto'
 import PostPreviewDto from '@/api/models/PostPreviewDto'
-import LoadMoreButton from '@/ui/layout/LoadMoreButton'
+import LoadMoreButton from '@/ui/post/LoadMoreButton'
 import PostList from '@/ui/post/PostList'
 import { GetServerSideProps } from 'next'
 import { FC, useCallback, useState } from 'react'

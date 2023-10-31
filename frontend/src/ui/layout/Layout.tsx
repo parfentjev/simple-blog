@@ -11,6 +11,9 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
               <Link href='/'>posts</Link>
             </li>
             <li>
+              <Link href='/search'>search</Link>
+            </li>
+            <li>
               <Link href='mailto:contact@fakeplastictrees.ee'>contact</Link>
             </li>
           </ul>
