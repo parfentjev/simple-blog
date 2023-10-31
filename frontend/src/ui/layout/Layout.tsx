@@ -29,7 +29,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
         </Link>
         <Link
           href={
-            process.env.NEXTJS_PUBLIC_SERVICE_URL + `/swagger-ui/index.html#/`
+            process.env.NEXT_PUBLIC_SERVICE_URL + `/swagger-ui/index.html#/`
           }
           target='_blank'
         >

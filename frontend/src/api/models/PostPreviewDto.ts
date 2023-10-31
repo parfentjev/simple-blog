@@ -1,9 +1,8 @@
-type Post = {
+type PostPreviewDto = {
   id: string
   title: string
   summary: string
-  text: string
   date: string
 }
 
-export default Post
+export default PostPreviewDto

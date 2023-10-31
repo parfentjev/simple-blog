@@ -1,20 +1,47 @@
 import { getPosts } from '@/api/api-executor'
-import Page from '@/api/models/Page'
-import PostPreview from '@/api/models/PostPreview'
-import PostListComponent from '@/ui/post/PostListComponent'
+import PageDto from '@/api/models/PageDto'
+import PostPreviewDto from '@/api/models/PostPreviewDto'
+import LoadMoreButton from '@/ui/layout/LoadMoreButton'
+import PostList from '@/ui/post/PostList'
 import { GetServerSideProps } from 'next'
-import { FC } from 'react'
+import { FC, useCallback, useState } from 'react'
 
-const PostListPage: FC<{ posts: Page<PostPreview> }> = ({ posts }) => {
-  return <PostListComponent posts={posts.items} />
+const LOAD_PAGE = 1
+const LOAD_POSTS = 20
+
+const PostListPage: FC<{ posts_page: PageDto<PostPreviewDto> }> = ({
+  posts_page,
+}) => {
+  const [currentPage, setCurrentPage] = useState(posts_page)
+  const [items, setItems] = useState(posts_page.items)
+
+  const handleLoadMore = useCallback(async () => {
+    const newPage = await getPosts(currentPage.page + 1, LOAD_POSTS).then(
+      (response) => response,
+    )
+
+    setCurrentPage(newPage)
+    setItems((existingItems) => [...existingItems, ...newPage.items])
+  }, [currentPage])
+
+  return (
+    <>
+      <PostList posts={items} />
+      {currentPage.totalPages > currentPage.page && (
+        <LoadMoreButton onClick={handleLoadMore} />
+      )}
+    </>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps<{
-  posts: Page<PostPreview>
+  posts_page: PageDto<PostPreviewDto>
 }> = async () => {
-  const posts = await getPosts().then((response) => response)
+  const posts_page = await getPosts(LOAD_PAGE, LOAD_POSTS).then(
+    (response) => response,
+  )
 
-  return { props: { posts } }
+  return { props: { posts_page } }
 }
 
 export default PostListPage

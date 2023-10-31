@@ -1,7 +1,7 @@
-type Page<T> = {
+type PageDto<T> = {
   page: number
   totalPages: number
   items: T[]
 }
 
-export default Page
+export default PageDto

@@ -1,15 +1,15 @@
 import { getPostById } from '@/api/api-executor'
-import Post from '@/api/models/Post'
-import { PostComponent } from '@/ui/post/PostComponent'
+import PostDto from '@/api/models/PostDto'
+import Post from '@/ui/post/Post'
 import { GetServerSideProps } from 'next'
 import { FC } from 'react'
 
-const PostPage: FC<{ post: Post }> = ({ post }) => {
-  return <PostComponent post={post} />
+const PostPage: FC<{ post: PostDto }> = ({ post }) => {
+  return <Post post={post} />
 }
 
 export const getServerSideProps: GetServerSideProps<{
-  post: Post
+  post: PostDto
 }> = async (context) => {
   const postId = context.params?.postId
 

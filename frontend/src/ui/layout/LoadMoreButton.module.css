@@ -1,0 +1,25 @@
+.container {
+  text-align: center;
+}
+
+.container button {
+  background-color: #f9a70e;
+  color: #211e19;
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  border-style: solid;
+  border-radius: 1px;
+  border-color: #f9a70e;
+  border-radius: 5px;
+}
+
+.container button:hover {
+  background-color: #211e19;
+  color: #f9a70e;
+  padding: 0.5rem;
+  border-style: solid;
+  border-radius: 1px;
+  border-color: #f9a70e;
+  border-radius: 5px;
+}
