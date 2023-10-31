@@ -1,10 +1,13 @@
+import CenteredContainer from '@/ui/layout/CenteredContainer'
 import SearchBox from '@/ui/search/SearchBox'
 import { FC } from 'react'
 
-const SEARCH_PROVIDER = 'https://duckduckgo.com/?q='
-
 const SearchPage: FC<{}> = () => {
-  return <SearchBox />
+  return (
+    <CenteredContainer name='Search'>
+      <SearchBox />
+    </CenteredContainer>
+  )
 }
 
 export default SearchPage

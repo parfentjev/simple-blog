@@ -1,5 +1,4 @@
 import { FC, FormEvent, useRef } from 'react'
-import styles from './SearchBox.module.css'
 
 const SEARCH_PROVIDER = 'https://duckduckgo.com/?q='
 
@@ -20,7 +19,7 @@ const SearchBox: FC<{}> = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div>
       <form onSubmit={handleOnSubmit}>
         <input type='text' ref={textInputRef} />
       </form>

@@ -3,6 +3,7 @@ import { AppProps } from 'next/app'
 import './../src/ui/layout/common.css'
 import Head from 'next/head'
 import Script from 'next/script'
+import { AuthContextProvider } from '@/store/auth-context'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -25,9 +26,11 @@ const App = ({ Component, pageProps }: AppProps) => {
         data-id='ad8cfdc0-03e1-4bc9-9944-56c71e54a8c9'
         data-utcoffset='3'
       ></Script>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <AuthContextProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </AuthContextProvider>
     </>
   )
 }

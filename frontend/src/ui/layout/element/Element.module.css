@@ -1,0 +1,11 @@
+.primary_button {
+  background-color: #f9a70e;
+  color: #211e19;
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  border-style: solid;
+  border-radius: 1px;
+  border-color: #f9a70e;
+  border-radius: 5px;
+}

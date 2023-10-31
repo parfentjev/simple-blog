@@ -11,6 +11,7 @@ body {
 
 h1 {
   color: #f9a70e;
+  text-transform: capitalize;
 }
 
 a {
@@ -44,6 +45,7 @@ nav li {
 footer {
   text-align: center;
   color: #866121;
+  margin-bottom: 3rem;
 }
 
 footer a {
@@ -55,9 +57,25 @@ main {
   margin: 3rem;
 }
 
+.text_centered {
+  text-align: center;
+}
+
+input {
+  background-color: rgb(200, 195, 188);
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem;
+  outline: none;
+}
+
 @media (min-width: 840px) {
   main {
     max-width: 840px;
     margin: 3rem auto;
+  }
+
+  input {
+    width: 50%;
   }
 }

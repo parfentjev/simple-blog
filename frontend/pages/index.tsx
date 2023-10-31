@@ -1,7 +1,8 @@
 import { getPosts } from '@/api/api-executor'
 import PageDto from '@/api/models/PageDto'
 import PostPreviewDto from '@/api/models/PostPreviewDto'
-import LoadMoreButton from '@/ui/post/LoadMoreButton'
+import CenteredContainer from '@/ui/layout/CenteredContainer'
+import Button from '@/ui/layout/element/Button'
 import PostList from '@/ui/post/PostList'
 import { GetServerSideProps } from 'next'
 import { FC, useCallback, useState } from 'react'
@@ -28,7 +29,9 @@ const PostListPage: FC<{ posts_page: PageDto<PostPreviewDto> }> = ({
     <>
       <PostList posts={items} />
       {currentPage.totalPages > currentPage.page && (
-        <LoadMoreButton onClick={handleLoadMore} />
+        <CenteredContainer>
+          <Button onClick={handleLoadMore} text='Load more' />
+        </CenteredContainer>
       )}
     </>
   )
