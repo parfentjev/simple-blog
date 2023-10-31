@@ -27,6 +27,15 @@
   border-radius: 10px;
 }
 
+.post code {
+  color: #ffc251;
+}
+
+.post pre code {
+  overflow: scroll;
+  display: block;
+}
+
 @media (min-width: 640px) {
   .text {
     width: 90%;
