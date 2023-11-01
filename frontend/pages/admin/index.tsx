@@ -5,7 +5,14 @@ import { FC } from 'react'
 const AdminPage: FC<{}> = () => {
   return (
     <ProtectedRoute>
-      <Link href='/admin/logout/'>Log out</Link>
+      <ul>
+        <li>
+          <Link href='/admin/post'>Create a post</Link>
+        </li>
+        <li>
+          <Link href='/admin/logout/'>Log out</Link>
+        </li>
+      </ul>
     </ProtectedRoute>
   )
 }

@@ -12,7 +12,12 @@ const Post: FC<{ post: PostDto }> = ({ post }) => {
   return (
     <article className={styles.post}>
       <h1 className={styles.title}>
-        <Link href={`/post/` + post.id + '/' + encodedTitle}>{post.title}</Link>
+        {(post.id && (
+          <Link href={`/post/` + post.id + '/' + encodedTitle}>
+            {post.title}
+          </Link>
+        )) ||
+          post.title}
       </h1>
       <div className={styles.text}>
         <MarkdownRenderer text={post.text} />

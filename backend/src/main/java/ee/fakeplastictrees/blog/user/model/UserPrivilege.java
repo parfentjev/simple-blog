@@ -6,7 +6,7 @@ public enum UserPrivilege {
     USER_MANAGEMENT,
     POST_MANAGEMENT;
 
-    public boolean granted(Authentication authentication) {
+    public boolean isGranted(Authentication authentication) {
         if (authentication == null) {
             return false;
         }

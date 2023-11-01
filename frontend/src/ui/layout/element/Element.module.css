@@ -1,6 +1,4 @@
-.primary_button {
-  background-color: #f9a70e;
-  color: #211e19;
+.button {
   padding: 0.5rem;
   border-radius: 5px;
   cursor: pointer;
@@ -8,4 +6,14 @@
   border-radius: 1px;
   border-color: #f9a70e;
   border-radius: 5px;
+  color: #211e19;
+}
+
+.primary_button {
+  background-color: #f9a70e;
+}
+
+.secondary_button {
+  background-color: #c07d00;
+  border-color: #c07d00;
 }

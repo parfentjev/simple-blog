@@ -36,7 +36,7 @@ public class PostController {
 
     @GetMapping(value = "/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PostDto> getPostById(@PathVariable("postId") String postId, Authentication authentication) {
-        boolean includeDrafts = UserPrivilege.POST_MANAGEMENT.granted(authentication);
+        boolean includeDrafts = UserPrivilege.POST_MANAGEMENT.isGranted(authentication);
 
         return postService.getPost(postId, includeDrafts)
                 .map(postDto -> new ResponseEntity<>(postDto, HttpStatus.OK)).

@@ -1,4 +1,4 @@
-import CenteredContainer from '@/ui/layout/CenteredContainer'
+import NamedContainer from '@/ui/layout/NamedContainer'
 import LoginForm from '@/ui/admin/LoginForm'
 import { FC } from 'react'
 import { useRouter } from 'next/router'
@@ -13,9 +13,9 @@ const LoginPage: FC<{}> = () => {
   }
 
   return (
-    <CenteredContainer name='Log in'>
+    <NamedContainer name='Log in' centered={true}>
       <LoginForm />
-    </CenteredContainer>
+    </NamedContainer>
   )
 }
 
