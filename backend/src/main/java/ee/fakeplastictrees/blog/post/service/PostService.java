@@ -39,8 +39,10 @@ public class PostService {
                 .build();
     }
 
-    public Optional<PostDto> getPost(String postId) {
-        return postRepository.findByIdAndVisibleTrue(postId).map(post -> mappers().post().postToPostDto(post));
+    public Optional<PostDto> getPost(String postId, boolean includeDrafts) {
+        return postRepository.findById(postId)
+                .filter(post -> post.getVisible() || includeDrafts)
+                .map(post -> mappers().post().postToPostDto(post));
     }
 
     public PostDto createPost(PostDto postDto) {

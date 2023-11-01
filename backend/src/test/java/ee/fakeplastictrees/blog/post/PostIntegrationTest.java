@@ -120,13 +120,32 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void getPostsByIdNotVisiblePost() {
+    public void getPostsByIdNotVisiblePostAsAnonymous() {
         PostPostsRequest request = postPostsRequest();
         request.setVisible(false);
         PostDto postDto = postPosts(request);
 
         anonymousExecutor().getPostsById(postDto.getId())
                 .statusCode(404);
+    }
+
+    @Test
+    public void getPostsByIdNotVisiblePostAsEditor() {
+        PostPostsRequest request = postPostsRequest();
+        request.setVisible(false);
+        PostDto postDto = postPosts(request);
+
+        editorExecutor().getPostsById(postDto.getId())
+                .statusCode(200)
+                .responseConsumer(response -> {
+                    assertThat(response.getId()).isEqualTo(postDto.getId());
+                    assertThat(response.getTitle()).isEqualTo(postDto.getTitle());
+                    assertThat(response.getSummary()).isEqualTo(postDto.getSummary());
+                    assertThat(response.getText()).isEqualTo(postDto.getText());
+                    assertThat(response.getDate()).isEqualTo(postDto.getDate());
+                    assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
+                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                });
     }
 
     @Test

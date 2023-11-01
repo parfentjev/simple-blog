@@ -8,11 +8,13 @@ import ee.fakeplastictrees.blog.post.controller.request.PutPostsRequest;
 import ee.fakeplastictrees.blog.post.model.PostDto;
 import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
 import ee.fakeplastictrees.blog.post.service.PostService;
+import ee.fakeplastictrees.blog.user.model.UserPrivilege;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import static ee.fakeplastictrees.blog.core.Utils.builders;
@@ -33,10 +35,12 @@ public class PostController {
     }
 
     @GetMapping(value = "/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PostDto> getPostById(@PathVariable("postId") String postId) {
-        return postService.getPost(postId)
-                .map(postDto -> new ResponseEntity<>(postDto, HttpStatus.OK))
-                .orElseThrow(() -> new ResourceNotFoundException("Post", postId));
+    public ResponseEntity<PostDto> getPostById(@PathVariable("postId") String postId, Authentication authentication) {
+        boolean includeDrafts = UserPrivilege.POST_MANAGEMENT.granted(authentication);
+
+        return postService.getPost(postId, includeDrafts)
+                .map(postDto -> new ResponseEntity<>(postDto, HttpStatus.OK)).
+                orElseThrow(() -> new ResourceNotFoundException("Post", postId));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
