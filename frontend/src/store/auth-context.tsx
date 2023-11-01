@@ -32,9 +32,19 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const localToken = loadLocalToken()
 
-    if (localToken) {
-      setToken(localToken)
+    if (!localToken) {
+      return
     }
+
+    if (new Date().getTime() > localToken.expirationDate - 86400000) {
+      removeLocalToken()
+      setToken(undefined)
+      // refresh token
+
+      return
+    }
+
+    setToken(localToken)
   }, [])
 
   const handleSingIn = useCallback(
