@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - rss:/backend/feed.xml
+      - /home/admin/simpleblog-static/static/feed.xml:/backend/feed.xml
 
   frontend:
     image: sblog-frontend
