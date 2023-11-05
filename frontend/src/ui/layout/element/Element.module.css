@@ -17,3 +17,9 @@
   background-color: #c07d00;
   border-color: #c07d00;
 }
+
+.border_only_button {
+  background-color: #211e19;
+  border-color: #f9a70e;
+  color: #f9a70e;
+}

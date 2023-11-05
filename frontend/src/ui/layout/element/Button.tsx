@@ -4,6 +4,7 @@ import styles from './Element.module.css'
 export enum ButtonStyle {
   Primary,
   Secondary,
+  BorderOnly,
 }
 
 const Button: FC<{
@@ -17,6 +18,10 @@ const Button: FC<{
   switch (style) {
     case ButtonStyle.Secondary: {
       className = styles.secondary_button
+      break
+    }
+    case ButtonStyle.BorderOnly: {
+      className = styles.border_only_button
       break
     }
     default: {

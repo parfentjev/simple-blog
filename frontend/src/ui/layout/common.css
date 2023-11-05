@@ -25,21 +25,34 @@ article {
 
 header {
   text-align: center;
-  background: #1b1914;
 }
 
 nav {
-  padding: 1rem;
+  background: #1b1914;
+  padding-top: 1rem;
+}
+
+nav button {
+  margin-bottom: 1rem;
 }
 
 nav ul {
+  display: none;
   list-style: none;
-  margin: 0;
+  padding: 0;
+  margin-top: 0;
+}
+
+.navbar_visible {
+  display: block;
 }
 
 nav li {
-  display: inline-block;
-  margin: 0 1rem 0 1rem;
+  padding: 1rem 0 1rem 0;
+}
+
+a:hover {
+  color: #ffcf76;
 }
 
 footer {
@@ -54,7 +67,7 @@ footer a {
 }
 
 main {
-  margin: 3rem;
+  margin: 3rem 0;
 }
 
 .text_centered {
@@ -71,6 +84,7 @@ textarea {
   color: rgb(200, 195, 188);
 }
 
+/* Large screen only */
 @media (min-width: 840px) {
   main {
     max-width: 840px;
@@ -79,5 +93,32 @@ textarea {
 
   input {
     width: 50%;
+  }
+
+  nav {
+    padding: 1rem;
+  }
+
+  nav ul {
+    display: block;
+    margin: 0;
+  }
+
+  nav li {
+    display: inline-block;
+    margin: 0 1rem 0 1rem;
+    padding: 0;
+  }
+
+  nav button {
+    display: none;
+  }
+}
+
+/* Mobile only */
+@media (max-width: 839px) {
+  nav li:hover,
+  nav li:active {
+    background-color: #332e27;
   }
 }

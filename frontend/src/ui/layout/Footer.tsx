@@ -4,6 +4,7 @@ import { FC } from 'react'
 const Footer: FC<{}> = () => {
   return (
     <footer>
+      <Link href='mailto:contact@fakeplastictrees.ee'>contact</Link>
       <Link rel='license' href='/license'>
         license
       </Link>

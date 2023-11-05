@@ -18,6 +18,7 @@
   - Optional, because I don't really need this.
   - But it'd be interesting to see how the protocol works.
 - ✔ Check if feed.xml is truly needed in the container, because now it'd override real feed wih a placeholder on each build
-- Add link to the RSS feed in the webapp
+- ✔ Add link to the RSS feed in the webapp
+- ✔ Do something with the navbar on small screens, it doesn't look good
 - See if a test can be created for the RSS generator
 - Add an endpoint for the webapp to refresh tokens

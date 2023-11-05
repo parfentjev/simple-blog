@@ -19,6 +19,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         />
         <link rel='apple-touch-icon' href='/logo192.png' />
         <link rel='manifest' href='/manifest.json' />
+        <link rel='alternate' type='application/rss+xml' title='Latest posts' href='/static/feed.xml' />
         <title>Fake Plastic Trees</title>
       </Head>
       <Script
