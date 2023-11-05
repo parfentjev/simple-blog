@@ -10,7 +10,6 @@ RUN ./gradlew --version
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
-COPY feed.xml .
 RUN ./gradlew build -x test
 
 CMD ["java", "-jar", "build/libs/simple-blog-0.1.0-SNAPSHOT.jar"]
