@@ -1,24 +1,23 @@
 # To do list
 
-## Part 1 - content organization
-
-- ✔️ Post status - visible:
+- ✔️Post status - visible:
   - Feed: return only visible=true.
   - by ID: return only visible=true.
   - `db.posts.updateMany({}, { $set: { visible: true } })`
-- ✔️ Token generation by username:password (`token.secret`, `token.issuer`, `token.lifespan`)
-- ✔️ Categories.
+- ✔️Token generation by username:password (`token.secret`, `token.issuer`, `token.lifespan`)
+- ✔️Categories.
   - `db.posts.updateMany({}, { $set: { category: "Miscellaneous" } })`
-- ✔️ POST/PUT/DELETE posts.
-- ✔️ Add ~~service~~ and ~~controller~~ tests: decided to make integration tests instead.
-- Update frontend to support editing and categories.
-
-## Part 2 - content provision
-
-- RSS feed
+- ✔️POST/PUT/DELETE posts.
+- ✔️Add ~~service~~ and ~~controller~~ tests: decided to make integration tests instead.
+- ✔️Update frontend to support editing and categories.
+- ✔️RSS feed
   - Separate script to generate a static file?
   - There's no need to generate it dynamically.
   - Maybe spring boot has some built-in cache.
-- ActivityPub for subscribers
+- ❌ ActivityPub for subscribers
   - Optional, because I don't really need this.
   - But it'd be interesting to see how the protocol works.
+- ✔ Check if feed.xml is truly needed in the container, because now it'd override real feed wih a placeholder on each build
+- Add link to the RSS feed in the webapp
+- See if a test can be created for the RSS generator
+- Add an endpoint for the webapp to refresh tokens
