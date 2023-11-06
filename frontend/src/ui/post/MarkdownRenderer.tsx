@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import tomorrow from 'react-syntax-highlighter/dist/esm/styles/prism/tomorrow'
+import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 
 const MarkdownRenderer: FC<{ text: string }> = ({ text }) => {
   return (
