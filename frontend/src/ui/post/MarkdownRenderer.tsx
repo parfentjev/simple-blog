@@ -19,10 +19,11 @@ const MarkdownRenderer: FC<{ text: string }> = ({ text }) => {
               <SyntaxHighlighter
                 {...rest}
                 PreTag='div'
-                children={String(children).replace(/\n$/, '')}
                 language={match != null ? match[1] : ''}
                 style={tomorrow}
-              />
+              >
+                {String(children).replace(/\n$/, '')}
+              </SyntaxHighlighter>
             )
           },
         }}
