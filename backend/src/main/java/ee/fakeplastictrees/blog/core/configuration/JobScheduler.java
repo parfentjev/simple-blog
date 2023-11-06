@@ -70,7 +70,7 @@ public class JobScheduler {
         feed.setEntries(entries);
 
         try (FileWriter writer = new FileWriter(rssFeedOutputFile)) {
-            new SyndFeedOutput().output(feed, writer);
+            new SyndFeedOutput().output(feed, writer, false);
         }
 
         logger.info("Updated the RSS feed: " + rssFeedOutputFile);

@@ -17,8 +17,10 @@
 - ❌ ActivityPub for subscribers
   - Optional, because I don't really need this.
   - But it'd be interesting to see how the protocol works.
+  - https://habr.com/ru/articles/702724/
 - ✔ Check if feed.xml is truly needed in the container, because now it'd override real feed wih a placeholder on each build
 - ✔ Add link to the RSS feed in the webapp
 - ✔ Do something with the navbar on small screens, it doesn't look good
-- See if a test can be created for the RSS generator
+- ✔ See if a test can be created for the RSS generator
 - Add an endpoint for the webapp to refresh tokens
+- Move MongoDB from cloud to local container
