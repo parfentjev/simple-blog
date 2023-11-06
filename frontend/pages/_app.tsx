@@ -19,14 +19,14 @@ const App = ({ Component, pageProps }: AppProps) => {
         />
         <link rel='apple-touch-icon' href='/logo192.png' />
         <link rel='manifest' href='/manifest.json' />
-        <link rel='alternate' type='application/rss+xml' title='Latest posts' href='/static/feed.xml' />
+        <link
+          rel='alternate'
+          type='application/rss+xml'
+          title='Latest posts'
+          href='/static/feed.xml'
+        />
         <title>Fake Plastic Trees</title>
       </Head>
-      <Script
-        src='https://cdn.counter.dev/script.js'
-        data-id='ad8cfdc0-03e1-4bc9-9944-56c71e54a8c9'
-        data-utcoffset='3'
-      ></Script>
       <AuthContextProvider>
         <Layout>
           <Component {...pageProps} />

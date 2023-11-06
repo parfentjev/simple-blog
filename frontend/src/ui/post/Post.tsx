@@ -4,8 +4,10 @@ import PostDto from '../../api/models/PostDto'
 import { encodeTitle, jsonDateToString } from '../../utils/string-utils'
 import MarkdownRenderer from './MarkdownRenderer'
 import Link from 'next/link'
+import { useAuthContext } from '@/store/auth-context'
 
 const Post: FC<{ post: PostDto }> = ({ post }) => {
+  const { token } = useAuthContext()
   const encodedTitle = encodeTitle(post.title)
   const dateString = jsonDateToString(post.date)
 
@@ -24,6 +26,11 @@ const Post: FC<{ post: PostDto }> = ({ post }) => {
       </div>
       <div>
         <div className={styles.date}>{dateString}</div>
+        {token && (
+          <div className={styles.actions}>
+            <Link href={`/admin/post/${post.id}`}>edit</Link>
+          </div>
+        )}
       </div>
     </article>
   )

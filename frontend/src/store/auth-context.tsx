@@ -11,14 +11,18 @@ import {
   useState,
 } from 'react'
 
+const ONE_DAY_MILLISECONDS = 86400000
+
 type AuthContextType = {
   token?: TokenDto
+  tokenExpirationDate?: Date
   signin: Function
   signout: Function
 }
 
 const AuthContext = createContext<AuthContextType>({
   token: undefined,
+  tokenExpirationDate: undefined,
   signin: () => {},
   signout: () => {},
 })
@@ -28,6 +32,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
 }) => {
   const { push } = useRouter()
   const [token, setToken] = useState<TokenDto>()
+  const [tokenExpirationDate, setTokenExpirationDate] = useState<Date>()
 
   useEffect(() => {
     const localToken = loadLocalToken()
@@ -36,12 +41,14 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
       return
     }
 
-    if (new Date().getTime() > localToken.expirationDate - 86400000) {
+    const currentDate = new Date().getTime()
+    const localTokenExpirationDate = localToken.expirationDate
+    if (currentDate > localTokenExpirationDate) {
+      console.log(currentDate, localTokenExpirationDate)
       removeLocalToken()
       setToken(undefined)
-      // refresh token
-
-      return
+    } else if (currentDate > localTokenExpirationDate - ONE_DAY_MILLISECONDS) {
+      setTokenExpirationDate(new Date(localTokenExpirationDate))
     }
 
     setToken(localToken)
@@ -57,12 +64,14 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
   )
 
   const handleSignOut = useCallback(() => {
-    setToken(undefined)
     removeLocalToken()
+    setToken(undefined)
+    setTokenExpirationDate(undefined)
   }, [])
 
   const value: AuthContextType = {
     token: token,
+    tokenExpirationDate: tokenExpirationDate,
     signin: handleSingIn,
     signout: handleSignOut,
   }
