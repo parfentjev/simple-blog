@@ -25,4 +25,4 @@
 - ✔ See if a test can be created for the RSS generator
 - ❌ Add an endpoint for the webapp to refresh tokens; nah, too much hustle, just add an indicator on the UI that the
   token is about to expire
-- Move MongoDB from cloud to local container
+- ✔ Move MongoDB from cloud to local container
