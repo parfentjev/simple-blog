@@ -2,7 +2,7 @@ import { FC, ReactNode } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import { useAuthContext } from '@/store/auth-context'
-import NamedContainer from './NamedContainer'
+import Container from './Container'
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const { tokenExpirationDate } = useAuthContext()
@@ -11,9 +11,9 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
     <>
       <Header />
       {tokenExpirationDate && (
-        <NamedContainer centered={true}>
+        <Container centered={true}>
           <p>Your token expires on {tokenExpirationDate.toLocaleString()}</p>
-        </NamedContainer>
+        </Container>
       )}
       <main>{children}</main>
       <Footer />

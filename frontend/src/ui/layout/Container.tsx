@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react'
 
-const NamedContainer: FC<{
+const Container: FC<{
   children: ReactNode
   name?: string
   centered?: boolean
@@ -18,4 +18,4 @@ const NamedContainer: FC<{
   )
 }
 
-export default NamedContainer
+export default Container

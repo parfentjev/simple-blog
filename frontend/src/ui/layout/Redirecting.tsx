@@ -1,8 +1,8 @@
 import { FC } from 'react'
-import NamedContainer from './NamedContainer'
+import Container from './Container'
 
 const Redirecting: FC<{}> = () => {
-  return <NamedContainer centered={true}>Redirecting...</NamedContainer>
+  return <Container centered={true}>Redirecting...</Container>
 }
 
 export default Redirecting

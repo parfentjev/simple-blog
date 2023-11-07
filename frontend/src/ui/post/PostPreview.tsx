@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import styles from './Post.module.css'
 import PostPreviewDto from '../../api/models/PostPreviewDto'
 import { encodeTitle, jsonDateToString } from '../../utils/string-utils'
@@ -16,13 +16,22 @@ const PostPreview: FC<{ post: PostPreviewDto }> = ({ post }) => {
       </h1>
       <div className={styles.text}>
         <MarkdownRenderer text={post.summary} />
-      </div>
-      <div>
-        <div className={styles.date}>{dateString}</div>
         <div className={styles.read}>
           <Link href={`/post/` + post.id + '/' + encodedTitle}>
             Read more...
           </Link>
+        </div>
+      </div>
+      <div>
+        <div className={`text_muted ${styles.date}`}>{dateString}</div>
+        <div className={`text_muted ${styles.categories}`}>
+          {post.category
+            .map<ReactNode>((i) => (
+              <Link id={i} href={'#'}>
+                {i}
+              </Link>
+            ))
+            .reduce((p1, p2) => [p1, ', ', p2])}
         </div>
       </div>
     </article>

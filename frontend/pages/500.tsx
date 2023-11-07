@@ -1,11 +1,11 @@
-import NamedContainer from '@/ui/layout/NamedContainer'
+import Container from '@/ui/layout/Container'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
 const InternalServerErrorPage: FC<{}> = () => {
   return (
-    <NamedContainer name='Oops!' centered={true}>
+    <Container name='Oops!' centered={true}>
       <p>Something went wrong.</p>
       <Image
         alt='Internal Server Error'
@@ -18,7 +18,7 @@ const InternalServerErrorPage: FC<{}> = () => {
           Designed by Freepik
         </Link>
       </p>
-    </NamedContainer>
+    </Container>
   )
 }
 

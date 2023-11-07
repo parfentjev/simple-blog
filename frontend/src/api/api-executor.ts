@@ -24,6 +24,7 @@ export const getPostById = async (postId: string) => {
   return axios
     .get<PostDto>(endpoint(ApiEndpoints.POSTS_ID, postId))
     .then((response) => response.data)
+    .catch((error) => handleError<PostDto>(error))
 }
 
 export const getPostByIdWithToken = async (token: TokenDto, postId: string) => {
@@ -64,11 +65,13 @@ export const putPosts = async (token: TokenDto, data: PostDto) => {
 const handleError = <T extends ErrorMessageProvider>(error: any): T => {
   const response = error.response
   const message = response ? response.data.message : null
-  const statusCode = response ? response.statusCode : null
+  const statusCode = response ? response.status : null
+
+  console.log(response)
 
   return {
     message: message ? message : 'Request has failed.',
-    statusCode,
+    statusCode
   } as T
 }
 

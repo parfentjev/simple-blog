@@ -19,6 +19,10 @@ export const getServerSideProps: GetServerSideProps<{
 
   const post = await getPostById(postId.toString())
 
+  if (post.statusCode == 404) {
+    return { notFound: true }
+  }
+
   return { props: { post } }
 }
 

@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
 import styles from './PostEditor.module.css'
 import Button, { ButtonStyle } from '../layout/element/Button'
-import NamedContainer from '../layout/NamedContainer'
+import Container from '../layout/Container'
 import PostDto from '@/api/models/PostDto'
 import Post from './Post'
 import { postPosts, putPosts } from '@/api/api-executor'
@@ -108,11 +108,11 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
         />
       </div>
       {modifiedPost && (
-        <NamedContainer>
+        <Container>
           <Post post={modifiedPost} />
-        </NamedContainer>
+        </Container>
       )}
-      <NamedContainer
+      <Container
         className={styles.options}
         name='Additional options'
         centered={false}
@@ -126,11 +126,11 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
           />
           <label htmlFor='visible'>Post is visible</label>
         </div>
-      </NamedContainer>
-      <NamedContainer centered={true}>
+      </Container>
+      <Container centered={true}>
         {errorMessage && <p>{errorMessage}</p>}
         <Button text='Save' type='submit' />{' '}
-      </NamedContainer>
+      </Container>
     </form>
   )
 }

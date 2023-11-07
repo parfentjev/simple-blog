@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import styles from './Post.module.css'
 import PostDto from '../../api/models/PostDto'
 import { encodeTitle, jsonDateToString } from '../../utils/string-utils'
@@ -25,10 +25,23 @@ const Post: FC<{ post: PostDto }> = ({ post }) => {
         <MarkdownRenderer text={post.text} />
       </div>
       <div>
-        <div className={styles.date}>{dateString}</div>
+        <div className={`text_muted ${styles.date}`}>{dateString}</div>
+        <div className={`text_muted ${styles.categories}`}>
+          {post.category
+            .map<ReactNode>((i) => (
+              <Link id={i} href={'#'}>
+                {i}
+              </Link>
+            ))
+            .reduce((p1, p2) => [p1, ', ', p2])}
+        </div>
+      </div>
+      <div>
         {token && (
-          <div className={styles.actions}>
-            <Link href={`/admin/post/${post.id}`}>edit</Link>
+          <div className={`text_muted ${styles.actions}`}>
+            <p>
+              <Link href={`/admin/post/${post.id}`}>edit</Link>
+            </p>
           </div>
         )}
       </div>

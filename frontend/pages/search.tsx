@@ -1,12 +1,12 @@
-import NamedContainer from '@/ui/layout/NamedContainer'
+import Container from '@/ui/layout/Container'
 import SearchBox from '@/ui/search/SearchBox'
 import { FC } from 'react'
 
 const SearchPage: FC<{}> = () => {
   return (
-    <NamedContainer name='Search' centered={true}>
+    <Container name='Search' centered={true}>
       <SearchBox />
-    </NamedContainer>
+    </Container>
   )
 }
 
