@@ -19,3 +19,7 @@
   width: 1rem;
   background-color: #211e19;
 }
+
+.invalid {
+  background-color: #3f0000;
+}

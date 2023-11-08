@@ -7,14 +7,16 @@ const Container: FC<{
   className?: string
 }> = ({ children, name, centered, className }) => {
   return (
-    <div
-      className={
-        (className ? className : ``) + ` ` + (centered ? `text_centered` : ``)
-      }
-    >
-      {name && <h1>{name}</h1>}
-      <div>{children}</div>
-    </div>
+    <>
+      <div className='text_centered'>{name && <h1>{name}</h1>}</div>
+      <div
+        className={
+          (className ? className : ``) + ` ` + (centered ? `text_centered` : ``)
+        }
+      >
+        <div>{children}</div>
+      </div>
+    </>
   )
 }
 

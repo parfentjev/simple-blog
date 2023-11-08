@@ -1,16 +1,18 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
 import styles from './PostEditor.module.css'
-import Button, { ButtonStyle } from '../layout/element/Button'
+import Button from '../layout/element/Button'
 import Container from '../layout/Container'
 import PostDto from '@/api/models/PostDto'
 import Post from './Post'
-import { postPosts, putPosts } from '@/api/api-executor'
+import { getCategories, postPosts, putPosts } from '@/api/api-executor'
 import { useAuthContext } from '@/store/auth-context'
 import { useRouter } from 'next/router'
 
 const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
   const { token } = useAuthContext()
   const { push } = useRouter()
+  const [possibleCategories, setPossibleCategories] = useState<string[]>([])
+  const [categoriesValid, setCategoriesValid] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string>()
 
   const [modifiedPost, setModifiedPost] = useState<PostDto>({
@@ -39,9 +41,45 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
     })
   }, [post])
 
+  useEffect(() => {
+    getCategories().then((response) => {
+      if (response.message) {
+        setErrorMessage(response.message)
+      } else {
+        setPossibleCategories(response.map((i) => i.name))
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    let invalidCategories: string[] = []
+
+    modifiedPost.category.forEach((i) => {
+      if (
+        possibleCategories.findIndex(
+          (j) => i.toLowerCase() === j.toLowerCase(),
+        ) < 0
+      ) {
+        invalidCategories.push(i)
+      }
+    })
+
+    if (invalidCategories.length > 0) {
+      setCategoriesValid(true)
+    } else {
+      setCategoriesValid(false)
+    }
+  }, [modifiedPost.category, possibleCategories])
+
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setModifiedPost((postDto) => {
       return { ...postDto, title: event.target.value }
+    })
+  }
+
+  const handleCategoriesChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setModifiedPost((postDto) => {
+      return { ...postDto, category: event.target.value.split(',') }
     })
   }
 
@@ -89,6 +127,15 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
           placeholder='title'
           onChange={handleTitleChange}
           value={modifiedPost.title}
+        />
+      </div>
+      <div>
+        <input
+          type='text'
+          placeholder='categories'
+          onChange={handleCategoriesChange}
+          value={modifiedPost.category}
+          className={categoriesValid ? styles.invalid : ``}
         />
       </div>
       <div>

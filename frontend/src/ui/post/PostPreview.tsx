@@ -27,7 +27,7 @@ const PostPreview: FC<{ post: PostPreviewDto }> = ({ post }) => {
         <div className={`text_muted ${styles.categories}`}>
           {post.category
             .map<ReactNode>((i) => (
-              <Link id={i} href={'#'}>
+              <Link key={i} href={`/categories/${i}`}>
                 {i}
               </Link>
             ))

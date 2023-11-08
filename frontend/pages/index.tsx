@@ -7,8 +7,8 @@ import PostList from '@/ui/post/PostList'
 import { GetServerSideProps } from 'next'
 import { FC, useCallback, useState } from 'react'
 
-const LOAD_PAGE = 1
-const LOAD_POSTS = 20
+export const LOAD_PAGE = 1
+export const LOAD_POSTS = 20
 
 const PostListPage: FC<{ posts_page: PageDto<PostPreviewDto> }> = ({
   posts_page,

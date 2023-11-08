@@ -70,6 +70,33 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    public void getPostsFilterByCategory() {
+        List<PostPostsRequest> postPostsRequests = IntStream.range(0, 2).mapToObj(i -> postPostsRequest()).toList();
+        postPostsRequests.get(0).setCategory(Set.of("category1", "category2"));
+        postPostsRequests.get(1).setCategory(Set.of("category1", "category3"));
+
+        List<PostPreviewDto> posts = postPostsRequests.stream()
+                .map(request -> {
+                    PostDto postDto = editorExecutor().postPosts(request).body();
+
+                    return mappers().post().postDtoToPostPreviewDto(postDto);
+                })
+                .toList();
+
+        anonymousExecutor().getPosts(1, 2, "category1")
+                .statusCode(200)
+                .responseConsumer(response -> {
+                    assertThat(response.getItems()).extracting(PostPreviewDto::getId).containsExactlyInAnyOrder(posts.get(0).getId(), posts.get(1).getId());
+                });
+
+        anonymousExecutor().getPosts(1, 2, "category2")
+                .statusCode(200)
+                .responseConsumer(response -> {
+                    assertThat(response.getItems()).extracting(PostPreviewDto::getId).containsExactlyInAnyOrder(posts.get(0).getId());
+                });
+    }
+
+    @Test
     public void getPostsEmptyList() {
         anonymousExecutor().getPosts(null, null)
                 .statusCode(200)

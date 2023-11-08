@@ -24,9 +24,24 @@ public class PostService {
     private PostRepository postRepository;
 
     public PageDto<PostPreviewDto> getPosts(Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("date").descending());
+        PageRequest pageRequest = buildPageRequest(page, size);
         Page<Post> postsPage = postRepository.findByVisibleTrue(pageRequest);
 
+        return buildPageDto(postsPage);
+    }
+
+    public PageDto<PostPreviewDto> getPosts(Integer page, Integer size, String category) {
+        PageRequest pageRequest = buildPageRequest(page, size);
+        Page<Post> postsPage = postRepository.findByVisibleTrueAndCategoryIgnoreCase(pageRequest, category);
+
+        return buildPageDto(postsPage);
+    }
+
+    private PageRequest buildPageRequest(Integer page, Integer size) {
+        return PageRequest.of(page - 1, size, Sort.by("date").descending());
+    }
+
+    private PageDto<PostPreviewDto> buildPageDto(Page<Post> postsPage) {
         List<PostPreviewDto> postPreviewDtoList = postsPage
                 .stream()
                 .map(post -> mappers().post().postToPostPreviewDto(post))

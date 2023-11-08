@@ -8,13 +8,15 @@ import PostUsersTokenResponse from './models/response/PostUsersTokenResponse'
 import ErrorMessageProvider from './models/response/ErrorMessageProvider'
 import PostPostsReponse from './models/response/PostPostsResponse'
 import TokenDto from './models/TokenDto'
+import GetCategoriesResponse from './models/response/GetCategoriesResponse'
 
-export const getPosts = async (page: number, size: number) => {
+export const getPosts = async (page: number, size: number, category?: string) => {
   return axios
     .get<PageDto<PostPreviewDto>>(endpoint(ApiEndpoints.POSTS), {
       params: {
         page,
         size,
+        category
       },
     })
     .then((response) => response.data)
@@ -60,6 +62,13 @@ export const putPosts = async (token: TokenDto, data: PostDto) => {
     )
     .then((response) => response.data)
     .catch((error) => handleError<PostPostsReponse>(error))
+}
+
+export const getCategories = async () => {
+  return axios
+  .get<GetCategoriesResponse>(endpoint(ApiEndpoints.CATEGORIES))
+  .then((response) => response.data)
+  .catch((error) => handleError<GetCategoriesResponse>(error))
 }
 
 const handleError = <T extends ErrorMessageProvider>(error: any): T => {

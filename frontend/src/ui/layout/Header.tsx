@@ -9,29 +9,46 @@ const Header: FC<{}> = () => {
 
   const handleShowMenuButton = useCallback(() => {
     setMenuVisible((state) => !state)
-  }, []);
+  }, [])
 
   const handleLinkClick = useCallback(() => {
     setMenuVisible(false)
-  }, []);
+  }, [])
 
   return (
     <header>
       <nav>
-      <Button text='show menu' style={ButtonStyle.BorderOnly} onClick={handleShowMenuButton} />
-        <ul className={isMenuVisible && 'navbar_visible' || undefined}>
+        <Button
+          text='show menu'
+          style={ButtonStyle.BorderOnly}
+          onClick={handleShowMenuButton}
+        />
+        <ul className={(isMenuVisible && 'navbar_visible') || undefined}>
           <li>
-            <Link href='/' onClick={handleLinkClick}>posts</Link>
+            <Link href='/' onClick={handleLinkClick}>
+              posts
+            </Link>
           </li>
           <li>
-            <Link href='/search' onClick={handleLinkClick}>search</Link>
+            <Link href='/categories' onCanPlay={handleLinkClick}>
+              categories
+            </Link>
           </li>
           <li>
-            <Link href='/static/feed.xml' onClick={handleLinkClick}>rss</Link>
+            <Link href='/search' onClick={handleLinkClick}>
+              search
+            </Link>
+          </li>
+          <li>
+            <Link href='/static/feed.xml' onClick={handleLinkClick}>
+              rss
+            </Link>
           </li>
           {token && (
             <li>
-              <Link href='/admin' onClick={handleLinkClick}>admin</Link>
+              <Link href='/admin' onClick={handleLinkClick}>
+                admin
+              </Link>
             </li>
           )}
         </ul>

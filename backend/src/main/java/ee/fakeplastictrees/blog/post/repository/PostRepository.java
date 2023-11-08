@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostRepository extends MongoRepository<Post, String> {
     Page<Post> findByVisibleTrue(Pageable pageable);
+
+    Page<Post> findByVisibleTrueAndCategoryIgnoreCase(Pageable pageable, String category);
 }

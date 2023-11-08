@@ -3,6 +3,7 @@ const baseUrl = process.env.SERVICE_URL || process.env.NEXT_PUBLIC_SERVICE_URL
 export enum ApiEndpoints {
   POSTS = '/posts',
   POSTS_ID = '/posts/{0}',
+  CATEGORIES = '/categories',
   USERS_TOKEN = '/users/token',
 }
 

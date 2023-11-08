@@ -26,12 +26,21 @@ public class PostController {
     private PostService postService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PageDto<PostPreviewDto>> getPosts(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size", defaultValue = "10") Integer size) {
+    public ResponseEntity<PageDto<PostPreviewDto>> getPosts(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                            @RequestParam(value = "size", defaultValue = "10") Integer size,
+                                                            @RequestParam(value = "category", required = false) String category) {
         if (size > 100) {
             size = 100;
         }
 
-        return new ResponseEntity<>(postService.getPosts(page, size), HttpStatus.OK);
+        PageDto<PostPreviewDto> posts;
+        if (category == null) {
+            posts = postService.getPosts(page, size);
+        } else {
+            posts = postService.getPosts(page, size, category);
+        }
+
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
