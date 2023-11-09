@@ -6,13 +6,15 @@ import Button from '@/ui/layout/element/Button'
 import PostList from '@/ui/post/PostList'
 import { GetServerSideProps } from 'next'
 import { FC, useCallback, useState } from 'react'
+import { toast } from 'react-toastify'
+import InternalServerErrorPage from './500'
 
 export const LOAD_PAGE = 1
 export const LOAD_POSTS = 20
 
-const PostListPage: FC<{ posts_page: PageDto<PostPreviewDto> }> = ({
-  posts_page,
-}) => {
+const PostListPage: FC<{
+  posts_page: PageDto<PostPreviewDto>
+}> = ({ posts_page }) => {
   const [currentPage, setCurrentPage] = useState(posts_page)
   const [items, setItems] = useState(posts_page.items)
 
@@ -24,6 +26,12 @@ const PostListPage: FC<{ posts_page: PageDto<PostPreviewDto> }> = ({
     setCurrentPage(newPage)
     setItems((existingItems) => [...existingItems, ...newPage.items])
   }, [currentPage])
+
+  if (posts_page.message) {
+    toast.error(posts_page.message)
+
+    return <InternalServerErrorPage />
+  }
 
   return (
     <>
@@ -38,7 +46,8 @@ const PostListPage: FC<{ posts_page: PageDto<PostPreviewDto> }> = ({
 }
 
 export const getServerSideProps: GetServerSideProps<{
-  posts_page: PageDto<PostPreviewDto>
+  posts_page?: PageDto<PostPreviewDto>
+  message?: string
 }> = async () => {
   const posts_page = await getPosts(LOAD_PAGE, LOAD_POSTS).then(
     (response) => response,

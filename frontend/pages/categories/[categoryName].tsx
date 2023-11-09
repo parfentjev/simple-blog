@@ -7,6 +7,8 @@ import { getPosts } from '@/api/api-executor'
 import PostList from '@/ui/post/PostList'
 import Container from '@/ui/layout/Container'
 import Button from '@/ui/layout/element/Button'
+import { toast } from 'react-toastify'
+import NotFoundErrorPage from '../404'
 
 const CategoryPage: FC<{
   posts_page: PageDto<PostPreviewDto>
@@ -20,19 +22,27 @@ const CategoryPage: FC<{
   }, [posts_page])
 
   const handleLoadMore = useCallback(async () => {
-    console.log({
-      currentPage: currentPage.page,
-      nextPage: currentPage.page + 1,
-    })
     const newPage = await getPosts(
       currentPage.page + 1,
       LOAD_POSTS,
       categoryName,
     ).then((response) => response)
 
-    setCurrentPage(newPage)
-    setItems((existingItems) => [...existingItems, ...newPage.items])
+    if (newPage.message) {
+      toast.error(newPage.message)
+    } else if (newPage.items.length < 1) {
+      toast.error(`Couldn't load any posts for ${categoryName}`)
+    } else {
+      setCurrentPage(newPage)
+      setItems((existingItems) => [...existingItems, ...newPage.items])
+    }
   }, [currentPage, categoryName])
+
+  if (posts_page.message || posts_page.items.length < 1) {
+    toast.error(`Couldn't load any posts for ${categoryName}`)
+
+    return <NotFoundErrorPage />
+  }
 
   return (
     <>
@@ -59,10 +69,6 @@ export const getServerSideProps: GetServerSideProps<{
   const posts_page = await getPosts(LOAD_PAGE, LOAD_POSTS, categoryName).then(
     (response) => response,
   )
-
-  if (posts_page.items.length < 1) {
-    return { notFound: true }
-  }
 
   return { props: { posts_page, categoryName } }
 }

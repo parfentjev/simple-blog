@@ -4,6 +4,7 @@ import { useAuthContext } from '@/store/auth-context'
 import EditPostForm from '@/ui/post/EditPostForm'
 import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const EditPostPage: FC<{}> = () => {
   const { query } = useRouter()
@@ -16,11 +17,7 @@ const EditPostPage: FC<{}> = () => {
     }
 
     getPostByIdWithToken(token, query.postId.toString()).then((response) => {
-      if (response.id) {
-        setPost(response)
-      } else {
-        // to do
-      }
+      response.id ? setPost(response) : toast.error(response.message)
     })
   }, [query, token])
 

@@ -10,16 +10,21 @@ import PostPostsReponse from './models/response/PostPostsResponse'
 import TokenDto from './models/TokenDto'
 import GetCategoriesResponse from './models/response/GetCategoriesResponse'
 
-export const getPosts = async (page: number, size: number, category?: string) => {
+export const getPosts = async (
+  page: number,
+  size: number,
+  category?: string,
+) => {
   return axios
     .get<PageDto<PostPreviewDto>>(endpoint(ApiEndpoints.POSTS), {
       params: {
         page,
         size,
-        category
+        category,
       },
     })
     .then((response) => response.data)
+    .catch((error) => handleError<PageDto<PostPreviewDto>>(error))
 }
 
 export const getPostById = async (postId: string) => {
@@ -66,9 +71,9 @@ export const putPosts = async (token: TokenDto, data: PostDto) => {
 
 export const getCategories = async () => {
   return axios
-  .get<GetCategoriesResponse>(endpoint(ApiEndpoints.CATEGORIES))
-  .then((response) => response.data)
-  .catch((error) => handleError<GetCategoriesResponse>(error))
+    .get<GetCategoriesResponse>(endpoint(ApiEndpoints.CATEGORIES))
+    .then((response) => response.data)
+    .catch((error) => handleError<GetCategoriesResponse>(error))
 }
 
 const handleError = <T extends ErrorMessageProvider>(error: any): T => {
@@ -80,7 +85,7 @@ const handleError = <T extends ErrorMessageProvider>(error: any): T => {
 
   return {
     message: message ? message : 'Request has failed.',
-    statusCode
+    statusCode,
   } as T
 }
 

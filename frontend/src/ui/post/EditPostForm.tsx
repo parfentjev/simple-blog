@@ -7,13 +7,13 @@ import Post from './Post'
 import { getCategories, postPosts, putPosts } from '@/api/api-executor'
 import { useAuthContext } from '@/store/auth-context'
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
 
 const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
   const { token } = useAuthContext()
   const { push } = useRouter()
   const [possibleCategories, setPossibleCategories] = useState<string[]>([])
   const [categoriesValid, setCategoriesValid] = useState(true)
-  const [errorMessage, setErrorMessage] = useState<string>()
 
   const [modifiedPost, setModifiedPost] = useState<PostDto>({
     id: post ? post.id : undefined,
@@ -43,11 +43,9 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
 
   useEffect(() => {
     getCategories().then((response) => {
-      if (response.message) {
-        setErrorMessage(response.message)
-      } else {
-        setPossibleCategories(response.map((i) => i.name))
-      }
+      response.message
+        ? toast.error(response.message)
+        : setPossibleCategories(response.map((i) => i.name))
     })
   }, [])
 
@@ -103,20 +101,20 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
 
   const handleSave = async (event: FormEvent) => {
     event.preventDefault()
-    setErrorMessage('')
 
     if (!token) {
+      toast.error('Token has expired.')
+
       return
     }
 
     const result = await (post
       ? putPosts(token, modifiedPost)
       : postPosts(token, modifiedPost))
-    if (result.message) {
-      setErrorMessage(result.message)
-    } else {
-      push(`/admin/post/${result.id}`)
-    }
+
+    result.message
+      ? toast.error(result.message)
+      : push(`/admin/post/${result.id}`)
   }
 
   return (
@@ -175,7 +173,6 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
         </div>
       </Container>
       <Container centered={true}>
-        {errorMessage && <p>{errorMessage}</p>}
         <Button text='Save' type='submit' />{' '}
       </Container>
     </form>
