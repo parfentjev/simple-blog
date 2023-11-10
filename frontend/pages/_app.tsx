@@ -3,6 +3,7 @@ import { AppProps } from 'next/app'
 import './../src/ui/layout/common.css'
 import Head from 'next/head'
 import { AuthContextProvider } from '@/store/auth-context'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (

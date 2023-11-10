@@ -23,7 +23,9 @@ const PostPreview: FC<{ post: PostPreviewDto }> = ({ post }) => {
         </div>
       </div>
       <div>
-        <div className={`text_muted ${styles.date}`}>{dateString}</div>
+        <div className={`text_muted ${styles.date}`}>
+          <i className='bi bi-calendar2'></i> {dateString}
+        </div>
         <div className={`text_muted ${styles.categories}`}>
           {post.category
             .map<ReactNode>((i) => (
@@ -31,7 +33,8 @@ const PostPreview: FC<{ post: PostPreviewDto }> = ({ post }) => {
                 {i}
               </Link>
             ))
-            .reduce((p1, p2) => [p1, ', ', p2])}
+            .reduce((p1, p2) => [p1, ', ', p2])}{' '}
+          <i className='bi bi-tags'></i>
         </div>
       </div>
     </article>
