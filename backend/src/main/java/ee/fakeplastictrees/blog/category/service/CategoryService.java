@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ee.fakeplastictrees.blog.core.Utils.mappers;
@@ -40,5 +41,9 @@ public class CategoryService {
         categoryRepository.findById(categoryId).ifPresentOrElse(category -> categoryRepository.delete(category), () -> {
             throw new ResourceNotFoundException(Category.class, categoryId);
         });
+    }
+
+    public Optional<Category> getCategoryByName(String name) {
+        return categoryRepository.findByName(name);
     }
 }

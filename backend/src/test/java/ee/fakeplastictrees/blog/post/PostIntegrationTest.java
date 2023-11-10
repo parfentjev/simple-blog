@@ -1,5 +1,7 @@
 package ee.fakeplastictrees.blog.post;
 
+import ee.fakeplastictrees.blog.category.controller.request.PostCategoriesRequest;
+import ee.fakeplastictrees.blog.category.model.CategoryDto;
 import ee.fakeplastictrees.blog.post.controller.request.PostPostsRequest;
 import ee.fakeplastictrees.blog.post.controller.request.PutPostsRequest;
 import ee.fakeplastictrees.blog.post.model.PostDto;
@@ -8,6 +10,7 @@ import ee.fakeplastictrees.blog.post.repository.PostRepository;
 import ee.fakeplastictrees.blog.testsupport.AbstractIntegrationTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,11 +22,23 @@ import java.util.stream.Stream;
 
 import static ee.fakeplastictrees.blog.core.Utils.builders;
 import static ee.fakeplastictrees.blog.core.Utils.mappers;
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PostIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private PostRepository postRepository;
+
+    private static Set<String> categories;
+
+    @BeforeEach
+    public void beforeEach() {
+        if (categories == null) {
+            categories = Set.of("category1", "category2");
+
+            categories.forEach(this::postCategories);
+        }
+    }
 
     @AfterEach
     public void afterEach() {
@@ -38,7 +53,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                 .mapToObj(i -> {
                     PostPostsRequest request = postPostsRequest();
                     request.setDate(instantNow.minusSeconds(i).toString());
-                    PostDto postDto = editorExecutor().postPosts(request).body();
+                    PostDto postDto = editorExecutor().postPosts(request).statusCode(201).body();
 
                     return mappers().post().postDtoToPostPreviewDto(postDto);
                 })
@@ -71,13 +86,16 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void getPostsFilterByCategory() {
+        List<String> newCategories = List.of(RandomStringUtils.randomAlphanumeric(10), RandomStringUtils.randomAlphanumeric(10));
+        newCategories.forEach(this::postCategories);
+
         List<PostPostsRequest> postPostsRequests = IntStream.range(0, 2).mapToObj(i -> postPostsRequest()).toList();
-        postPostsRequests.get(0).setCategory(Set.of("category1", "category2"));
-        postPostsRequests.get(1).setCategory(Set.of("category1", "category3"));
+        postPostsRequests.get(0).setCategory(Set.of("category1", newCategories.get(0)));
+        postPostsRequests.get(1).setCategory(Set.of("category1", newCategories.get(1)));
 
         List<PostPreviewDto> posts = postPostsRequests.stream()
                 .map(request -> {
-                    PostDto postDto = editorExecutor().postPosts(request).body();
+                    PostDto postDto = editorExecutor().postPosts(request).statusCode(201).body();
 
                     return mappers().post().postDtoToPostPreviewDto(postDto);
                 })
@@ -89,7 +107,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getItems()).extracting(PostPreviewDto::getId).containsExactlyInAnyOrder(posts.get(0).getId(), posts.get(1).getId());
                 });
 
-        anonymousExecutor().getPosts(1, 2, "category2")
+        anonymousExecutor().getPosts(1, 2, newCategories.get(0))
                 .statusCode(200)
                 .responseConsumer(response -> {
                     assertThat(response.getItems()).extracting(PostPreviewDto::getId).containsExactlyInAnyOrder(posts.get(0).getId());
@@ -381,13 +399,16 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
     public void putPostsByIdAsEditor() {
         PostDto postDto = postPosts(postPostsRequest());
 
+        Set<String> newCategories = Set.of(RandomStringUtils.randomAlphanumeric(10), RandomStringUtils.randomAlphanumeric(10));
+        newCategories.forEach(this::postCategories);
+
         PutPostsRequest request = builders().post().request().putPosts()
                 .title(RandomStringUtils.randomAlphanumeric(30))
                 .summary(RandomStringUtils.randomAlphanumeric(200))
                 .text(RandomStringUtils.randomAlphanumeric(5000))
                 .date(Instant.now().toString())
                 .visible(true)
-                .category(Set.of(RandomStringUtils.randomAlphanumeric(10), RandomStringUtils.randomAlphanumeric(10)))
+                .category(newCategories)
                 .build();
 
         editorExecutor().putPostsById(postDto.getId(), request)
@@ -738,6 +759,29 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getPostsById(postDto.getId()).statusCode(200);
     }
 
+    @Test
+    public void postPostsWithCategoryThatDoesNotExist() {
+        PostPostsRequest postPostsRequest = postPostsRequest();
+        String notExistingCategoryName = RandomStringUtils.randomAlphanumeric(10);
+        postPostsRequest.setCategory(Set.of("category1", notExistingCategoryName));
+
+        editorExecutor().postPosts(postPostsRequest)
+                .statusCode(404)
+                .message(format("Category was not found by identifier '%s'", notExistingCategoryName));
+    }
+
+    @Test
+    public void putPostsWithCategoryThatDoesNotExist() {
+        PostDto postDto = postPosts(postPostsRequest());
+        PutPostsRequest putPostsRequest = putPostsRequest(postDto);
+        String notExistingCategoryName = RandomStringUtils.randomAlphanumeric(10);
+        putPostsRequest.setCategory(Set.of("category1", notExistingCategoryName));
+
+        editorExecutor().putPostsById(postDto.getId(), putPostsRequest)
+                .statusCode(404)
+                .message(format("Category was not found by identifier '%s'", notExistingCategoryName));
+    }
+
     private PostPostsRequest postPostsRequest() {
         return builders().post().request().postPosts()
                 .title(RandomStringUtils.randomAlphanumeric(30))
@@ -745,7 +789,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                 .text(RandomStringUtils.randomAlphanumeric(5000))
                 .date(Instant.now().toString())
                 .visible(true)
-                .category(Set.of(RandomStringUtils.randomAlphanumeric(10), RandomStringUtils.randomAlphanumeric(10)))
+                .category(categories)
                 .build();
     }
 
@@ -762,5 +806,13 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                 .visible(true)
                 .category(postDto.getCategory())
                 .build();
+    }
+
+    private CategoryDto postCategories(String name) {
+        PostCategoriesRequest request = builders().category().request().postCategories()
+                .name(name)
+                .build();
+
+        return editorExecutor().postCategories(request).statusCode(201).body();
     }
 }
