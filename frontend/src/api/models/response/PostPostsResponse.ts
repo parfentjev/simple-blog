@@ -1,6 +1,6 @@
 import PostDto from '../PostDto'
-import ErrorMessageProvider from './ErrorMessageProvider'
+import Response from './Resonse'
 
-type PostPostsReponse = PostDto & ErrorMessageProvider
+type PostPostsReponse = PostDto & Response
 
 export default PostPostsReponse

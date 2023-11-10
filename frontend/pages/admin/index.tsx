@@ -3,7 +3,7 @@ import Container from '@/ui/layout/Container'
 import Link from 'next/link'
 import { FC } from 'react'
 
-const AdminPage: FC<{}> = () => {
+const AdminPage: FC = () => {
   return (
     <ProtectedRoute>
       <Container name='Admin page'>

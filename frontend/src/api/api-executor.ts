@@ -9,6 +9,8 @@ import ErrorMessageProvider from './models/response/ErrorMessageProvider'
 import PostPostsReponse from './models/response/PostPostsResponse'
 import TokenDto from './models/TokenDto'
 import GetCategoriesResponse from './models/response/GetCategoriesResponse'
+import GetPostsResponse from './models/response/GetPostsResponse'
+import GetPostByIdResponse from './models/response/GetPostByIdResponse'
 
 export const getPosts = async (
   page: number,
@@ -16,7 +18,7 @@ export const getPosts = async (
   category?: string,
 ) => {
   return axios
-    .get<PageDto<PostPreviewDto>>(endpoint(ApiEndpoints.POSTS), {
+    .get<GetPostsResponse>(endpoint(ApiEndpoints.POSTS), {
       params: {
         page,
         size,
@@ -24,20 +26,24 @@ export const getPosts = async (
       },
     })
     .then((response) => response.data)
-    .catch((error) => handleError<PageDto<PostPreviewDto>>(error))
+    .catch((error) => handleError<GetPostsResponse>(error))
 }
 
 export const getPostById = async (postId: string) => {
   return axios
-    .get<PostDto>(endpoint(ApiEndpoints.POSTS_ID, postId))
+    .get<GetPostByIdResponse>(endpoint(ApiEndpoints.POSTS_ID, postId))
     .then((response) => response.data)
-    .catch((error) => handleError<PostDto>(error))
+    .catch((error) => handleError<GetPostByIdResponse>(error))
 }
 
 export const getPostByIdWithToken = async (token: TokenDto, postId: string) => {
   return axios
-    .get<PostDto>(endpoint(ApiEndpoints.POSTS_ID, postId), requestConfig(token))
+    .get<GetPostByIdResponse>(
+      endpoint(ApiEndpoints.POSTS_ID, postId),
+      requestConfig(token),
+    )
     .then((response) => response.data)
+    .catch((error) => handleError<GetPostByIdResponse>(error))
 }
 
 export const postUsersToken = async (data: PostUsersTokenRequest) => {

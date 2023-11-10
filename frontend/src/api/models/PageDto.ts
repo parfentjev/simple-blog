@@ -1,6 +1,4 @@
-import ErrorMessageProvider from './response/ErrorMessageProvider'
-
-type PageDto<T> = ErrorMessageProvider & {
+type PageDto<T> = {
   page: number
   totalPages: number
   items: T[]

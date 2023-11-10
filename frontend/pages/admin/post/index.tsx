@@ -1,7 +1,7 @@
 import EditPostForm from '@/ui/post/EditPostForm'
 import { FC } from 'react'
 
-const CreatePostPage: FC<{}> = () => {
+const CreatePostPage: FC = () => {
   return <EditPostForm />
 }
 

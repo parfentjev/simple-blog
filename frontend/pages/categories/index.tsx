@@ -6,9 +6,11 @@ import { FC } from 'react'
 import InternalServerErrorPage from '../500'
 import { toast } from 'react-toastify'
 
-const CategoriesPage: FC<{ categories: GetCategoriesResponse }> = ({
-  categories,
-}) => {
+type CategoriesPageProps = {
+  categories: GetCategoriesResponse
+}
+
+const CategoriesPage: FC<CategoriesPageProps> = ({ categories }) => {
   if (categories.message) {
     toast.error(categories.message)
 
@@ -18,9 +20,9 @@ const CategoriesPage: FC<{ categories: GetCategoriesResponse }> = ({
   return <Categories categories={categories} />
 }
 
-export const getServerSideProps: GetServerSideProps<{
-  categories: GetCategoriesResponse
-}> = async () => {
+export const getServerSideProps: GetServerSideProps<
+  CategoriesPageProps
+> = async () => {
   const categories = await getCategories()
 
   return { props: { categories } }

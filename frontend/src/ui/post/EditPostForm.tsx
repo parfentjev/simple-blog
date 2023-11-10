@@ -22,7 +22,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
     text: post ? post.text : '',
     date: post ? post.date : new Date().toJSON(),
     visible: post ? post.visible : false,
-    category: post ? post.category : ['Other'],
+    category: post ? post.category : [],
   })
 
   useEffect(() => {
@@ -112,9 +112,12 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
       ? putPosts(token, modifiedPost)
       : postPosts(token, modifiedPost))
 
-    result.message
-      ? toast.error(result.message)
-      : push(`/admin/post/${result.id}`)
+    if (result.message) {
+      toast.error(result.message)
+    } else {
+      toast.success('Post saved.')
+      push(`/admin/post/${result.id}`)
+    }
   }
 
   return (

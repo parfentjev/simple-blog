@@ -27,13 +27,14 @@ const Post: FC<{ post: PostDto }> = ({ post }) => {
       <div>
         <div className={`text_muted ${styles.date}`}>{dateString}</div>
         <div className={`text_muted ${styles.categories}`}>
-          {post.category
-            .map<ReactNode>((i) => (
-              <Link key={i} href={`/categories/${i}`}>
-                {i}
-              </Link>
-            ))
-            .reduce((p1, p2) => [p1, ', ', p2])}
+          {post.category.length > 0 &&
+            post.category
+              .map<ReactNode>((i) => (
+                <Link key={i} href={`/categories/${i}`}>
+                  {i}
+                </Link>
+              ))
+              .reduce((p1, p2) => [p1, ', ', p2])}
         </div>
       </div>
       <div>

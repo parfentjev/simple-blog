@@ -2,7 +2,6 @@ import Layout from '@/ui/layout/Layout'
 import { AppProps } from 'next/app'
 import './../src/ui/layout/common.css'
 import Head from 'next/head'
-import Script from 'next/script'
 import { AuthContextProvider } from '@/store/auth-context'
 
 const App = ({ Component, pageProps }: AppProps) => {

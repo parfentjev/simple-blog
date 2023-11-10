@@ -1,33 +1,24 @@
 import { getPostById } from '@/api/api-executor'
-import PostDto from '@/api/models/PostDto'
 import Post from '@/ui/post/Post'
 import { GetServerSideProps } from 'next'
 import { FC } from 'react'
 import { toast } from 'react-toastify'
 import NotFoundErrorPage from '../../404'
+import GetPostByIdResponse from '@/api/models/response/GetPostByIdResponse'
+import PostPage, { loadPost } from '.'
 
-const PostPage: FC<{ post: PostDto }> = ({ post }) => {
-  if (post.message) {
-    toast.error(post.message)
-
-    return <NotFoundErrorPage />
-  }
-
-  return <Post post={post} />
+type PostPageProps = {
+  post: GetPostByIdResponse
 }
 
-export const getServerSideProps: GetServerSideProps<{
-  post?: PostDto
-}> = async (context) => {
-  const postId = context.params?.postId
-
-  if (postId == undefined) {
-    return { notFound: true }
-  }
-
-  const post = await getPostById(postId.toString())
-
-  return { props: { post } }
+const TitledPostPage: FC<PostPageProps> = ({ post }) => {
+  return <PostPage post={post} />
 }
 
-export default PostPage
+export const getServerSideProps: GetServerSideProps<PostPageProps> = async (
+  context,
+) => {
+  return await loadPost(context)
+}
+
+export default TitledPostPage

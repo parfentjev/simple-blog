@@ -1,6 +1,6 @@
-import CategoryDto from "../CategoryDto";
-import ErrorMessageProvider from "./ErrorMessageProvider";
+import CategoryDto from '../CategoryDto'
+import Response from './Resonse'
 
-type GetCategoriesResponse = CategoryDto[] & ErrorMessageProvider
+type GetCategoriesResponse = CategoryDto[] & Response
 
 export default GetCategoriesResponse

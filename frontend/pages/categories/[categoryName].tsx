@@ -1,19 +1,20 @@
-import PostPreviewDto from '@/api/models/PostPreviewDto'
 import { FC, useCallback, useEffect, useState } from 'react'
 import { LOAD_PAGE, LOAD_POSTS } from '..'
 import { GetServerSideProps } from 'next'
-import PageDto from '@/api/models/PageDto'
 import { getPosts } from '@/api/api-executor'
 import PostList from '@/ui/post/PostList'
 import Container from '@/ui/layout/Container'
 import Button from '@/ui/layout/element/Button'
 import { toast } from 'react-toastify'
 import NotFoundErrorPage from '../404'
+import GetPostsResponse from '@/api/models/response/GetPostsResponse'
 
-const CategoryPage: FC<{
-  posts_page: PageDto<PostPreviewDto>
+type CategoryPageProps = {
+  posts_page: GetPostsResponse
   categoryName: string
-}> = ({ posts_page, categoryName }) => {
+}
+
+const CategoryPage: FC<CategoryPageProps> = ({ posts_page, categoryName }) => {
   const [currentPage, setCurrentPage] = useState(posts_page)
   const [items, setItems] = useState(posts_page.items)
 
@@ -56,10 +57,9 @@ const CategoryPage: FC<{
   )
 }
 
-export const getServerSideProps: GetServerSideProps<{
-  posts_page: PageDto<PostPreviewDto>
-  categoryName: string
-}> = async (context) => {
+export const getServerSideProps: GetServerSideProps<CategoryPageProps> = async (
+  context,
+) => {
   const categoryName = context.params?.categoryName?.toString()
 
   if (categoryName == undefined) {

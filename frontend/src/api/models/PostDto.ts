@@ -1,6 +1,4 @@
-import ErrorMessageProvider from "./response/ErrorMessageProvider"
-
-type PostDto = ErrorMessageProvider & {
+type PostDto = {
   id?: string
   title: string
   summary: string

@@ -2,7 +2,7 @@ import Container from '@/ui/layout/Container'
 import SearchBox from '@/ui/search/SearchBox'
 import { FC } from 'react'
 
-const SearchPage: FC<{}> = () => {
+const SearchPage: FC = () => {
   return (
     <Container name='Search' centered={true}>
       <SearchBox />

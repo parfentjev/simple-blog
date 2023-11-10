@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
-const InternalServerErrorPage: FC<{}> = () => {
+const InternalServerErrorPage: FC = () => {
   return (
     <Container name='Oops!' centered={true}>
       <p>Something went wrong.</p>

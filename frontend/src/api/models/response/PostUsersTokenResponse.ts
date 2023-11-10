@@ -1,6 +1,6 @@
 import TokenDto from '../TokenDto'
-import ErrorMessageProvider from './ErrorMessageProvider'
+import Response from './Resonse'
 
-type PostUsersTokenResponse = ErrorMessageProvider & TokenDto
+type PostUsersTokenResponse = TokenDto & Response
 
 export default PostUsersTokenResponse

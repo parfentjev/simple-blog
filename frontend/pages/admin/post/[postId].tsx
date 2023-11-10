@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-const EditPostPage: FC<{}> = () => {
+const EditPostPage: FC = () => {
   const { query } = useRouter()
   const { token } = useAuthContext()
   const [post, setPost] = useState<PostDto>()

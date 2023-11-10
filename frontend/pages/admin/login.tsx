@@ -4,7 +4,7 @@ import { FC } from 'react'
 import { useRouter } from 'next/router'
 import { useAuthContext } from '@/store/auth-context'
 
-const LoginPage: FC<{}> = () => {
+const LoginPage: FC = () => {
   const { push } = useRouter()
   const { token } = useAuthContext()
 
