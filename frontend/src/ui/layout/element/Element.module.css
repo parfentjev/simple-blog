@@ -4,13 +4,13 @@
   cursor: pointer;
   border-style: solid;
   border-radius: 1px;
-  border-color: #f9a70e;
+  border-color: var(--color-dark-tangerine);
   border-radius: 5px;
-  color: #211e19;
+  color: var(--color-eerie-black);
 }
 
 .primary_button {
-  background-color: #f9a70e;
+  background-color: var(--color-dark-tangerine);
 }
 
 .secondary_button {
@@ -19,7 +19,7 @@
 }
 
 .border_only_button {
-  background-color: #211e19;
-  border-color: #f9a70e;
-  color: #f9a70e;
+  background-color: var(--color-eerie-black);
+  border-color: var(--color-dark-tangerine);
+  color: var(--color-dark-tangerine);
 }

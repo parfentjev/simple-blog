@@ -1,3 +1,14 @@
+:root {
+  --color-black-chocolate: #1b1914;
+  --color-eerie-black: #211e19;
+  --color-dark-tangerine: #f9a70e;
+  --color-topaz: #ffcf76;
+  --color-golden-brown: #866121;
+  --color-pale-silver: #c8c3bc;
+  --color-taupe-gray: #898989;
+  --color-cola: #332e27;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,17 +16,17 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #211e19;
-  color: rgb(200, 195, 188);
+  background: var(--color-eerie-black);
+  color: var(--color-pale-silver);
 }
 
 h1 {
-  color: #f9a70e;
+  color: var(--color-dark-tangerine);
   text-transform: capitalize;
 }
 
 a {
-  color: #f9a70e;
+  color: var(--color-dark-tangerine);
   text-decoration: none;
 }
 
@@ -28,7 +39,7 @@ header {
 }
 
 nav {
-  background: #1b1914;
+  background: var(--color-black-chocolate);
   padding-top: 1rem;
 }
 
@@ -52,17 +63,17 @@ nav li {
 }
 
 a:hover {
-  color: #ffcf76;
+  color: var(--color-topaz);
 }
 
 footer {
   text-align: center;
-  color: #866121;
+  color: var(--color-golden-brown);
   margin-bottom: 3rem;
 }
 
 footer a {
-  color: #866121;
+  color: var(--color-golden-brown);
   margin: 0 1rem 0 1rem;
 }
 
@@ -76,20 +87,20 @@ main {
 
 input,
 textarea {
-  background-color: #211e19;
-  border: solid 1px #f9a70e;
+  background-color: var(--color-eerie-black);
+  border: solid 1px var(--color-dark-tangerine);
   border-radius: 5px;
   padding: 0.5rem;
   outline: none;
-  color: rgb(200, 195, 188);
+  color: var(--color-pale-silver);
 }
 
 .text_muted {
-  color: rgb(137, 137, 137);
+  color: var(--color-taupe-gray);
 }
 
 .text_muted a {
-  color: #866121;
+  color: var(--color-golden-brown);
 }
 
 /* Large screen only */
@@ -127,6 +138,6 @@ textarea {
 @media (max-width: 839px) {
   nav li:hover,
   nav li:active {
-    background-color: #332e27;
+    background-color: var(--color-cola);
   }
 }
