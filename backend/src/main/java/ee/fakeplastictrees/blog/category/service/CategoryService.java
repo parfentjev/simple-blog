@@ -44,6 +44,6 @@ public class CategoryService {
     }
 
     public Optional<Category> getCategoryByName(String name) {
-        return categoryRepository.findByName(name);
+        return categoryRepository.findByNameIgnoreCase(name);
     }
 }

@@ -782,6 +782,18 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                 .message(format("Category was not found by identifier '%s'", notExistingCategoryName));
     }
 
+    @Test
+    public void postPostsWithCategoryCaseInsensitive() {
+        PostPostsRequest postPostsRequest = postPostsRequest();
+        postPostsRequest.setCategory(Set.of("CATEGORY1"));
+
+        editorExecutor().postPosts(postPostsRequest)
+                .statusCode(201)
+                .responseConsumer(response -> {
+                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postPostsRequest.getCategory());
+                });
+    }
+
     private PostPostsRequest postPostsRequest() {
         return builders().post().request().postPosts()
                 .title(RandomStringUtils.randomAlphanumeric(30))
