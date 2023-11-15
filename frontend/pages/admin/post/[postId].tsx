@@ -1,6 +1,6 @@
 import { getPostByIdWithToken } from '@/api/api-executor'
 import PostDto from '@/api/models/PostDto'
-import { useAuthContext } from '@/store/auth-context'
+import { ProtectedRoute, useAuthContext } from '@/store/auth-context'
 import EditPostForm from '@/ui/post/EditPostForm'
 import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
@@ -21,7 +21,11 @@ const EditPostPage: FC = () => {
     })
   }, [query, token])
 
-  return <EditPostForm post={post} />
+  return (
+    <ProtectedRoute>
+      <EditPostForm post={post} />
+    </ProtectedRoute>
+  )
 }
 
 export default EditPostPage

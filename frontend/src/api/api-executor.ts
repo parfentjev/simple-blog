@@ -11,6 +11,10 @@ import TokenDto from './models/TokenDto'
 import GetCategoriesResponse from './models/response/GetCategoriesResponse'
 import GetPostsResponse from './models/response/GetPostsResponse'
 import GetPostByIdResponse from './models/response/GetPostByIdResponse'
+import PostCategoriesRequest from './models/request/PostCategoriesRequest'
+import PostCategoriesResponse from './models/response/PostCategoriesResponse'
+import PutCategoriesRequest from './models/request/PutCategoriesRequest'
+import PutCategoriesResponse from './models/response/PutCategoriesResponse'
 
 export const getPosts = async (
   page: number,
@@ -80,6 +84,44 @@ export const getCategories = async () => {
     .get<GetCategoriesResponse>(endpoint(ApiEndpoints.CATEGORIES))
     .then((response) => response.data)
     .catch((error) => handleError<GetCategoriesResponse>(error))
+}
+
+export const postCategories = async (
+  data: PostCategoriesRequest,
+  token: TokenDto,
+) => {
+  return axios
+    .post<PostCategoriesResponse>(
+      endpoint(ApiEndpoints.CATEGORIES),
+      data,
+      requestConfig(token),
+    )
+    .then((response) => response.data)
+    .catch((error) => handleError<PostCategoriesResponse>(error))
+}
+
+export const putCategories = async (
+  categoryId: string,
+  data: PutCategoriesRequest,
+  token: TokenDto,
+) => {
+  return axios
+    .put<PutCategoriesResponse>(
+      endpoint(ApiEndpoints.CATEGORIES_ID, categoryId),
+      data,
+      requestConfig(token),
+    )
+    .then((response) => response.data)
+    .catch((error) => handleError(error))
+}
+
+export const deleteCategories = async (categoryId: string, token: TokenDto) => {
+  return axios
+    .delete<ErrorMessageProvider>(
+      endpoint(ApiEndpoints.CATEGORIES_ID, categoryId),
+      requestConfig(token),
+    )
+    .catch((error) => handleError(error))
 }
 
 const handleError = <T extends ErrorMessageProvider>(error: any): T => {

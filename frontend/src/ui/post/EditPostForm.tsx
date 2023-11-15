@@ -15,7 +15,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
   const [possibleCategories, setPossibleCategories] = useState<string[]>([])
   const [categoriesValid, setCategoriesValid] = useState(true)
 
-  const [modifiedPost, setModifiedPost] = useState<PostDto>({
+  const [postState, setPostState] = useState<PostDto>({
     id: post ? post.id : undefined,
     title: post ? post.title : '',
     summary: post ? post.summary : '',
@@ -30,7 +30,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
       return
     }
 
-    setModifiedPost({
+    setPostState({
       id: post.id,
       title: post.title,
       summary: post.summary,
@@ -52,7 +52,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
   useEffect(() => {
     let invalidCategories: string[] = []
 
-    modifiedPost.category.forEach((i) => {
+    postState.category.forEach((i) => {
       if (
         possibleCategories.findIndex(
           (j) => i.toLowerCase() === j.toLowerCase(),
@@ -67,34 +67,34 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
     } else {
       setCategoriesValid(false)
     }
-  }, [modifiedPost.category, possibleCategories])
+  }, [postState.category, possibleCategories])
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setModifiedPost((postDto) => {
+    setPostState((postDto) => {
       return { ...postDto, title: event.target.value }
     })
   }
 
   const handleCategoriesChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setModifiedPost((postDto) => {
+    setPostState((postDto) => {
       return { ...postDto, category: event.target.value.split(',') }
     })
   }
 
   const handleSummaryChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setModifiedPost((postDto) => {
+    setPostState((postDto) => {
       return { ...postDto, summary: event.target.value }
     })
   }
 
   const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setModifiedPost((postDto) => {
+    setPostState((postDto) => {
       return { ...postDto, text: event.target.value }
     })
   }
 
   const handleVisibleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setModifiedPost((postDto) => {
+    setPostState((postDto) => {
       return { ...postDto, visible: event.target.checked }
     })
   }
@@ -103,14 +103,14 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
     event.preventDefault()
 
     if (!token) {
-      toast.error('Token has expired.')
+      toast.error('Token is not defined.')
 
       return
     }
 
     const result = await (post
-      ? putPosts(token, modifiedPost)
-      : postPosts(token, modifiedPost))
+      ? putPosts(token, postState)
+      : postPosts(token, postState))
 
     if (result.message) {
       toast.error(result.message)
@@ -127,7 +127,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
           type='text'
           placeholder='title'
           onChange={handleTitleChange}
-          value={modifiedPost.title}
+          value={postState.title}
         />
       </div>
       <div>
@@ -135,7 +135,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
           type='text'
           placeholder='categories'
           onChange={handleCategoriesChange}
-          value={modifiedPost.category}
+          value={postState.category}
           className={categoriesValid ? styles.invalid : ``}
         />
       </div>
@@ -144,7 +144,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
           rows={5}
           placeholder='summary'
           onChange={handleSummaryChange}
-          value={modifiedPost.summary}
+          value={postState.summary}
         />
       </div>
       <div>
@@ -152,12 +152,12 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
           rows={10}
           placeholder='text'
           onChange={handleTextChange}
-          value={modifiedPost.text}
+          value={postState.text}
         />
       </div>
-      {modifiedPost && (
+      {postState && (
         <Container>
-          <Post post={modifiedPost} />
+          <Post post={postState} />
         </Container>
       )}
       <Container
@@ -170,7 +170,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
             type='checkbox'
             id='visible'
             onChange={handleVisibleChange}
-            checked={modifiedPost.visible}
+            checked={postState.visible}
           />
           <label htmlFor='visible'>Post is visible</label>
         </div>

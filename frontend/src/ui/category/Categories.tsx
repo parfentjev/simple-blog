@@ -9,7 +9,7 @@ const Categories: FC<{ categories: CategoryDto[] }> = ({ categories }) => {
       <p>Select a category to see all posts that belong to it.</p>
       <ul>
         {categories.map((i) => (
-          <li key={i.name}>
+          <li key={i.id}>
             <Link href={`/categories/${i.name}`}>{i.name}</Link>
           </li>
         ))}

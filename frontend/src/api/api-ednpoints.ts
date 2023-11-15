@@ -4,6 +4,7 @@ export enum ApiEndpoints {
   POSTS = '/posts',
   POSTS_ID = '/posts/{0}',
   CATEGORIES = '/categories',
+  CATEGORIES_ID = '/categories/{0}',
   USERS_TOKEN = '/users/token',
 }
 

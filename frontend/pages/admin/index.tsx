@@ -12,6 +12,9 @@ const AdminPage: FC = () => {
             <Link href='/admin/post'>Create a post</Link>
           </li>
           <li>
+            <Link href='/admin/categories'>Manage categories</Link>
+          </li>
+          <li>
             <Link href='/admin/logout/'>Log out</Link>
           </li>
         </ul>
