@@ -88,11 +88,11 @@ public class ApiExecutor {
         return ExtendedResponse.of(requestSpecification.get("/posts"), GetPostsResponse.class);
     }
 
-    public ExtendedResponse<GetPostsResponse> getPosts(Integer page, Integer size, String category) {
+    public ExtendedResponse<GetPostsResponse> getPosts(Integer page, Integer size, String categoryId) {
         RequestSpecification requestSpecification = restAssured();
         Optional.ofNullable(page).ifPresent(value -> requestSpecification.queryParam("page", value));
         Optional.ofNullable(size).ifPresent(value -> requestSpecification.queryParam("size", value));
-        Optional.ofNullable(category).ifPresent(value -> requestSpecification.queryParam("category", category));
+        Optional.ofNullable(categoryId).ifPresent(value -> requestSpecification.queryParam("categoryId", categoryId));
 
         return ExtendedResponse.of(requestSpecification.get("/posts"), GetPostsResponse.class);
     }

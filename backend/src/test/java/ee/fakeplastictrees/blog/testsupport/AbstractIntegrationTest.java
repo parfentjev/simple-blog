@@ -7,17 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.MountableFile;
-
-import java.io.IOException;
 
 import static ee.fakeplastictrees.blog.core.Utils.builders;
 
-@Testcontainers
 @ActiveProfiles("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractIntegrationTest {
@@ -30,24 +22,6 @@ public abstract class AbstractIntegrationTest {
     private ApiExecutor anonymousExecutor;
     private ApiExecutor editorExecutor;
     private ApiExecutor adminExecutor;
-
-    static final MongoDBContainer mongoDBContainer;
-
-    static {
-        try {
-            mongoDBContainer = new MongoDBContainer("mongo:latest");
-            mongoDBContainer.start();
-            mongoDBContainer.copyFileToContainer(MountableFile.forClasspathResource("/dump"), "/dump");
-            mongoDBContainer.execInContainer("mongorestore", "/dump");
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @DynamicPropertySource
-    static void initialize(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-    }
 
     protected String baseUrl() {
         return baseUrl + ":" + serverPort;

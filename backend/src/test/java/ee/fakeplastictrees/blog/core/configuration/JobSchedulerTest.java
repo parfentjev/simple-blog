@@ -16,8 +16,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 import static ee.fakeplastictrees.blog.core.Utils.builders;
@@ -58,7 +58,7 @@ public class JobSchedulerTest extends AbstractTest {
                         .title(format("Post #%d", i))
                         .summary(format("Summary #%d", i))
                         .date(LocalDateTime.now().plusDays(i).toString())
-                        .category(Set.of("category1", "category2"))
+                        .categories(Collections.emptyList())
                         .build())
                 .toList();
 

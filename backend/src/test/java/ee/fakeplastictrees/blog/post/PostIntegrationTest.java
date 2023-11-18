@@ -2,6 +2,7 @@ package ee.fakeplastictrees.blog.post;
 
 import ee.fakeplastictrees.blog.category.controller.request.PostCategoriesRequest;
 import ee.fakeplastictrees.blog.category.model.CategoryDto;
+import ee.fakeplastictrees.blog.category.repository.CategoryRepository;
 import ee.fakeplastictrees.blog.post.controller.request.PostPostsRequest;
 import ee.fakeplastictrees.blog.post.controller.request.PutPostsRequest;
 import ee.fakeplastictrees.blog.post.model.PostDto;
@@ -9,14 +10,13 @@ import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
 import ee.fakeplastictrees.blog.post.repository.PostRepository;
 import ee.fakeplastictrees.blog.testsupport.AbstractIntegrationTest;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -29,20 +29,32 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private PostRepository postRepository;
 
-    private static Set<String> categories;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
-    @BeforeEach
-    public void beforeEach() {
-        if (categories == null) {
-            categories = Set.of("category1", "category2");
+    private static final List<CategoryDto> categories;
 
-            categories.forEach(this::postCategories);
-        }
+    static {
+        categories = List.of(
+                builders().category().categoryDto()
+                        .id("1")
+                        .name("Category1")
+                        .build(),
+                builders().category().categoryDto()
+                        .id("2")
+                        .name("Category2")
+                        .build()
+        );
     }
 
     @AfterEach
     public void afterEach() {
         postRepository.deleteAll();
+
+        categoryRepository.findAll()
+                .stream()
+                .filter(c -> !NumberUtils.isCreatable(c.getId()))
+                .forEach(c -> categoryRepository.delete(c));
     }
 
     @Test
@@ -86,12 +98,20 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void getPostsFilterByCategory() {
-        List<String> newCategories = List.of(RandomStringUtils.randomAlphanumeric(10), RandomStringUtils.randomAlphanumeric(10));
-        newCategories.forEach(this::postCategories);
+        List<CategoryDto> newCategories = List.of(
+                generateCategoryDto("3", "Category3"),
+                generateCategoryDto("4", "Category4")
+        );
 
         List<PostPostsRequest> postPostsRequests = IntStream.range(0, 2).mapToObj(i -> postPostsRequest()).toList();
-        postPostsRequests.get(0).setCategory(Set.of("category1", newCategories.get(0)));
-        postPostsRequests.get(1).setCategory(Set.of("category1", newCategories.get(1)));
+        postPostsRequests.get(0).setCategories(List.of(
+                categories.get(0),
+                newCategories.get(0))
+        );
+        postPostsRequests.get(1).setCategories(List.of(
+                categories.get(0),
+                newCategories.get(1))
+        );
 
         List<PostPreviewDto> posts = postPostsRequests.stream()
                 .map(request -> {
@@ -101,13 +121,13 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                 })
                 .toList();
 
-        anonymousExecutor().getPosts(1, 2, "category1")
+        anonymousExecutor().getPosts(1, 2, "1")
                 .statusCode(200)
                 .responseConsumer(response -> {
                     assertThat(response.getItems()).extracting(PostPreviewDto::getId).containsExactlyInAnyOrder(posts.get(0).getId(), posts.get(1).getId());
                 });
 
-        anonymousExecutor().getPosts(1, 2, newCategories.get(0))
+        anonymousExecutor().getPosts(1, 2, newCategories.get(0).getId())
                 .statusCode(200)
                 .responseConsumer(response -> {
                     assertThat(response.getItems()).extracting(PostPreviewDto::getId).containsExactlyInAnyOrder(posts.get(0).getId());
@@ -160,7 +180,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -189,7 +209,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -366,7 +386,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
     @Test
     public void postPostsWithNullCategory() {
         PostPostsRequest request = postPostsRequest();
-        request.setCategory(null);
+        request.setCategories(null);
 
         editorExecutor().postPosts(request).statusCode(400);
 
@@ -382,7 +402,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
     @Test
     public void postPostsWithEmptyCategory() {
         PostPostsRequest request = postPostsRequest();
-        request.setCategory(Set.of());
+        request.setCategories(List.of());
 
         editorExecutor().postPosts(request).statusCode(400);
 
@@ -399,8 +419,10 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
     public void putPostsByIdAsEditor() {
         PostDto postDto = postPosts(postPostsRequest());
 
-        Set<String> newCategories = Set.of(RandomStringUtils.randomAlphanumeric(10), RandomStringUtils.randomAlphanumeric(10));
-        newCategories.forEach(this::postCategories);
+        List<CategoryDto> newCategories = List.of(
+                generateCategoryDto("3", "Category3"),
+                generateCategoryDto("4", "Category4")
+        );
 
         PutPostsRequest request = builders().post().request().putPosts()
                 .title(RandomStringUtils.randomAlphanumeric(30))
@@ -408,7 +430,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                 .text(RandomStringUtils.randomAlphanumeric(5000))
                 .date(Instant.now().toString())
                 .visible(true)
-                .category(newCategories)
+                .categories(newCategories)
                 .build();
 
         editorExecutor().putPostsById(postDto.getId(), request)
@@ -420,7 +442,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(request.getText());
                     assertThat(response.getDate()).isEqualTo(request.getDate());
                     assertThat(response.getVisible()).isEqualTo(request.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(request.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(request.getCategories());
                 });
     }
 
@@ -440,7 +462,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(request.getText());
                     assertThat(response.getDate()).isEqualTo(request.getDate());
                     assertThat(response.getVisible()).isEqualTo(request.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(request.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(request.getCategories());
                 });
 
         anonymousExecutor().getPostsById(postDto.getId())
@@ -462,7 +484,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -481,7 +503,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -503,7 +525,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -525,7 +547,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -547,7 +569,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -569,7 +591,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -591,7 +613,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -613,7 +635,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -635,7 +657,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -657,7 +679,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -679,7 +701,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -688,7 +710,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
         PostDto postDto = postPosts(postPostsRequest());
 
         PutPostsRequest request = putPostsRequest(postDto);
-        request.setCategory(null);
+        request.setCategories(null);
 
         editorExecutor().putPostsById(postDto.getId(), request).statusCode(400);
 
@@ -701,7 +723,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -710,7 +732,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
         PostDto postDto = postPosts(postPostsRequest());
 
         PutPostsRequest request = putPostsRequest(postDto);
-        request.setCategory(Set.of());
+        request.setCategories(List.of());
 
         editorExecutor().putPostsById(postDto.getId(), request).statusCode(400);
 
@@ -723,7 +745,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                     assertThat(response.getText()).isEqualTo(postDto.getText());
                     assertThat(response.getDate()).isEqualTo(postDto.getDate());
                     assertThat(response.getVisible()).isEqualTo(postDto.getVisible());
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postDto.getCategory());
+                    assertThat(response.getCategories()).containsExactlyInAnyOrderElementsOf(postDto.getCategories());
                 });
     }
 
@@ -762,36 +784,28 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
     @Test
     public void postPostsWithCategoryThatDoesNotExist() {
         PostPostsRequest postPostsRequest = postPostsRequest();
-        String notExistingCategoryName = RandomStringUtils.randomAlphanumeric(10);
-        postPostsRequest.setCategory(Set.of("category1", notExistingCategoryName));
+        postPostsRequest.setCategories(List.of(
+                generateCategoryDto(categories.get(0).getId(), categories.get(0).getName()),
+                generateCategoryDto("-1", RandomStringUtils.randomAlphanumeric(10)))
+        );
 
         editorExecutor().postPosts(postPostsRequest)
                 .statusCode(404)
-                .message(format("Category was not found by identifier '%s'", notExistingCategoryName));
+                .message(format("Category was not found by identifier '%s'", "-1"));
     }
 
     @Test
     public void putPostsWithCategoryThatDoesNotExist() {
         PostDto postDto = postPosts(postPostsRequest());
         PutPostsRequest putPostsRequest = putPostsRequest(postDto);
-        String notExistingCategoryName = RandomStringUtils.randomAlphanumeric(10);
-        putPostsRequest.setCategory(Set.of("category1", notExistingCategoryName));
+        putPostsRequest.setCategories(List.of(
+                categories.get(0),
+                generateCategoryDto("-1", RandomStringUtils.randomAlphanumeric(10)))
+        );
 
         editorExecutor().putPostsById(postDto.getId(), putPostsRequest)
                 .statusCode(404)
-                .message(format("Category was not found by identifier '%s'", notExistingCategoryName));
-    }
-
-    @Test
-    public void postPostsWithCategoryCaseInsensitive() {
-        PostPostsRequest postPostsRequest = postPostsRequest();
-        postPostsRequest.setCategory(Set.of("CATEGORY1"));
-
-        editorExecutor().postPosts(postPostsRequest)
-                .statusCode(201)
-                .responseConsumer(response -> {
-                    assertThat(response.getCategory()).containsExactlyInAnyOrderElementsOf(postPostsRequest.getCategory());
-                });
+                .message(format("Category was not found by identifier '%s'", "-1"));
     }
 
     private PostPostsRequest postPostsRequest() {
@@ -801,7 +815,7 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                 .text(RandomStringUtils.randomAlphanumeric(5000))
                 .date(Instant.now().toString())
                 .visible(true)
-                .category(categories)
+                .categories(categories)
                 .build();
     }
 
@@ -816,15 +830,22 @@ public class PostIntegrationTest extends AbstractIntegrationTest {
                 .text(postDto.getText())
                 .date(postDto.getDate())
                 .visible(true)
-                .category(postDto.getCategory())
+                .categories(postDto.getCategories())
                 .build();
     }
 
-    private CategoryDto postCategories(String name) {
+    private CategoryDto postCategories(CategoryDto categoryDto) {
         PostCategoriesRequest request = builders().category().request().postCategories()
-                .name(name)
+                .name(categoryDto.getName())
                 .build();
 
         return editorExecutor().postCategories(request).statusCode(201).body();
+    }
+
+    private CategoryDto generateCategoryDto(String id, String name) {
+        return CategoryDto.builder()
+                .id(id)
+                .name(name)
+                .build();
     }
 }

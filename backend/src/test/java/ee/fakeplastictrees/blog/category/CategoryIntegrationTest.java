@@ -6,6 +6,7 @@ import ee.fakeplastictrees.blog.category.model.CategoryDto;
 import ee.fakeplastictrees.blog.category.repository.CategoryRepository;
 import ee.fakeplastictrees.blog.testsupport.AbstractIntegrationTest;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,10 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
 
     @AfterEach
     public void afterEach() {
-        categoryRepository.deleteAll();
+        categoryRepository.findAll()
+                .stream()
+                .filter(c -> !NumberUtils.isCreatable(c.getId()))
+                .forEach(c -> categoryRepository.delete(c));
     }
 
     @Test
@@ -32,51 +36,23 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getCategories()
                 .statusCode(200)
                 .responseConsumer(response -> {
-                    assertThat(response).hasSize(categories.size());
-                    assertThat(response).containsExactlyInAnyOrderElementsOf(categories);
-                });
-    }
-
-    @Test
-    public void getCategoriesEmptyList() {
-        anonymousExecutor().getCategories()
-                .statusCode(200)
-                .responseConsumer(response -> {
-                    assertThat(response).hasSize(0);
+                    assertThat(response).containsAll(categories);
                 });
     }
 
     @Test
     public void postCategoriesAsAnonymous() {
         anonymousExecutor().postCategories(postCategoriesRequest()).statusCode(401);
-
-        anonymousExecutor().getCategories()
-                .statusCode(200)
-                .responseConsumer(response -> {
-                    assertThat(response).hasSize(0);
-                });
     }
 
     @Test
     public void postCategoriesWithNoBody() {
         editorExecutor().postCategories(null).statusCode(415);
-
-        anonymousExecutor().getCategories()
-                .statusCode(200)
-                .responseConsumer(response -> {
-                    assertThat(response).hasSize(0);
-                });
     }
 
     @Test
     public void postCategoriesWithNullName() {
         editorExecutor().postCategories(builders().category().request().postCategories().build()).statusCode(400);
-
-        anonymousExecutor().getCategories()
-                .statusCode(200)
-                .responseConsumer(response -> {
-                    assertThat(response).hasSize(0);
-                });
     }
 
     @Test
@@ -84,12 +60,6 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         PostCategoriesRequest request = postCategoriesRequest();
         request.setName("");
         editorExecutor().postCategories(request).statusCode(400);
-
-        anonymousExecutor().getCategories()
-                .statusCode(200)
-                .responseConsumer(response -> {
-                    assertThat(response).hasSize(0);
-                });
     }
 
     @Test
@@ -111,7 +81,6 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getCategories()
                 .statusCode(200)
                 .responseConsumer(response -> {
-                    assertThat(response).hasSize(1);
                     assertThat(response).contains(categoryDto);
                 });
     }
@@ -128,7 +97,6 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getCategories()
                 .statusCode(200)
                 .responseConsumer(response -> {
-                    assertThat(response).hasSize(1);
                     assertThat(response).contains(categoryDto);
                 });
     }
@@ -142,7 +110,6 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getCategories()
                 .statusCode(200)
                 .responseConsumer(response -> {
-                    assertThat(response).hasSize(1);
                     assertThat(response).contains(categoryDto);
                 });
     }
@@ -156,7 +123,6 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getCategories()
                 .statusCode(200)
                 .responseConsumer(response -> {
-                    assertThat(response).hasSize(1);
                     assertThat(response).contains(categoryDto);
                 });
     }
@@ -173,7 +139,6 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getCategories()
                 .statusCode(200)
                 .responseConsumer(response -> {
-                    assertThat(response).hasSize(1);
                     assertThat(response).contains(categoryDto);
                 });
     }
@@ -186,7 +151,6 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getCategories()
                 .statusCode(200)
                 .responseConsumer(response -> {
-                    assertThat(response).hasSize(1);
                     assertThat(response).contains(categoryDto);
                 });
     }
@@ -199,7 +163,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getCategories()
                 .statusCode(200)
                 .responseConsumer(response -> {
-                    assertThat(response).hasSize(0);
+                    assertThat(response).filteredOn(i -> i.getId().equals(categoryDto.getId())).hasSize(0);
                 });
     }
 
@@ -211,7 +175,6 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getCategories()
                 .statusCode(200)
                 .responseConsumer(response -> {
-                    assertThat(response).hasSize(1);
                     assertThat(response).contains(categoryDto);
                 });
     }
@@ -224,7 +187,6 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
         anonymousExecutor().getCategories()
                 .statusCode(200)
                 .responseConsumer(response -> {
-                    assertThat(response).hasSize(1);
                     assertThat(response).contains(categoryDto);
                 });
     }

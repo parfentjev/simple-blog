@@ -1,6 +1,7 @@
 package ee.fakeplastictrees.blog.post.service;
 
 import ee.fakeplastictrees.blog.category.model.Category;
+import ee.fakeplastictrees.blog.category.model.CategoryDto;
 import ee.fakeplastictrees.blog.category.service.CategoryService;
 import ee.fakeplastictrees.blog.core.exceptions.ResourceNotFoundException;
 import ee.fakeplastictrees.blog.core.model.PageDto;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static ee.fakeplastictrees.blog.core.Utils.builders;
 import static ee.fakeplastictrees.blog.core.Utils.mappers;
@@ -36,9 +36,9 @@ public class PostService {
         return buildPageDto(postsPage);
     }
 
-    public PageDto<PostPreviewDto> getPosts(Integer page, Integer size, String category) {
+    public PageDto<PostPreviewDto> getPosts(Integer page, Integer size, String categoryId) {
         PageRequest pageRequest = buildPageRequest(page, size);
-        Page<Post> postsPage = postRepository.findByVisibleTrueAndCategoryIgnoreCase(pageRequest, category);
+        Page<Post> postsPage = postRepository.findByVisibleTrueAndCategoriesId(pageRequest, categoryId);
 
         return buildPageDto(postsPage);
     }
@@ -67,7 +67,7 @@ public class PostService {
     }
 
     public PostDto createPost(PostDto postDto) {
-        assertCategoriesExist(postDto.getCategory());
+        assertCategoriesExist(postDto.getCategories());
 
         return mappers().post().postToPostDto(postRepository.save(mappers().post().postDtoToPost(postDto)));
     }
@@ -77,7 +77,7 @@ public class PostService {
             throw new ResourceNotFoundException(Post.class, postDto.getId());
         }
 
-        assertCategoriesExist(postDto.getCategory());
+        assertCategoriesExist(postDto.getCategories());
 
         return mappers().post().postToPostDto(postRepository.save(mappers().post().postDtoToPost(postDto)));
     }
@@ -88,10 +88,10 @@ public class PostService {
         });
     }
 
-    private void assertCategoriesExist(Set<String> categories) {
+    private void assertCategoriesExist(List<CategoryDto> categories) {
         categories.forEach(category -> {
-            if (categoryService.getCategoryByName(category).isEmpty()) {
-                throw new ResourceNotFoundException(Category.class, category);
+            if (categoryService.getCategoryById(category.getId()).isEmpty()) {
+                throw new ResourceNotFoundException(Category.class, category.getId());
             }
         });
     }

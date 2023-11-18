@@ -43,7 +43,7 @@ public class CategoryService {
         });
     }
 
-    public Optional<Category> getCategoryByName(String name) {
-        return categoryRepository.findByNameIgnoreCase(name);
+    public Optional<Category> getCategoryById(String categoryId) {
+        return categoryRepository.findById(categoryId);
     }
 }

@@ -11,9 +11,13 @@ import ee.fakeplastictrees.blog.testsupport.TestCredentials;
 import ee.fakeplastictrees.blog.user.controller.request.PostUsersRequest;
 import ee.fakeplastictrees.blog.user.controller.request.PostUsersTokenRequest;
 import ee.fakeplastictrees.blog.user.model.UserRole;
+import ee.fakeplastictrees.blog.user.repository.UserRepository;
 import io.restassured.http.ContentType;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Instant;
@@ -30,6 +34,17 @@ public class UserIntegrationTest extends AbstractIntegrationTest {
 
     @Value("${token.issuer}")
     private String tokenIssuer;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @AfterEach
+    public void afterEach() {
+        userRepository.findAll()
+                .stream()
+                .filter(u -> !NumberUtils.isCreatable(u.getId()))
+                .forEach(userRepository::delete);
+    }
 
     @Test
     public void postUsers() {

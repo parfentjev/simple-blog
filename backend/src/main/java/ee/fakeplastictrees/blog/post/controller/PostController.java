@@ -28,16 +28,16 @@ public class PostController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageDto<PostPreviewDto>> getPosts(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                                             @RequestParam(value = "size", defaultValue = "10") Integer size,
-                                                            @RequestParam(value = "category", required = false) String category) {
+                                                            @RequestParam(value = "categoryId", required = false) String categoryId) {
         if (size > 100) {
             size = 100;
         }
 
         PageDto<PostPreviewDto> posts;
-        if (category == null) {
+        if (categoryId == null) {
             posts = postService.getPosts(page, size);
         } else {
-            posts = postService.getPosts(page, size, category);
+            posts = postService.getPosts(page, size, categoryId);
         }
 
         return new ResponseEntity<>(posts, HttpStatus.OK);
@@ -48,8 +48,8 @@ public class PostController {
         boolean includeDrafts = UserPrivilege.POST_MANAGEMENT.isGranted(authentication);
 
         return postService.getPost(postId, includeDrafts)
-                .map(postDto -> new ResponseEntity<>(postDto, HttpStatus.OK)).
-                orElseThrow(() -> new ResourceNotFoundException("Post", postId));
+                .map(postDto -> new ResponseEntity<>(postDto, HttpStatus.OK))
+                .orElseThrow(() -> new ResourceNotFoundException("Post", postId));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -61,7 +61,7 @@ public class PostController {
                 .text(request.getText())
                 .date(request.getDate())
                 .visible(request.getVisible())
-                .category(request.getCategory())
+                .categories(request.getCategories())
                 .build();
 
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
@@ -77,7 +77,7 @@ public class PostController {
                 .text(request.getText())
                 .date(request.getDate())
                 .visible(request.getVisible())
-                .category(request.getCategory())
+                .categories(request.getCategories())
                 .build();
 
         return new ResponseEntity<>(postService.updatePost(postDto), HttpStatus.OK);

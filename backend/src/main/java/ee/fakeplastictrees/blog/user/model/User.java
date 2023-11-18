@@ -1,23 +1,27 @@
 package ee.fakeplastictrees.blog.user.model;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+@Entity
 @Data
 @Builder
-@Document("users")
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
+    @Column
     String username;
 
+    @Column
     String password;
 
+    @Column
     UserRole role;
 }

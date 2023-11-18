@@ -1,11 +1,12 @@
 package ee.fakeplastictrees.blog.post.model;
 
+import ee.fakeplastictrees.blog.category.model.CategoryDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,5 +24,5 @@ public class PostDto {
 
     Boolean visible;
 
-    Set<String> category;
+    List<CategoryDto> categories;
 }

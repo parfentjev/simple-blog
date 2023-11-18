@@ -1,32 +1,40 @@
 package ee.fakeplastictrees.blog.post.model;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import ee.fakeplastictrees.blog.category.model.Category;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Set;
+import java.util.List;
 
+@Entity
 @Data
 @Builder
-@Document("posts")
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Post {
     @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
+    @Column
     String title;
 
+    @Column
     String summary;
 
+    @Column
     String text;
 
+    @Column
     String date;
 
+    @Column
     Boolean visible;
 
-    Set<String> category;
+    @ManyToMany
+    List<Category> categories;
 }
 

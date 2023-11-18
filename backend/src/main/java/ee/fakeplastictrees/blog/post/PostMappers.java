@@ -5,6 +5,7 @@ import ee.fakeplastictrees.blog.post.model.PostDto;
 import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
 
 import static ee.fakeplastictrees.blog.core.Utils.builders;
+import static ee.fakeplastictrees.blog.core.Utils.mappers;
 
 public class PostMappers {
     public PostPreviewDto postToPostPreviewDto(Post post) {
@@ -13,16 +14,17 @@ public class PostMappers {
                 .title(post.getTitle())
                 .summary(post.getSummary())
                 .date(post.getDate())
-                .category(post.getCategory())
+                .categories(post.getCategories().stream().map(i -> mappers().category().categoryToCategoryDto(i)).toList())
                 .build();
     }
+
     public PostPreviewDto postDtoToPostPreviewDto(PostDto postDto) {
         return builders().post().postPreviewDto()
                 .id(postDto.getId())
                 .title(postDto.getTitle())
                 .summary(postDto.getSummary())
                 .date(postDto.getDate())
-                .category(postDto.getCategory())
+                .categories(postDto.getCategories())
                 .build();
     }
 
@@ -34,7 +36,7 @@ public class PostMappers {
                 .text(post.getText())
                 .date(post.getDate())
                 .visible(post.getVisible())
-                .category(post.getCategory())
+                .categories(post.getCategories().stream().map(i -> mappers().category().categoryToCategoryDto(i)).toList())
                 .build();
     }
 
@@ -46,7 +48,7 @@ public class PostMappers {
                 .text(post.getText())
                 .date(post.getDate())
                 .visible(post.getVisible())
-                .category(post.getCategory())
+                .categories(post.getCategories().stream().map(i -> mappers().category().categoryDtoToCategory(i)).toList())
                 .build();
     }
 }

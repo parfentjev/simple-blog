@@ -1,19 +1,21 @@
 package ee.fakeplastictrees.blog.category.model;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+@Entity
 @Data
 @Builder
-@Document("categories")
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Category {
     @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
+    @Column
     String name;
 }
