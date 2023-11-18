@@ -8,11 +8,14 @@ import { getCategories, postPosts, putPosts } from '@/api/api-executor'
 import { useAuthContext } from '@/store/auth-context'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
+import CategoryDto from '@/api/models/CategoryDto'
 
 const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
   const { token } = useAuthContext()
   const { push } = useRouter()
-  const [possibleCategories, setPossibleCategories] = useState<string[]>([])
+  const [possibleCategories, setPossibleCategories] = useState<CategoryDto[]>(
+    [],
+  )
   const [categoriesValid, setCategoriesValid] = useState(true)
 
   const [postState, setPostState] = useState<PostDto>({
@@ -22,7 +25,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
     text: post ? post.text : '',
     date: post ? post.date : new Date().toJSON(),
     visible: post ? post.visible : false,
-    category: post ? post.category : [],
+    categories: post ? post.categories : [],
   })
 
   useEffect(() => {
@@ -37,7 +40,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
       text: post.text,
       date: post.date,
       visible: post.visible,
-      category: post.category,
+      categories: post.categories,
     })
   }, [post])
 
@@ -45,20 +48,20 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
     getCategories().then((response) => {
       response.message
         ? toast.error(response.message)
-        : setPossibleCategories(response.map((i) => i.name))
+        : setPossibleCategories(response.map((i) => i))
     })
   }, [])
 
   useEffect(() => {
     let invalidCategories: string[] = []
 
-    postState.category.forEach((i) => {
+    postState.categories.forEach((i) => {
       if (
         possibleCategories.findIndex(
-          (j) => i.toLowerCase() === j.toLowerCase(),
+          (j) => i.name.toLowerCase() === j.name.toLowerCase(),
         ) < 0
       ) {
-        invalidCategories.push(i)
+        invalidCategories.push(i.name)
       }
     })
 
@@ -67,7 +70,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
     } else {
       setCategoriesValid(false)
     }
-  }, [postState.category, possibleCategories])
+  }, [postState.categories, possibleCategories])
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPostState((postDto) => {
@@ -77,7 +80,17 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
 
   const handleCategoriesChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPostState((postDto) => {
-      return { ...postDto, category: event.target.value.split(',') }
+      return {
+        ...postDto,
+        categories: event.target.value.split(',').map((i) => {
+          return {
+            id: possibleCategories.find(
+              (c) => c.name.toLowerCase() === i.toLocaleLowerCase(),
+            )?.id,
+            name: i,
+          }
+        }),
+      }
     })
   }
 
@@ -135,7 +148,7 @@ const EditPostForm: FC<{ post?: PostDto }> = ({ post }) => {
           type='text'
           placeholder='categories'
           onChange={handleCategoriesChange}
-          value={postState.category}
+          value={postState.categories.map((i) => i.name)}
           className={categoriesValid ? styles.invalid : ``}
         />
       </div>

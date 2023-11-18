@@ -11,10 +11,10 @@ import GetPostsResponse from '@/api/models/response/GetPostsResponse'
 
 type CategoryPageProps = {
   posts_page: GetPostsResponse
-  categoryName: string
+  categoryId: string
 }
 
-const CategoryPage: FC<CategoryPageProps> = ({ posts_page, categoryName }) => {
+const CategoryPage: FC<CategoryPageProps> = ({ posts_page, categoryId }) => {
   const [currentPage, setCurrentPage] = useState(posts_page)
   const [items, setItems] = useState(posts_page.items)
 
@@ -26,21 +26,21 @@ const CategoryPage: FC<CategoryPageProps> = ({ posts_page, categoryName }) => {
     const newPage = await getPosts(
       currentPage.page + 1,
       LOAD_POSTS,
-      categoryName,
+      categoryId,
     ).then((response) => response)
 
     if (newPage.message) {
       toast.error(newPage.message)
     } else if (newPage.items.length < 1) {
-      toast.error(`Couldn't load any posts for ${categoryName}`)
+      toast.error(`Couldn't load any posts for ${categoryId}`)
     } else {
       setCurrentPage(newPage)
       setItems((existingItems) => [...existingItems, ...newPage.items])
     }
-  }, [currentPage, categoryName])
+  }, [currentPage, categoryId])
 
   if (posts_page.message || posts_page.items.length < 1) {
-    toast.error(`Couldn't load any posts for ${categoryName}`)
+    toast.error(`Couldn't load any posts for ${categoryId}`)
 
     return <NotFoundErrorPage />
   }
@@ -60,17 +60,17 @@ const CategoryPage: FC<CategoryPageProps> = ({ posts_page, categoryName }) => {
 export const getServerSideProps: GetServerSideProps<CategoryPageProps> = async (
   context,
 ) => {
-  const categoryName = context.params?.categoryName?.toString()
+  const categoryId = context.params?.categoryId?.toString()
 
-  if (categoryName == undefined) {
+  if (categoryId == undefined) {
     return { notFound: true }
   }
 
-  const posts_page = await getPosts(LOAD_PAGE, LOAD_POSTS, categoryName).then(
+  const posts_page = await getPosts(LOAD_PAGE, LOAD_POSTS, categoryId).then(
     (response) => response,
   )
 
-  return { props: { posts_page, categoryName } }
+  return { props: { posts_page, categoryId } }
 }
 
 export default CategoryPage

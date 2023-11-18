@@ -27,10 +27,10 @@ const PostPreview: FC<{ post: PostPreviewDto }> = ({ post }) => {
           <i className='bi bi-calendar2'></i> {dateString}
         </div>
         <div className={`text_muted ${styles.categories}`}>
-          {post.category
+          {post.categories
             .map<ReactNode>((i) => (
-              <Link key={i} href={`/categories/${i}`}>
-                {i}
+              <Link key={i.id} href={`/categories/${i.id}`}>
+                {i.name}
               </Link>
             ))
             .reduce((p1, p2) => [p1, ', ', p2])}{' '}

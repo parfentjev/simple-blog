@@ -19,14 +19,14 @@ import PutCategoriesResponse from './models/response/PutCategoriesResponse'
 export const getPosts = async (
   page: number,
   size: number,
-  category?: string,
+  categoryId?: string,
 ) => {
   return axios
     .get<GetPostsResponse>(endpoint(ApiEndpoints.POSTS), {
       params: {
         page,
         size,
-        category,
+        categoryId,
       },
     })
     .then((response) => response.data)

@@ -29,11 +29,12 @@ const Post: FC<{ post: PostDto }> = ({ post }) => {
           <i className='bi bi-calendar2'></i> {dateString}
         </div>
         <div className={`text_muted ${styles.categories}`}>
-          {post.category.length > 0 &&
-            post.category
+          {post.categories &&
+            post.categories.length > 0 &&
+            post.categories
               .map<ReactNode>((i) => (
-                <Link key={i} href={`/categories/${i}`}>
-                  {i}
+                <Link key={i.id} href={`/categories/${i.id}`}>
+                  {i.name}
                 </Link>
               ))
               .reduce((p1, p2) => [p1, ', ', p2])}{' '}

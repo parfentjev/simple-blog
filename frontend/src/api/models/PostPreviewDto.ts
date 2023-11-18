@@ -1,9 +1,11 @@
+import CategoryDto from './CategoryDto'
+
 type PostPreviewDto = {
   id: string
   title: string
   summary: string
   date: string
-  category: string[]
+  categories: CategoryDto[]
 }
 
 export default PostPreviewDto

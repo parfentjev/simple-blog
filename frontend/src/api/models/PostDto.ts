@@ -1,3 +1,5 @@
+import CategoryDto from './CategoryDto'
+
 type PostDto = {
   id?: string
   title: string
@@ -5,7 +7,7 @@ type PostDto = {
   text: string
   date: string
   visible: boolean
-  category: string[]
+  categories: CategoryDto[]
 }
 
 export default PostDto

@@ -10,7 +10,7 @@ const Categories: FC<{ categories: CategoryDto[] }> = ({ categories }) => {
       <ul>
         {categories.map((i) => (
           <li key={i.id}>
-            <Link href={`/categories/${i.name}`}>{i.name}</Link>
+            <Link href={`/categories/${i.id}`}>{i.name}</Link>
           </li>
         ))}
       </ul>
