@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { FC } from 'react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -9,6 +10,19 @@ const MarkdownRenderer: FC<{ text: string }> = ({ text }) => {
       <ReactMarkdown
         linkTarget={'_blank'}
         components={{
+          img(props) {
+            const { src, alt } = props
+            const image = <img src={src} alt={alt} title={alt} />
+
+            return (
+              (src && (
+                <Link href={src} target='_blank'>
+                  {image}
+                </Link>
+              )) ||
+              image
+            )
+          },
           code(props) {
             const { children, className, node, inline, ...rest } = props
             const match = /language-(\w+)/.exec(className || '')
