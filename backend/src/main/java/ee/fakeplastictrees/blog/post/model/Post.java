@@ -34,7 +34,7 @@ public class Post {
     @Column
     Boolean visible;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     List<Category> categories;
 }
 

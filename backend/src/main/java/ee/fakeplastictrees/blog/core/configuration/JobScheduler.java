@@ -10,6 +10,9 @@ import ee.fakeplastictrees.blog.post.service.PostService;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,8 +80,11 @@ public class JobScheduler {
     }
 
     private SyndEntry mapPostToEntry(PostPreviewDto post) {
+        Node parsedSummary = Parser.builder().build().parse(post.getSummary());
+        String htmlSummary = HtmlRenderer.builder().build().render(parsedSummary);
+
         SyndContentImpl description = new SyndContentImpl();
-        description.setValue(post.getSummary());
+        description.setValue(htmlSummary);
 
         SyndEntry entry = new SyndEntryImpl();
         entry.setUri(post.getId());
