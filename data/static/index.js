@@ -11,3 +11,4 @@ const search = (event) => {
 }
 
 document.getElementById("search-form")?.addEventListener("submit", search)
+hljs.highlightAll();

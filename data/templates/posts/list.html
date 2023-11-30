@@ -1,11 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
+{% if posts|length == 0 %}
+<p class="text-center">Posts not found.</p>
+{% endif %}
 {% for post in posts %}
 <article class="post">
     <h1 class="post-title"><a href="/post/{{ post.id }}/{{ post.title|slugify }}">{{ post.title }}</a></h1>
     <div class="post-text">
         {{ post.summary|markdown|safe }}
-        {% if post.text %}<div class="post-read-more"><a href="/post/{{ post.id }}/{{ post.title|slugify }}">Read more...</a></div>{% endif %}
+        {% if post.text %}
+        <div class="post-read-more"><a href="/post/{{ post.id }}/{{ post.title|slugify }}">Read more...</a></div>
+        {% endif %}
     </div>
     <div class="text-muted">
         <div class="post-date">

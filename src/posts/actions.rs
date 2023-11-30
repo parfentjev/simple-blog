@@ -16,14 +16,6 @@ pub fn get_posts(conn: &mut SqliteConnection) -> Option<Vec<Post>> {
         .ok()
 }
 
-fn get_categories_belonging_to(conn: &mut SqliteConnection, posts: &Vec<Post>) -> Option<Vec<(PostCategory, Category)>> {
-    PostCategory::belonging_to(posts)
-        .inner_join(categories::table)
-        .select((PostCategory::as_select(), Category::as_select()))
-        .load(conn)
-        .ok()
-}
-
 pub fn get_post_with_categories(conn: &mut SqliteConnection, post_id: String) -> Option<PostWithCategories> {
     let post = get_post(conn, post_id)?;
 
@@ -38,7 +30,12 @@ pub fn get_post_with_categories(conn: &mut SqliteConnection, post_id: String) ->
 
 pub fn get_posts_with_categories(conn: &mut SqliteConnection) -> Option<Vec<PostWithCategories>> {
     let posts = get_posts(conn)?;
-    let post_categories = get_categories_belonging_to(conn, &posts)?;
+
+    let post_categories: Vec<(PostCategory, Category)> = PostCategory::belonging_to(&posts)
+        .inner_join(categories::table)
+        .select((PostCategory::as_select(), Category::as_select()))
+        .load(conn)
+        .ok()?;
 
     Some(post_categories
         .grouped_by(&posts)

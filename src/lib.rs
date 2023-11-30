@@ -1,13 +1,14 @@
 use std::collections::HashMap;
 use actix_files::Files;
 use actix_web::{App, HttpServer, web};
+use actix_web::http::StatusCode;
 use actix_web::middleware::ErrorHandlers;
 use diesel::{SqliteConnection};
 use diesel::r2d2::{ConnectionManager, Pool};
 use dotenvy::dotenv;
 use tera::{Tera, Value};
 use crate::core::config::core_config;
-use crate::core::middleware::internal_server_error_handler;
+use crate::core::middleware::{internal_server_error_handler, not_found_handler};
 use crate::posts::config::posts_config;
 use crate::core::props::{STATIC_DIR, TEMPLATES_DIR};
 
@@ -27,7 +28,8 @@ pub async fn run() -> std::io::Result<()> {
             .service(Files::new("/static", STATIC_DIR))
             .app_data(web::Data::new(templates()))
             .app_data(web::Data::new(db_pool()))
-            .wrap(ErrorHandlers::new().default_handler(internal_server_error_handler))
+            .wrap(ErrorHandlers::new().default_handler(internal_server_error_handler)
+                .handler(StatusCode::NOT_FOUND, not_found_handler))
             .configure(core_config)
             .configure(posts_config)
     })
