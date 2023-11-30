@@ -1,0 +1,10 @@
+version: '3.1'
+
+services:
+  simple-blog:
+    image: simple-blog:latest
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - /path/to/shared/data/service.db:/data/service.db

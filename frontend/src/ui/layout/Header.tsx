@@ -30,7 +30,7 @@ const Header: FC<{}> = () => {
             </Link>
           </li>
           <li>
-            <Link href='/categories' onCanPlay={handleLinkClick}>
+            <Link href='/categories' onClick={handleLinkClick}>
               categories
             </Link>
           </li>

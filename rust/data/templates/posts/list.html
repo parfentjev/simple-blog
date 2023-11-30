@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+{% for post in posts %}
+<article class="post">
+    <h1 class="post-title"><a href="/post/{{ post.id }}/{{ post.title|slugify }}">{{ post.title }}</a></h1>
+    <div class="post-text">
+        {{ post.summary|markdown|safe }}
+        {% if post.text %}<div class="post-read-more"><a href="/post/{{ post.id }}/{{ post.title|slugify }}">Read more...</a></div>{% endif %}
+    </div>
+    <div class="text-muted">
+        <div class="post-date">
+            {{ post.date|date(format="%d.%m.%Y") }}
+        </div>
+        <div class="post-categories">
+            {% for category in post.categories %}
+            {{ category.name }}{% if loop.index < post.categories|length %}, {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</article>
+{% endfor %}
+{% endblock content %}
