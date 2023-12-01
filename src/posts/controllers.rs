@@ -37,7 +37,7 @@ pub async fn post_by_id(tera: Templates, pool: DbPool, post_id: web::Path<(Strin
 pub async fn rss_feed(pool: DbPool) -> actix_web::Result<impl Responder> {
     let posts = web::block(move || {
         let mut conn = pool.get().ok()?;
-        get_posts(&mut conn)
+        get_posts(&mut conn, true)
     }).await.map_err(internal_server_error)?.unwrap_or(Vec::new());
 
     let items: Vec<Item> = posts
