@@ -1,5 +1,6 @@
 pub mod props;
-pub mod middleware;
-mod controllers;
+pub mod error_handlers;
 pub mod config;
-pub mod utils;
+pub mod http_responses;
+pub mod json_responses;
+mod controllers;

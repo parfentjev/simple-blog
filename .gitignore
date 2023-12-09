@@ -4,3 +4,4 @@
 data/service.db
 image.tar
 deploy.sh
+.env.release

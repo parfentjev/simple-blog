@@ -25,6 +25,14 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    users (id) {
+        id -> Text,
+        username -> Text,
+        password -> Text,
+    }
+}
+
 diesel::joinable!(post_categories -> categories (category_id));
 diesel::joinable!(post_categories -> posts (post_id));
 
@@ -32,4 +40,5 @@ diesel::allow_tables_to_appear_in_same_query!(
     categories,
     post_categories,
     posts,
+    users,
 );

@@ -1,5 +1,8 @@
-use crate::posts::models::{Category, Post, PostCategory, PostWithCategories};
+use chrono::Utc;
 use diesel::prelude::*;
+use uuid::Uuid;
+
+use crate::posts::models::{Category, CreatePostRequest, NewPost, NewPostCategory, Post, PostCategory, PostWithCategories};
 use crate::schema::*;
 
 fn get_post(conn: &mut SqliteConnection, post_id: String) -> Option<Post> {
@@ -44,4 +47,44 @@ pub fn get_posts_with_categories(conn: &mut SqliteConnection) -> Option<Vec<Post
         .zip(posts)
         .map(|(pc, p)| PostWithCategories::new(p, pc.into_iter().map(|(_, c)| c).collect()))
         .collect())
+}
+
+pub fn insert_post(conn: &mut SqliteConnection, post: CreatePostRequest) -> anyhow::Result<Post> {
+    Ok(diesel::insert_into(posts::table)
+        .values(NewPost {
+            id: &Uuid::new_v4().to_string(),
+            title: &post.title,
+            summary: &post.summary,
+            text: &post.text,
+            date: &Utc::now().to_rfc3339(),
+            visible: &post.visible,
+        })
+        .returning(Post::as_returning())
+        .get_result(conn)?)
+}
+
+pub fn update_post(conn: &mut SqliteConnection, post_id: String, post: Post) -> anyhow::Result<Post> {
+    Ok(diesel::update(posts::table)
+        .filter(posts::id.eq(post_id))
+        .set(post)
+        .returning(Post::as_returning())
+        .get_result(conn)?)
+}
+
+pub fn insert_category(conn: &mut SqliteConnection, post_id: String, category_id: String) -> anyhow::Result<()> {
+    diesel::insert_into(post_categories::table)
+        .values(NewPostCategory {
+            post_id: &post_id,
+            category_id: &category_id,
+        })
+        .execute(conn)
+        .map(|_| Ok(()))?
+}
+
+pub fn delete_category(conn: &mut SqliteConnection, post_id: String, category_id: String) -> anyhow::Result<()> {
+    diesel::delete(post_categories::table)
+        .filter(post_categories::post_id.eq(post_id))
+        .filter(post_categories::category_id.eq(category_id))
+        .execute(conn)
+        .map(|_| Ok(()))?
 }

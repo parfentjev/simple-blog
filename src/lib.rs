@@ -1,36 +1,39 @@
 use std::collections::HashMap;
+
 use actix_files::Files;
-use actix_web::{App, HttpServer, web};
-use actix_web::http::StatusCode;
-use actix_web::middleware::ErrorHandlers;
-use diesel::{SqliteConnection};
+use actix_web::{App, HttpResponse, HttpServer, web};
 use diesel::r2d2::{ConnectionManager, Pool};
+use diesel::SqliteConnection;
 use dotenvy::dotenv;
 use tera::{Tera, Value};
+
+use crate::admin::config::admin_config;
 use crate::core::config::core_config;
-use crate::core::middleware::{internal_server_error_handler, not_found_handler};
-use crate::posts::config::posts_config;
+use crate::core::error_handlers::default;
 use crate::core::props::{STATIC_DIR, TEMPLATES_DIR};
+use crate::posts::config::posts_config;
 
 pub mod schema;
-mod posts;
+pub mod security;
 mod core;
+mod admin;
+mod posts;
 
 pub type Templates = web::Data<Tera>;
 pub type DbPool = web::Data<Pool<ConnectionManager<SqliteConnection>>>;
+pub type Response = actix_web::Result<HttpResponse>;
 
 pub async fn run() -> std::io::Result<()> {
     dotenv().ok();
 
     HttpServer::new(|| {
         App::new()
-            // todo: robots.txt
             .service(Files::new("/static", STATIC_DIR))
             .app_data(web::Data::new(templates()))
             .app_data(web::Data::new(db_pool()))
-            .wrap(ErrorHandlers::new().default_handler(internal_server_error_handler)
-                .handler(StatusCode::NOT_FOUND, not_found_handler))
+            .wrap(default())
             .configure(core_config)
+            .configure(admin_config)
             .configure(posts_config)
     })
         .bind(("0.0.0.0", 8080))?
@@ -46,7 +49,6 @@ fn templates() -> Tera {
     }
 
     tera.register_filter("markdown", md_to_html);
-
     tera
 }
 
