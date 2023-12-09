@@ -7,4 +7,4 @@ This repository hosts the program that powers my blog: [Fake Plastic Trees](http
 - Diesel
 - Tera
 
-Initially, it was written with Spring Boot and Next.js. That implementation is located in the `legacy/` directory.
+Initially, it was written with Spring Boot and Next.js. That implementation is located [here](https://codeberg.org/parfentjev/simple-blog/src/tag/0.1.0/legacy).
