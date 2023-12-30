@@ -1,5 +1,5 @@
 pub mod config;
 mod models;
-mod actions;
+pub mod actions;
 mod controllers;
 mod json;

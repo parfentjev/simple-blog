@@ -1,3 +1,4 @@
+use std::fmt::{Debug, Display, Formatter};
 use actix_web::HttpResponse;
 use serde::Serialize;
 
@@ -29,15 +30,27 @@ pub fn bad_request(error: anyhow::Error) -> Response {
     Ok(HttpResponse::BadRequest().json(ErrorResponse::from_error(error)))
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct ErrorResponse {
     pub message: String,
 }
 
 impl ErrorResponse {
+    pub fn from_string(message: String) -> Self {
+        Self {
+            message,
+        }
+    }
+
     pub fn from_error(e: anyhow::Error) -> Self {
         Self {
             message: e.to_string(),
         }
+    }
+}
+
+impl Display for ErrorResponse {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", serde_json::to_string(self).unwrap_or("Error".to_string()))
     }
 }

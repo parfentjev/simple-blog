@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 use std::future::Future;
+use std::ops::Add;
 use std::pin::Pin;
 
 use actix_web::{Error, FromRequest, HttpRequest};
@@ -10,10 +11,12 @@ use anyhow::bail;
 use argon2::{Argon2, PasswordHash, PasswordHasher, PasswordVerifier};
 use argon2::password_hash::rand_core::OsRng;
 use argon2::password_hash::SaltString;
-use chrono::Utc;
+use chrono::{DateTime, Days, Utc};
 use hmac::{Hmac, Mac};
 use jwt::{SignWithKey, VerifyWithKey};
 use sha2::Sha256;
+
+use crate::core::json_responses::ErrorResponse;
 
 pub fn hash_password(password: &str) -> anyhow::Result<String> {
     match Argon2::default().hash_password(password.as_bytes(), &SaltString::generate(&mut OsRng)) {
@@ -36,7 +39,7 @@ pub fn generate_jwt(user_id: String) -> anyhow::Result<String> {
     let key: Hmac<Sha256> = Hmac::new_from_slice(secret.as_bytes())?;
     let mut claims = BTreeMap::new();
     claims.insert("sub", user_id);
-    claims.insert("iat", Utc::now().timestamp().to_string());
+    claims.insert("iat", Utc::now().add(Days::new(1)).timestamp().to_string());
 
     Ok(claims.sign_with_key(&key)?)
 }
@@ -76,10 +79,12 @@ impl FromRequest for Authorization {
             let iat = claims.get("iat");
 
             if sub.is_some() && iat.is_some() {
-                return Box::pin(async { Ok(Authorization {}) });
+                if let Some(_) = DateTime::from_timestamp(iat.unwrap().parse::<i64>().unwrap_or(0), 0) {
+                    return Box::pin(async { Ok(Authorization {}) });
+                };
             }
         }
 
-        Box::pin(async { Err(ErrorUnauthorized("Invalid credentials.")) })
+        Box::pin(async { Err(ErrorUnauthorized(ErrorResponse::from_string("Invalid credentials.".to_string()))) })
     }
 }

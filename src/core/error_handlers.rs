@@ -26,7 +26,7 @@ fn not_found_handler<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<
 }
 
 fn unauthorized_handler<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
-    return_error("errors/401.html", res)
+    return_json(res)
 }
 
 fn return_error<B>(template_name: &str, res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
