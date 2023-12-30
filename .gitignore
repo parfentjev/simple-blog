@@ -1,7 +1,6 @@
 .idea/
 /target/
-/posts/
-data/service.db
+*.db
 image.tar
 deploy.sh
-.env.release
+.env

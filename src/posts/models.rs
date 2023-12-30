@@ -1,3 +1,4 @@
+use chrono::NaiveDateTime;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -10,7 +11,7 @@ pub struct Post {
     pub title: String,
     pub summary: String,
     pub text: String,
-    pub date: String,
+    pub date: NaiveDateTime,
     pub visible: bool,
 }
 
@@ -21,7 +22,7 @@ pub struct NewPost<'a> {
     pub title: &'a str,
     pub summary: &'a str,
     pub text: &'a str,
-    pub date: &'a str,
+    pub date: &'a NaiveDateTime,
     pub visible: &'a bool,
 }
 

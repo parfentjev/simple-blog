@@ -56,7 +56,7 @@ pub fn insert_post(conn: &mut SqliteConnection, post: CreatePostRequest) -> anyh
             title: &post.title,
             summary: &post.summary,
             text: &post.text,
-            date: &Utc::now().to_rfc3339(),
+            date: &Utc::now().naive_utc(),
             visible: &post.visible,
         })
         .returning(Post::as_returning())

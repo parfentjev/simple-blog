@@ -7,4 +7,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /path/to/shared/data/service.db:/data/service.db
+      - /path/to/service.db:/service.db
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}

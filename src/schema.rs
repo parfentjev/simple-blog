@@ -20,7 +20,7 @@ diesel::table! {
         title -> Text,
         summary -> Text,
         text -> Text,
-        date -> Text,
+        date -> Timestamp,
         visible -> Bool,
     }
 }

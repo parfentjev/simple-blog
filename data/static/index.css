@@ -15,7 +15,8 @@ body {
     font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: var(--color-eerie-black);
+    /* background: var(--color-eerie-black); */
+    background: url('/static/images/new-year/bg-snowflakes.png');
     color: var(--color-pale-silver);
 }
 
