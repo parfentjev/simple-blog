@@ -16,8 +16,6 @@ use hmac::{Hmac, Mac};
 use jwt::{SignWithKey, VerifyWithKey};
 use sha2::Sha256;
 
-use crate::core::json_responses::ErrorResponse;
-
 pub fn hash_password(password: &str) -> anyhow::Result<String> {
     match Argon2::default().hash_password(password.as_bytes(), &SaltString::generate(&mut OsRng)) {
         Ok(hash) => Ok(hash.to_string()),
@@ -84,6 +82,6 @@ impl FromRequest for Authorization {
             }
         }
 
-        Box::pin(async { Err(ErrorUnauthorized(ErrorResponse::from_string("Invalid credentials.".to_string()))) })
+        Box::pin(async { Err(ErrorUnauthorized("Invalid credentials.".to_string())) })
     }
 }

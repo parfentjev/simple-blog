@@ -1,6 +1,6 @@
 use actix_web::{HttpResponse, Responder};
 use tera::Context;
-use crate::core::http_responses::internal_server_error;
+use crate::responses::internal_server_error;
 use crate::Templates;
 
 pub async fn search(tera: Templates) -> actix_web::Result<impl Responder> {

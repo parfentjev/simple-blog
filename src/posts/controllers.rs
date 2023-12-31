@@ -1,14 +1,11 @@
-use actix_web::{delete, get, HttpResponse, post, put, web};
+use actix_web::{get, HttpResponse, web};
 use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
 use tera::Context;
 
 use crate::{DbPool, Response, Templates};
-use crate::core::http_responses::{internal_server_error, not_found};
-use crate::core::json_responses::{ok_or_bad_request, some_or_not_found};
-use crate::core::props::{WEBSITE_DESCRIPTION, WEBSITE_TITLE, WEBSITE_URL};
+use crate::responses::{internal_server_error, not_found};
+use crate::props::{WEBSITE_DESCRIPTION, WEBSITE_TITLE, WEBSITE_URL};
 use crate::posts::actions;
-use crate::posts::models::{CreatePostRequest, Post};
-use crate::security::Authorization;
 
 #[get("/")]
 pub async fn index(tera: Templates, pool: DbPool) -> Response {
@@ -74,69 +71,4 @@ pub async fn rss_feed(pool: DbPool) -> Response {
         .to_string();
 
     Ok(HttpResponse::Ok().content_type("application/rss+xml").body(channel))
-}
-
-#[post("/api/post")]
-pub async fn api_add_post(_: Authorization, pool: DbPool, post: web::Json<CreatePostRequest>) -> Response {
-    let post = web::block(move || {
-        let mut conn = pool.get()?;
-        actions::insert_post(&mut conn, post.into_inner())
-    }).await.map_err(internal_server_error)?;
-
-    ok_or_bad_request(post)
-}
-
-#[get("/api/post/{id}")]
-pub async fn api_get_post(_: Authorization, pool: DbPool, post_id: web::Path<String>) -> Response {
-    let result = web::block(move || {
-        let mut conn = pool.get().ok()?;
-        actions::get_post_with_categories(&mut conn, post_id.into_inner())
-    }).await.map_err(internal_server_error)?;
-
-    some_or_not_found(result)
-}
-
-#[put("/api/post/{id}")]
-pub async fn api_update_post(_: Authorization, pool: DbPool, post_id: web::Path<String>, post: web::Json<Post>) -> Response {
-    let result = web::block(move || {
-        let mut conn = pool.get()?;
-        actions::update_post(&mut conn, post_id.into_inner(), post.into_inner())
-    }).await.map_err(internal_server_error)?;
-
-    ok_or_bad_request(result)
-}
-
-#[get("/api/categories")]
-pub async fn api_get_categories(_: Authorization, pool: DbPool) -> Response {
-    let result = web::block(move || {
-        let mut conn = pool.get()?;
-
-        actions::get_categories(&mut conn)
-    }).await.map_err(internal_server_error)?;
-
-    ok_or_bad_request(result)
-}
-
-#[post("/api/post/{post_id}/category/{category_id}")]
-pub async fn api_add_post_category(_: Authorization, pool: DbPool, ids: web::Path<(String, String)>) -> Response {
-    let result = web::block(move || {
-        let mut conn = pool.get()?;
-        let (post_id, category_id) = ids.into_inner();
-
-        actions::insert_category(&mut conn, post_id, category_id)
-    }).await.map_err(internal_server_error)?;
-
-    ok_or_bad_request(result)
-}
-
-#[delete("/api/post/{post_id}/category/{category_id}")]
-pub async fn api_delete_post_category(_: Authorization, pool: DbPool, ids: web::Path<(String, String)>) -> Response {
-    let result = web::block(move || {
-        let mut conn = pool.get()?;
-        let (post_id, category_id) = ids.into_inner();
-
-        actions::delete_category(&mut conn, post_id, category_id)
-    }).await.map_err(internal_server_error)?;
-
-    ok_or_bad_request(result)
 }

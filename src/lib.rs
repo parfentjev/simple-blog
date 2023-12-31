@@ -9,8 +9,8 @@ use tera::{Tera, Value};
 
 use crate::admin::config::admin_config;
 use crate::core::config::core_config;
-use crate::core::error_handlers::default;
-use crate::core::props::{STATIC_DIR, TEMPLATES_DIR};
+use crate::error_handlers::default;
+use crate::props::{STATIC_DIR, TEMPLATES_DIR};
 use crate::posts::config::posts_config;
 
 pub mod schema;
@@ -18,6 +18,9 @@ pub mod security;
 mod core;
 mod admin;
 mod posts;
+pub mod responses;
+pub mod error_handlers;
+pub mod props;
 
 pub type Templates = web::Data<Tera>;
 pub type DbPool = web::Data<Pool<ConnectionManager<SqliteConnection>>>;

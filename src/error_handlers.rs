@@ -26,21 +26,10 @@ fn not_found_handler<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<
 }
 
 fn unauthorized_handler<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
-    return_json(res)
+    return_error("errors/401.html", res)
 }
 
 fn return_error<B>(template_name: &str, res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
-    match res.headers().get(header::CONTENT_TYPE) {
-        Some(content_type) if content_type == "application/json" => return_json(res),
-        _ => { return_html(template_name, res) }
-    }
-}
-
-fn return_json<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
-    Ok(ErrorHandlerResponse::Response(res.map_into_left_body()))
-}
-
-fn return_html<B>(template_name: &str, res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
     let (req, res) = res.into_parts();
 
     let html = match req.app_data::<Templates>() {

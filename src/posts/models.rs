@@ -1,10 +1,10 @@
 use chrono::NaiveDateTime;
 use diesel::prelude::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::schema::{categories, post_categories, posts};
 
-#[derive(Queryable, Selectable, Identifiable, Serialize, Deserialize, AsChangeset, PartialEq)]
+#[derive(Queryable, Selectable, Identifiable, AsChangeset, Serialize, PartialEq)]
 #[diesel(table_name = posts)]
 pub struct Post {
     pub id: String,
@@ -63,7 +63,6 @@ impl PostWithCategories {
     }
 }
 
-#[derive(Deserialize)]
 pub struct CreatePostRequest {
     pub title: String,
     pub summary: String,
