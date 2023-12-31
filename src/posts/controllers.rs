@@ -2,13 +2,14 @@ use actix_web::{get, HttpResponse, web};
 use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
 use tera::Context;
 
-use crate::{DbPool, Response, Templates};
-use crate::responses::{internal_server_error, not_found};
-use crate::props::{WEBSITE_DESCRIPTION, WEBSITE_TITLE, WEBSITE_URL};
+use crate::{DbPool, Response, TemplateEngine, templates};
 use crate::posts::actions;
+use crate::props::{WEBSITE_DESCRIPTION, WEBSITE_TITLE, WEBSITE_URL};
+use crate::responses::{internal_server_error, not_found};
+use crate::templates::render_ctx;
 
 #[get("/")]
-pub async fn index(tera: Templates, pool: DbPool) -> Response {
+pub async fn index(tera: TemplateEngine, pool: DbPool) -> Response {
     let posts = web::block(move || {
         let mut conn = pool.get().ok()?;
 
@@ -17,22 +18,20 @@ pub async fn index(tera: Templates, pool: DbPool) -> Response {
 
     let mut context = Context::new();
     context.insert("posts", &posts);
-    let html = tera.render("posts/list.html", &context).map_err(internal_server_error)?;
-
-    Ok(HttpResponse::Ok().body(html))
+    render_ctx(&tera, templates::POSTS_LIST, &context)
 }
 
 #[get("/post/{id}")]
-pub async fn post_by_id(tera: Templates, pool: DbPool, post_id: web::Path<(String, )>) -> Response {
+pub async fn post_by_id(tera: TemplateEngine, pool: DbPool, post_id: web::Path<(String, )>) -> Response {
     render_post(tera, pool, post_id).await
 }
 
 #[get("/post/{id}/{name}")]
-pub async fn post_by_name(tera: Templates, pool: DbPool, post_id: web::Path<(String, )>) -> Response {
+pub async fn post_by_name(tera: TemplateEngine, pool: DbPool, post_id: web::Path<(String, )>) -> Response {
     render_post(tera, pool, post_id).await
 }
 
-async fn render_post(tera: Templates, pool: DbPool, post_id: web::Path<(String, )>) -> Response {
+async fn render_post(tera: TemplateEngine, pool: DbPool, post_id: web::Path<(String, )>) -> Response {
     let post = web::block(move || {
         let mut conn = pool.get().ok()?;
         actions::get_post_with_categories(&mut conn, post_id.into_inner().0)
@@ -40,9 +39,7 @@ async fn render_post(tera: Templates, pool: DbPool, post_id: web::Path<(String, 
 
     let mut context = Context::new();
     context.insert("post", &post);
-    let html = tera.render("posts/post.html", &context).map_err(internal_server_error)?;
-
-    Ok(HttpResponse::Ok().body(html))
+    render_ctx(&tera, templates::POSTS_DETAILS, &context)
 }
 
 #[get("/feed.xml")]

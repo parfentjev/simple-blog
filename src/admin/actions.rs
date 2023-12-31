@@ -7,7 +7,7 @@ use uuid::Uuid;
 
 use crate::admin::models::{NewUser, User, UserRequest};
 use crate::schema::*;
-use crate::security::{generate_jwt, hash_password, password_valid};
+use crate::admin::security::{generate_jwt, hash_password, password_valid};
 
 fn registration_enabled(conn: &mut SqliteConnection) -> bool {
     matches!(users::table.count().get_result::<i64>(conn), Ok(count) if count == 0)

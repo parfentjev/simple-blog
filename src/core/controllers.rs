@@ -1,16 +1,11 @@
-use actix_web::{HttpResponse, Responder};
-use tera::Context;
-use crate::responses::internal_server_error;
-use crate::Templates;
+use actix_web::{Responder};
+use crate::{TemplateEngine, templates};
+use crate::templates::render;
 
-pub async fn search(tera: Templates) -> actix_web::Result<impl Responder> {
-    let html = tera.render("core/search.html", &Context::new()).map_err(internal_server_error)?;
-
-    Ok(HttpResponse::Ok().body(html))
+pub async fn search(tera: TemplateEngine) -> actix_web::Result<impl Responder> {
+    render(&tera, templates::CORE_SEARCH)
 }
 
-pub async fn license(tera: Templates) -> actix_web::Result<impl Responder> {
-    let html = tera.render("core/license.html", &Context::new()).map_err(internal_server_error)?;
-
-    Ok(HttpResponse::Ok().body(html))
+pub async fn license(tera: TemplateEngine) -> actix_web::Result<impl Responder> {
+    render(&tera, templates::CORE_LICENSE)
 }

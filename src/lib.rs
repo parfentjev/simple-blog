@@ -14,15 +14,15 @@ use crate::props::{STATIC_DIR, TEMPLATES_DIR};
 use crate::posts::config::posts_config;
 
 pub mod schema;
-pub mod security;
 mod core;
 mod admin;
 mod posts;
 pub mod responses;
 pub mod error_handlers;
 pub mod props;
+pub mod templates;
 
-pub type Templates = web::Data<Tera>;
+pub type TemplateEngine = web::Data<Tera>;
 pub type DbPool = web::Data<Pool<ConnectionManager<SqliteConnection>>>;
 pub type Response = actix_web::Result<HttpResponse>;
 

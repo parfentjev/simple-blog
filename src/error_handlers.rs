@@ -8,7 +8,7 @@ use actix_web::middleware::{ErrorHandlerResponse, ErrorHandlers};
 use actix_web::Result;
 use tera::Context;
 
-use crate::Templates;
+use crate::TemplateEngine;
 
 pub fn default() -> ErrorHandlers<BoxBody> {
     ErrorHandlers::new()
@@ -32,7 +32,7 @@ fn unauthorized_handler<B>(res: ServiceResponse<B>) -> Result<ErrorHandlerRespon
 fn return_error<B>(template_name: &str, res: ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
     let (req, res) = res.into_parts();
 
-    let html = match req.app_data::<Templates>() {
+    let html = match req.app_data::<TemplateEngine>() {
         Some(tera) => {
             match tera.render(template_name, &Context::new()) {
                 Ok(template) => Some(template),
