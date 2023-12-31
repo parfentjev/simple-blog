@@ -75,12 +75,11 @@ impl FromRequest for Authorization {
             .and_then(extract_token)
             .map(decode_token)
         {
-            let sub = claims.get("sub");
-            let iat = claims.get("iat");
-
-            if sub.is_some() && iat.is_some() {
-                if let Some(_) = DateTime::from_timestamp(iat.unwrap().parse::<i64>().unwrap_or(0), 0) {
-                    return Box::pin(async { Ok(Authorization {}) });
+            if let Some(iat) = claims.get("iat") {
+                if let Some(iat) = DateTime::from_timestamp(iat.parse::<i64>().unwrap_or(0), 0) {
+                    if iat.gt(&Utc::now()) {
+                        return Box::pin(async { Ok(Authorization {}) });
+                    }
                 };
             }
         }

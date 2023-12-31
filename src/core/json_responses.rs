@@ -1,4 +1,5 @@
 use std::fmt::{Debug, Display, Formatter};
+
 use actix_web::HttpResponse;
 use serde::Serialize;
 
@@ -15,18 +16,18 @@ pub fn ok_or_bad_request<V: Serialize>(value: anyhow::Result<V>) -> Response {
     }
 }
 
-pub fn ok_or_not_found<V: Serialize>(value: Option<V>) -> Response {
+pub fn some_or_not_found<V: Serialize>(value: Option<V>) -> Response {
     match value {
         Some(v) => ok(v),
         None => not_found(),
     }
 }
 
-pub fn not_found() -> Response {
+fn not_found() -> Response {
     Ok(HttpResponse::NotFound().finish())
 }
 
-pub fn bad_request(error: anyhow::Error) -> Response {
+fn bad_request(error: anyhow::Error) -> Response {
     Ok(HttpResponse::BadRequest().json(ErrorResponse::from_error(error)))
 }
 

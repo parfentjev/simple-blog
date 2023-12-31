@@ -88,3 +88,7 @@ pub fn delete_category(conn: &mut SqliteConnection, post_id: String, category_id
         .execute(conn)
         .map(|_| Ok(()))?
 }
+
+pub fn get_categories(conn: &mut SqliteConnection) -> anyhow::Result<Vec<Category>> {
+    Ok(categories::table.select(Category::as_select()).load(conn)?)
+}

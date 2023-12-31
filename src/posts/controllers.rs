@@ -3,12 +3,12 @@ use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
 use tera::Context;
 
 use crate::{DbPool, Response, Templates};
-use crate::security::Authorization;
 use crate::core::http_responses::{internal_server_error, not_found};
-use crate::core::json_responses::{ok_or_bad_request, ok_or_not_found};
+use crate::core::json_responses::{ok_or_bad_request, some_or_not_found};
 use crate::core::props::{WEBSITE_DESCRIPTION, WEBSITE_TITLE, WEBSITE_URL};
 use crate::posts::actions;
 use crate::posts::models::{CreatePostRequest, Post};
+use crate::security::Authorization;
 
 #[get("/")]
 pub async fn index(tera: Templates, pool: DbPool) -> Response {
@@ -93,7 +93,7 @@ pub async fn api_get_post(_: Authorization, pool: DbPool, post_id: web::Path<Str
         actions::get_post_with_categories(&mut conn, post_id.into_inner())
     }).await.map_err(internal_server_error)?;
 
-    ok_or_not_found(result)
+    some_or_not_found(result)
 }
 
 #[put("/api/post/{id}")]
@@ -101,6 +101,17 @@ pub async fn api_update_post(_: Authorization, pool: DbPool, post_id: web::Path<
     let result = web::block(move || {
         let mut conn = pool.get()?;
         actions::update_post(&mut conn, post_id.into_inner(), post.into_inner())
+    }).await.map_err(internal_server_error)?;
+
+    ok_or_bad_request(result)
+}
+
+#[get("/api/categories")]
+pub async fn api_get_categories(_: Authorization, pool: DbPool) -> Response {
+    let result = web::block(move || {
+        let mut conn = pool.get()?;
+
+        actions::get_categories(&mut conn)
     }).await.map_err(internal_server_error)?;
 
     ok_or_bad_request(result)
