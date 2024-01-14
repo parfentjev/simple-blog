@@ -5,12 +5,14 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/parfentjev/simple-blog/internal/config"
 	"github.com/parfentjev/simple-blog/internal/db"
 	"github.com/parfentjev/simple-blog/internal/routes"
 )
 
 func main() {
-	db.InitDB()
+	db.Init()
+	config.Init()
 	engine := gin.Default()
 	engine.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"https://fakeplastictrees.ee", "http://fakeplastictrees.ee", "http://localhost"},

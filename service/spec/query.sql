@@ -1,4 +1,4 @@
--- name: GetPosts :many
+-- name: SelectPosts :many
 select id,
     title,
     summary,
@@ -7,7 +7,7 @@ select id,
 from posts
 where visible = ?
 order by date desc;
--- name: GetPost :one
+-- name: SelectPost :one
 select *
 from posts
 where id = ?
@@ -25,3 +25,12 @@ where id = ?;
 -- name: DeletePost :exec
 delete from posts
 where id = ?;
+-- name: SelectUser :one
+select id,
+    password,
+    active
+from users
+where username = ?;
+-- name: InsertUser :exec
+insert into users(id, username, password, active)
+values(?, ?, ?, ?);

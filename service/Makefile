@@ -1,9 +1,13 @@
 .PHONY: run
+.PHONY: migrate
 .PHONY: codegen
 .PHONY: deploy
 
 run:
 	go run .
+
+migrate:
+	sqlite3 data/server.db < spec/schema.sql
 
 codegen:
 	sqlc generate

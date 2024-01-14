@@ -5,20 +5,24 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/parfentjev/simple-blog/internal/db"
-	"github.com/parfentjev/simple-blog/internal/rss"
+	"github.com/parfentjev/simple-blog/internal/middlewares"
+	"github.com/parfentjev/simple-blog/internal/utils"
 )
 
 func registerPostHandlers(e *gin.Engine, h *RequestHandler) {
 	e.GET("/posts", h.getPosts)
-	e.POST("/posts", h.addPost)
 	e.GET("/posts/:id", h.getPost)
-	e.PUT("/posts/:id", h.updatePost)
-	e.DELETE("/posts/:id", h.deletePost)
 	e.GET("/rss/posts", h.getRssFeed)
+
+	auth := e.Group("/")
+	auth.Use(middlewares.Authenticate)
+	auth.POST("/posts", h.addPost)
+	auth.PUT("/posts/:id", h.updatePost)
+	auth.DELETE("/posts/:id", h.deletePost)
 }
 
 func (h *RequestHandler) getPosts(c *gin.Context) {
-	posts, err := h.Queries.GetPosts(c.Request.Context(), true)
+	posts, err := h.Queries.SelectPosts(c.Request.Context(), true)
 	if err != nil {
 		panic(err)
 	}
@@ -27,12 +31,12 @@ func (h *RequestHandler) getPosts(c *gin.Context) {
 }
 
 func (h *RequestHandler) addPost(c *gin.Context) {
-	c.Status(http.StatusUnauthorized)
+	c.Status(http.StatusOK)
 }
 
 func (h *RequestHandler) getPost(c *gin.Context) {
 	id := c.Param("id")
-	post, err := h.Queries.GetPost(c.Request.Context(), db.GetPostParams{ID: id, Visible: true})
+	post, err := h.Queries.SelectPost(c.Request.Context(), db.SelectPostParams{ID: id, Visible: true})
 	if err != nil {
 		c.Status(http.StatusNotFound)
 		return
@@ -42,20 +46,20 @@ func (h *RequestHandler) getPost(c *gin.Context) {
 }
 
 func (h *RequestHandler) updatePost(c *gin.Context) {
-	c.Status(http.StatusUnauthorized)
+	c.Status(http.StatusOK)
 }
 
 func (h *RequestHandler) deletePost(c *gin.Context) {
-	c.Status(http.StatusUnauthorized)
+	c.Status(http.StatusOK)
 }
 
 func (h *RequestHandler) getRssFeed(c *gin.Context) {
-	posts, err := h.Queries.GetPosts(c.Request.Context(), true)
+	posts, err := h.Queries.SelectPosts(c.Request.Context(), true)
 	if err != nil {
 		panic(err)
 	}
 
-	feed, err := rss.Generate(posts)
+	feed, err := utils.GenerateRss(posts)
 	if err != nil {
 		panic(err)
 	}

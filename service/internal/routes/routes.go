@@ -8,6 +8,7 @@ import (
 func Register(e *gin.Engine) {
 	h := NewRequestHandler(db.New(db.Connection))
 	registerPostHandlers(e, h)
+	registerUserHandlers(e, h)
 }
 
 type RequestHandler struct {

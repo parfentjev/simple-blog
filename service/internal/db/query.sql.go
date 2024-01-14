@@ -20,80 +20,6 @@ func (q *Queries) DeletePost(ctx context.Context, id string) error {
 	return err
 }
 
-const getPost = `-- name: GetPost :one
-select id, title, summary, text, date, visible
-from posts
-where id = ?
-    and visible = ?
-`
-
-type GetPostParams struct {
-	ID      string `json:"id"`
-	Visible bool   `json:"visible"`
-}
-
-func (q *Queries) GetPost(ctx context.Context, arg GetPostParams) (Post, error) {
-	row := q.db.QueryRowContext(ctx, getPost, arg.ID, arg.Visible)
-	var i Post
-	err := row.Scan(
-		&i.ID,
-		&i.Title,
-		&i.Summary,
-		&i.Text,
-		&i.Date,
-		&i.Visible,
-	)
-	return i, err
-}
-
-const getPosts = `-- name: GetPosts :many
-select id,
-    title,
-    summary,
-    date,
-    visible
-from posts
-where visible = ?
-order by date desc
-`
-
-type GetPostsRow struct {
-	ID      string    `json:"id"`
-	Title   string    `json:"title"`
-	Summary string    `json:"summary"`
-	Date    time.Time `json:"date"`
-	Visible bool      `json:"visible"`
-}
-
-func (q *Queries) GetPosts(ctx context.Context, visible bool) ([]GetPostsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getPosts, visible)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetPostsRow
-	for rows.Next() {
-		var i GetPostsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Title,
-			&i.Summary,
-			&i.Date,
-			&i.Visible,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const insertPost = `-- name: InsertPost :exec
 insert into posts(id, title, summary, date, visible)
 values(?, ?, ?, ?, ?)
@@ -116,6 +42,123 @@ func (q *Queries) InsertPost(ctx context.Context, arg InsertPostParams) error {
 		arg.Visible,
 	)
 	return err
+}
+
+const insertUser = `-- name: InsertUser :exec
+insert into users(id, username, password, active)
+values(?, ?, ?, ?)
+`
+
+type InsertUserParams struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Active   bool   `json:"active"`
+}
+
+func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) error {
+	_, err := q.db.ExecContext(ctx, insertUser,
+		arg.ID,
+		arg.Username,
+		arg.Password,
+		arg.Active,
+	)
+	return err
+}
+
+const selectPost = `-- name: SelectPost :one
+select id, title, summary, text, date, visible
+from posts
+where id = ?
+    and visible = ?
+`
+
+type SelectPostParams struct {
+	ID      string `json:"id"`
+	Visible bool   `json:"visible"`
+}
+
+func (q *Queries) SelectPost(ctx context.Context, arg SelectPostParams) (Post, error) {
+	row := q.db.QueryRowContext(ctx, selectPost, arg.ID, arg.Visible)
+	var i Post
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Summary,
+		&i.Text,
+		&i.Date,
+		&i.Visible,
+	)
+	return i, err
+}
+
+const selectPosts = `-- name: SelectPosts :many
+select id,
+    title,
+    summary,
+    date,
+    visible
+from posts
+where visible = ?
+order by date desc
+`
+
+type SelectPostsRow struct {
+	ID      string    `json:"id"`
+	Title   string    `json:"title"`
+	Summary string    `json:"summary"`
+	Date    time.Time `json:"date"`
+	Visible bool      `json:"visible"`
+}
+
+func (q *Queries) SelectPosts(ctx context.Context, visible bool) ([]SelectPostsRow, error) {
+	rows, err := q.db.QueryContext(ctx, selectPosts, visible)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SelectPostsRow
+	for rows.Next() {
+		var i SelectPostsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Summary,
+			&i.Date,
+			&i.Visible,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const selectUser = `-- name: SelectUser :one
+select id,
+    password,
+    active
+from users
+where username = ?
+`
+
+type SelectUserRow struct {
+	ID       string `json:"id"`
+	Password string `json:"password"`
+	Active   bool   `json:"active"`
+}
+
+func (q *Queries) SelectUser(ctx context.Context, username string) (SelectUserRow, error) {
+	row := q.db.QueryRowContext(ctx, selectUser, username)
+	var i SelectUserRow
+	err := row.Scan(&i.ID, &i.Password, &i.Active)
+	return i, err
 }
 
 const updatePost = `-- name: UpdatePost :exec

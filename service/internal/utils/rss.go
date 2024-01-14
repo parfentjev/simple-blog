@@ -1,4 +1,4 @@
-package rss
+package utils
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 
 const baseUrl string = "https://fakeplastictrees.ee"
 
-func Generate(posts []db.GetPostsRow) (string, error) {
+func GenerateRss(posts []db.SelectPostsRow) (string, error) {
 	feed := &feeds.Feed{
 		Title:       "Fake Plastic Trees",
 		Link:        &feeds.Link{Href: baseUrl},

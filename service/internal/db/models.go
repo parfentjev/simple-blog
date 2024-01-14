@@ -16,3 +16,10 @@ type Post struct {
 	Date    time.Time `json:"date"`
 	Visible bool      `json:"visible"`
 }
+
+type User struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Active   bool   `json:"active"`
+}

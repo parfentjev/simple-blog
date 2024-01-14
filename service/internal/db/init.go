@@ -9,7 +9,7 @@ import (
 
 var Connection *sql.DB
 
-func InitDB() {
+func Init() {
 	var err error
 
 	Connection, err = sql.Open("sqlite3", "data/server.db")
