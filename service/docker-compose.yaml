@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  service:
+    build: .
+    image: simple-blog-service:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - /path/to/data/:/data

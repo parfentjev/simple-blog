@@ -22,7 +22,7 @@ const Header: FC = () => {
                         <Link to={'/search'}>search</Link>
                     </li>
                     <li>
-                        <Link to={'/feed.xml'}>rss</Link>
+                        <a href="/feed.xml">rss</a>
                     </li>
                 </ul>
             </nav>

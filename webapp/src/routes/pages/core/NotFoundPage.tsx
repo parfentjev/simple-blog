@@ -9,7 +9,10 @@ const NotFoundPage: FC = () => {
                 doesn't exist.
             </p>
             <div className="text-center">
-                <img src={`${process.env.PUBLIC_URL}/images/404.png`} />
+                <img
+                    alt="A puzzled robot"
+                    src={`${process.env.PUBLIC_URL}/images/404.png`}
+                />
             </div>
         </>
     )

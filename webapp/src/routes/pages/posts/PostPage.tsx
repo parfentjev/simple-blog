@@ -16,7 +16,7 @@ const PostPage: FC = () => {
                 .then((post) => setPost(post))
                 .catch(() => toast.error('Failed to load post.'))
         }
-    }, [])
+    }, [id])
 
     if (!post) {
         return <p className="text-center">Post not found!</p>

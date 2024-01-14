@@ -1,12 +1,6 @@
 import { FC } from 'react'
 import Layout from './ui/core/Layout'
-import {
-    BrowserRouter,
-    Route,
-    RouterProvider,
-    Routes,
-    createBrowserRouter,
-} from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import routes from './routes/routes'
 import './index.css'
 
