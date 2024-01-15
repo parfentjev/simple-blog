@@ -4,6 +4,9 @@ import LicensePage from './pages/core/LicensePage'
 import { ReactNode } from 'react'
 import PostPage from './pages/posts/PostPage'
 import NotFoundPage from './pages/core/NotFoundPage'
+import AuthPage from './pages/admin/AuthPage'
+import AdminHome from './pages/admin/AdminHome'
+import { ProtectedRoute } from '../store/auth-context'
 
 interface Route {
     path: string
@@ -16,6 +19,15 @@ const routes: Route[] = [
     { path: '/license', element: <LicensePage /> },
     { path: '/post/:id', element: <PostPage /> },
     { path: '/post/:id/:title', element: <PostPage /> },
+    {
+        path: '/admin',
+        element: (
+            <ProtectedRoute>
+                <AdminHome />
+            </ProtectedRoute>
+        ),
+    },
+    { path: '/admin/auth', element: <AuthPage /> },
     { path: '*', element: <NotFoundPage /> },
 ]
 

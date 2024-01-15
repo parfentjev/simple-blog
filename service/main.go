@@ -15,7 +15,7 @@ func main() {
 	config.Init()
 	engine := gin.Default()
 	engine.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"https://fakeplastictrees.ee", "http://fakeplastictrees.ee", "http://localhost"},
+		AllowOrigins: []string{"https://fakeplastictrees.ee", "http://fakeplastictrees.ee", "http://localhost:3000"},
 		MaxAge:       12 * time.Hour,
 	}))
 	routes.Register(engine)
