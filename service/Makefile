@@ -4,6 +4,7 @@
 .PHONY: deploy
 
 run:
+	export $(xargs <.env)
 	go run .
 
 migrate:
@@ -22,3 +23,7 @@ deploy:
 		docker load < simple-blog-service.tar && \
 		docker-compose up -d && \
 		rm simple-blog-service.tar"
+	scp ${SIMPLE_BLOG_REMOTE_HOST}:${SIMPLE_BLOG_REMOTE_PATH}data/server.db data/server.prod.db
+	sqlite3 data/server.prod.db < spec/schema.sql
+	scp data/server.prod.db ${SIMPLE_BLOG_REMOTE_HOST}:${SIMPLE_BLOG_REMOTE_PATH}data/server.db
+	rm data/server.prod.db

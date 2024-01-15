@@ -21,14 +21,15 @@ func (q *Queries) DeletePost(ctx context.Context, id string) error {
 }
 
 const insertPost = `-- name: InsertPost :exec
-insert into posts(id, title, summary, date, visible)
-values(?, ?, ?, ?, ?)
+insert into posts(id, title, summary, text, date, visible)
+values(?, ?, ?, ?, ?, ?)
 `
 
 type InsertPostParams struct {
 	ID      string    `json:"id"`
 	Title   string    `json:"title"`
 	Summary string    `json:"summary"`
+	Text    string    `json:"text"`
 	Date    time.Time `json:"date"`
 	Visible bool      `json:"visible"`
 }
@@ -38,6 +39,7 @@ func (q *Queries) InsertPost(ctx context.Context, arg InsertPostParams) error {
 		arg.ID,
 		arg.Title,
 		arg.Summary,
+		arg.Text,
 		arg.Date,
 		arg.Visible,
 	)
@@ -70,16 +72,36 @@ const selectPost = `-- name: SelectPost :one
 select id, title, summary, text, date, visible
 from posts
 where id = ?
+`
+
+func (q *Queries) SelectPost(ctx context.Context, id string) (Post, error) {
+	row := q.db.QueryRowContext(ctx, selectPost, id)
+	var i Post
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Summary,
+		&i.Text,
+		&i.Date,
+		&i.Visible,
+	)
+	return i, err
+}
+
+const selectPostByVisible = `-- name: SelectPostByVisible :one
+select id, title, summary, text, date, visible
+from posts
+where id = ?
     and visible = ?
 `
 
-type SelectPostParams struct {
+type SelectPostByVisibleParams struct {
 	ID      string `json:"id"`
 	Visible bool   `json:"visible"`
 }
 
-func (q *Queries) SelectPost(ctx context.Context, arg SelectPostParams) (Post, error) {
-	row := q.db.QueryRowContext(ctx, selectPost, arg.ID, arg.Visible)
+func (q *Queries) SelectPostByVisible(ctx context.Context, arg SelectPostByVisibleParams) (Post, error) {
+	row := q.db.QueryRowContext(ctx, selectPostByVisible, arg.ID, arg.Visible)
 	var i Post
 	err := row.Scan(
 		&i.ID,
@@ -165,6 +187,7 @@ const updatePost = `-- name: UpdatePost :exec
 update posts
 set title = ?,
     summary = ?,
+    text = ?,
     date = ?,
     visible = ?
 where id = ?
@@ -173,6 +196,7 @@ where id = ?
 type UpdatePostParams struct {
 	Title   string    `json:"title"`
 	Summary string    `json:"summary"`
+	Text    string    `json:"text"`
 	Date    time.Time `json:"date"`
 	Visible bool      `json:"visible"`
 	ID      string    `json:"id"`
@@ -182,6 +206,7 @@ func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) error {
 	_, err := q.db.ExecContext(ctx, updatePost,
 		arg.Title,
 		arg.Summary,
+		arg.Text,
 		arg.Date,
 		arg.Visible,
 		arg.ID,

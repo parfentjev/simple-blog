@@ -9,6 +9,9 @@ type userRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type tokenResponse struct {
-	Token string `json:"token"`
+type createPostRequest struct {
+	Title   string `json:"title" binding:"required"`
+	Summary string `json:"summary" binding:"required"`
+	Text    string `json:"text" binding:"required"`
+	Visible bool   `json:"visible" binding:"required"`
 }

@@ -10,15 +10,20 @@ order by date desc;
 -- name: SelectPost :one
 select *
 from posts
+where id = ?;
+-- name: SelectPostByVisible :one
+select *
+from posts
 where id = ?
     and visible = ?;
 -- name: InsertPost :exec
-insert into posts(id, title, summary, date, visible)
-values(?, ?, ?, ?, ?);
+insert into posts(id, title, summary, text, date, visible)
+values(?, ?, ?, ?, ?, ?);
 -- name: UpdatePost :exec
 update posts
 set title = ?,
     summary = ?,
+    text = ?,
     date = ?,
     visible = ?
 where id = ?;

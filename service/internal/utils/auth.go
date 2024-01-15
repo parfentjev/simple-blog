@@ -11,6 +11,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type GeneratedToken struct {
+	Token          string `json:"token"`
+	ExpirationDate int64  `json:"expiration_date"`
+}
+
 func HashPassword(password string) (string, error) {
 	result, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 
@@ -21,11 +26,18 @@ func PasswordValid(hashedPassword string, password string) bool {
 	return nil == bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
-func GenerateToken(sub string) (string, error) {
-	return jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+func GenerateToken(sub string) (GeneratedToken, error) {
+	exp := time.Now().Add(time.Hour * 24 * 7).Unix()
+	signedToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": sub,
-		"exp": time.Now().Add(time.Hour * 24 * 7).Unix(),
+		"exp": exp,
 	}).SignedString([]byte(config.App.HashSecret))
+
+	if err != nil {
+		return GeneratedToken{}, err
+	}
+
+	return GeneratedToken{signedToken, exp}, nil
 }
 
 func TokenValid(token string) bool {

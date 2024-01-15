@@ -33,7 +33,7 @@ func (h *RequestHandler) createUser(c *gin.Context) {
 	}
 
 	err = h.Queries.InsertUser(c.Request.Context(), db.InsertUserParams{
-		ID:       uuid.New().String(),
+		ID:       uuid.NewString(),
 		Username: request.Username,
 		Password: hashedPassword,
 		Active:   true,
@@ -63,5 +63,5 @@ func (h *RequestHandler) createToken(c *gin.Context) {
 		panic(err)
 	}
 
-	c.JSON(http.StatusOK, tokenResponse{Token: token})
+	c.JSON(http.StatusOK, token)
 }
