@@ -13,14 +13,15 @@ import (
 
 func registerPostHandlers(e *gin.Engine, h *RequestHandler) {
 	e.GET("/posts", h.getPosts)
-	e.GET("/posts/:id", h.getPost)
+	e.GET("/posts/published/:id", h.getPublishedPost)
 	e.GET("/rss/posts", h.getRssFeed)
 
-	auth := e.Group("/")
-	auth.Use(middlewares.Authenticate)
-	auth.POST("/posts", h.addPost)
-	auth.PUT("/posts/:id", h.updatePost)
-	auth.DELETE("/posts/:id", h.deletePost)
+	g := e.Group("/")
+	g.Use(middlewares.Authenticate)
+	g.GET("/posts/:id", h.getPost)
+	g.POST("/posts", h.createPost)
+	g.PUT("/posts/:id", h.updatePost)
+	g.DELETE("/posts/:id", h.deletePost)
 }
 
 func (h *RequestHandler) getPosts(c *gin.Context) {
@@ -32,8 +33,8 @@ func (h *RequestHandler) getPosts(c *gin.Context) {
 	c.JSON(http.StatusOK, posts)
 }
 
-func (h *RequestHandler) addPost(c *gin.Context) {
-	var request createPostRequest
+func (h *RequestHandler) createPost(c *gin.Context) {
+	var request addPostRequest
 	if err := c.ShouldBind(&request); err != nil {
 		c.Status(http.StatusBadRequest)
 		return
@@ -45,7 +46,7 @@ func (h *RequestHandler) addPost(c *gin.Context) {
 		Summary: request.Summary,
 		Text:    request.Text,
 		Date:    time.Now(),
-		Visible: request.Visible,
+		Visible: *request.Visible,
 	}); err != nil {
 		panic(err)
 	}
@@ -55,7 +56,30 @@ func (h *RequestHandler) addPost(c *gin.Context) {
 
 func (h *RequestHandler) getPost(c *gin.Context) {
 	id := c.Param("id")
-	post, err := h.Queries.SelectPostByVisible(c.Request.Context(), db.SelectPostByVisibleParams{ID: id, Visible: true})
+
+	var (
+		post db.Post
+		err  error
+	)
+
+	post, err = h.Queries.SelectPost(c.Request.Context(), id)
+	if err != nil {
+		c.Status(http.StatusNotFound)
+		return
+	}
+
+	c.JSON(http.StatusOK, post)
+}
+
+func (h *RequestHandler) getPublishedPost(c *gin.Context) {
+	id := c.Param("id")
+
+	var (
+		post db.Post
+		err  error
+	)
+
+	post, err = h.Queries.SelectVisiblePost(c.Request.Context(), id)
 	if err != nil {
 		c.Status(http.StatusNotFound)
 		return
@@ -66,14 +90,12 @@ func (h *RequestHandler) getPost(c *gin.Context) {
 
 func (h *RequestHandler) updatePost(c *gin.Context) {
 	id := c.Param("id")
-	originalPost, err := h.Queries.SelectPost(c.Request.Context(), id)
-
-	if err != nil {
+	if _, err := h.Queries.SelectPost(c.Request.Context(), id); err != nil {
 		c.Status(http.StatusNotFound)
 		return
 	}
 
-	var request createPostRequest
+	var request updatePostRequest
 	if err := c.ShouldBind(&request); err != nil {
 		c.Status(http.StatusBadRequest)
 		return
@@ -84,8 +106,8 @@ func (h *RequestHandler) updatePost(c *gin.Context) {
 		Title:   request.Title,
 		Summary: request.Summary,
 		Text:    request.Text,
-		Date:    originalPost.Date,
-		Visible: request.Visible,
+		Date:    request.Date,
+		Visible: *request.Visible,
 	}); err != nil {
 		panic(err)
 	}

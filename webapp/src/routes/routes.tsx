@@ -7,6 +7,7 @@ import NotFoundPage from './pages/core/NotFoundPage'
 import AuthPage from './pages/admin/AuthPage'
 import AdminHome from './pages/admin/AdminHome'
 import { ProtectedRoute } from '../store/auth-context'
+import PostEditor from './pages/admin/PostEditor'
 
 interface Route {
     path: string
@@ -19,6 +20,7 @@ const routes: Route[] = [
     { path: '/license', element: <LicensePage /> },
     { path: '/post/:id', element: <PostPage /> },
     { path: '/post/:id/:title', element: <PostPage /> },
+    { path: '/admin/auth', element: <AuthPage /> },
     {
         path: '/admin',
         element: (
@@ -27,7 +29,22 @@ const routes: Route[] = [
             </ProtectedRoute>
         ),
     },
-    { path: '/admin/auth', element: <AuthPage /> },
+    {
+        path: '/admin/post',
+        element: (
+            <ProtectedRoute>
+                <PostEditor />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/admin/post/:id',
+        element: (
+            <ProtectedRoute>
+                <PostEditor />
+            </ProtectedRoute>
+        ),
+    },
     { path: '*', element: <NotFoundPage /> },
 ]
 

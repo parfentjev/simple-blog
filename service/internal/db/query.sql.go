@@ -88,32 +88,6 @@ func (q *Queries) SelectPost(ctx context.Context, id string) (Post, error) {
 	return i, err
 }
 
-const selectPostByVisible = `-- name: SelectPostByVisible :one
-select id, title, summary, text, date, visible
-from posts
-where id = ?
-    and visible = ?
-`
-
-type SelectPostByVisibleParams struct {
-	ID      string `json:"id"`
-	Visible bool   `json:"visible"`
-}
-
-func (q *Queries) SelectPostByVisible(ctx context.Context, arg SelectPostByVisibleParams) (Post, error) {
-	row := q.db.QueryRowContext(ctx, selectPostByVisible, arg.ID, arg.Visible)
-	var i Post
-	err := row.Scan(
-		&i.ID,
-		&i.Title,
-		&i.Summary,
-		&i.Text,
-		&i.Date,
-		&i.Visible,
-	)
-	return i, err
-}
-
 const selectPosts = `-- name: SelectPosts :many
 select id,
     title,
@@ -180,6 +154,27 @@ func (q *Queries) SelectUser(ctx context.Context, username string) (SelectUserRo
 	row := q.db.QueryRowContext(ctx, selectUser, username)
 	var i SelectUserRow
 	err := row.Scan(&i.ID, &i.Password, &i.Active)
+	return i, err
+}
+
+const selectVisiblePost = `-- name: SelectVisiblePost :one
+select id, title, summary, text, date, visible
+from posts
+where id = ?
+    and visible = 1
+`
+
+func (q *Queries) SelectVisiblePost(ctx context.Context, id string) (Post, error) {
+	row := q.db.QueryRowContext(ctx, selectVisiblePost, id)
+	var i Post
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Summary,
+		&i.Text,
+		&i.Date,
+		&i.Visible,
+	)
 	return i, err
 }
 

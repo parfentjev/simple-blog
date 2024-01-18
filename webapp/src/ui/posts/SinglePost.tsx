@@ -3,8 +3,11 @@ import { PostDto } from '../../api/models/post'
 import { encodeTitle, jsonDateToString } from '../../utils/string-utils'
 import MarkdownRenderer from './MarkdownRenderer'
 import { Link } from 'react-router-dom'
+import { useAuthContext } from '../../store/auth-context'
 
 const SinglePost: FC<{ post: PostDto }> = ({ post }) => {
+    const { token } = useAuthContext()
+
     const postUrl = '/post/' + post.id + '/' + encodeTitle(post.title)
     const postDate = jsonDateToString(post.date)
 
@@ -13,6 +16,11 @@ const SinglePost: FC<{ post: PostDto }> = ({ post }) => {
             <h1 className="post-title">
                 <Link to={postUrl}>{post.title}</Link>
             </h1>
+            {token && (
+                <div className="text-muted text-right">
+                    <Link to={`/admin/post/${post.id}`}>edit</Link>
+                </div>
+            )}
             <div className="post-text">
                 <MarkdownRenderer>{post.text}</MarkdownRenderer>
             </div>

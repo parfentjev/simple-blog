@@ -4,7 +4,6 @@
 .PHONY: deploy
 
 run:
-	export $(xargs <.env)
 	go run .
 
 migrate:

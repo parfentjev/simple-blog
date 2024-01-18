@@ -21,7 +21,7 @@ func (h *RequestHandler) createUser(c *gin.Context) {
 		return
 	}
 
-	var request userRequest
+	var request addUserRequest
 	if nil != c.ShouldBindJSON(&request) {
 		c.Status(http.StatusBadRequest)
 		return
@@ -46,7 +46,7 @@ func (h *RequestHandler) createUser(c *gin.Context) {
 }
 
 func (h *RequestHandler) createToken(c *gin.Context) {
-	var request userRequest
+	var request addUserRequest
 	if nil != c.ShouldBindJSON(&request) {
 		c.Status(http.StatusBadRequest)
 		return

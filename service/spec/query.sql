@@ -11,11 +11,11 @@ order by date desc;
 select *
 from posts
 where id = ?;
--- name: SelectPostByVisible :one
+-- name: SelectVisiblePost :one
 select *
 from posts
 where id = ?
-    and visible = ?;
+    and visible = 1;
 -- name: InsertPost :exec
 insert into posts(id, title, summary, text, date, visible)
 values(?, ?, ?, ?, ?, ?);
