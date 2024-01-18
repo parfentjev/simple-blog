@@ -8,7 +8,7 @@ import {
     useState,
 } from 'react'
 import { TokenDto } from '../api/models/user'
-import { redirect, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 type AuthContextType = {
     token?: TokenDto
@@ -45,11 +45,14 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
         setToken(localToken)
     }, [])
 
-    const handleSingIn = useCallback((token: TokenDto) => {
-        setToken(token)
-        saveLocalToken(token)
-        navigate('/admin')
-    }, [])
+    const handleSingIn = useCallback(
+        (token: TokenDto) => {
+            setToken(token)
+            saveLocalToken(token)
+            navigate('/admin')
+        },
+        [navigate]
+    )
 
     const handleSignOut = useCallback(() => {
         removeLocalToken()

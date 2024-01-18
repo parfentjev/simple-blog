@@ -26,7 +26,7 @@ const PostEditor: FC = () => {
         getPost(token, id)
             .then((post) => setPostState(post))
             .catch(() => toast.error('Failed to load post.'))
-    }, [id])
+    }, [id, token])
 
     const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setPostState((postDto) => {

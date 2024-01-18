@@ -1,5 +1,4 @@
-import { FC, FormEvent, useCallback, useRef } from 'react'
-import { toast } from 'react-toastify'
+import { FC } from 'react'
 import AuthForm from '../../../ui/admin/AuthForm'
 
 const AuthPage: FC = () => {
