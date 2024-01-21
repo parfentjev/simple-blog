@@ -10,18 +10,18 @@ import (
 	"github.com/parfentjev/simple-blog/internal/utils"
 )
 
-func registerUserHandlers(e *gin.Engine, h *RequestHandler) {
+func registerUserHandlers(e *gin.Engine, h *StorageHandler) {
 	e.POST("/users", h.createUser)
 	e.POST("/users/token", h.createToken)
 }
 
-func (h *RequestHandler) createUser(c *gin.Context) {
+func (h *StorageHandler) createUser(c *gin.Context) {
 	if !config.App.RegistrationEnabled {
 		c.JSON(http.StatusForbidden, messageResponse{"User creation is disabled."})
 		return
 	}
 
-	var request addUserRequest
+	var request postUsersRequest
 	if nil != c.ShouldBindJSON(&request) {
 		c.Status(http.StatusBadRequest)
 		return
@@ -45,8 +45,8 @@ func (h *RequestHandler) createUser(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-func (h *RequestHandler) createToken(c *gin.Context) {
-	var request addUserRequest
+func (h *StorageHandler) createToken(c *gin.Context) {
+	var request postUsersRequest
 	if nil != c.ShouldBindJSON(&request) {
 		c.Status(http.StatusBadRequest)
 		return
@@ -63,5 +63,5 @@ func (h *RequestHandler) createToken(c *gin.Context) {
 		panic(err)
 	}
 
-	c.JSON(http.StatusOK, token)
+	c.JSON(http.StatusOK, tokenDto{Token: token.Token, ExpirationDate: token.ExpirationDate})
 }

@@ -10,7 +10,7 @@ import (
 
 const baseUrl string = "https://fakeplastictrees.ee"
 
-func GenerateRss(posts []db.SelectPostsRow) (string, error) {
+func GenerateRss(posts []db.SelectVisiblePostsRow) (string, error) {
 	feed := &feeds.Feed{
 		Title:       "Fake Plastic Trees",
 		Link:        &feeds.Link{Href: baseUrl},

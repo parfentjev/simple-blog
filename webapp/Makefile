@@ -1,5 +1,9 @@
+.PHONY: run
 .PHONY: release
 .PHONY: deploy
+
+run:
+	BROWSER=none npm start
 
 release:
 	npm run build

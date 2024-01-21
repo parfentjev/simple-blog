@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	routes "github.com/parfentjev/simple-blog/internal/api"
 	"github.com/parfentjev/simple-blog/internal/config"
 	"github.com/parfentjev/simple-blog/internal/db"
-	"github.com/parfentjev/simple-blog/internal/routes"
 )
 
 func main() {

@@ -36,7 +36,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
         }
 
         const currentDate = new Date().getTime()
-        const localTokenExpirationDate = localToken.expiration_date * 1000
+        const localTokenExpirationDate = localToken.expirationDate * 1000
         if (currentDate > localTokenExpirationDate) {
             removeLocalToken()
             setToken(undefined)

@@ -1,6 +1,6 @@
 export interface TokenDto {
     token: string
-    expiration_date: number
+    expirationDate: number
 }
 
 export interface PostUsersTokenRequest {

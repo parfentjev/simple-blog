@@ -1,11 +1,11 @@
--- name: SelectPosts :many
+-- name: SelectVisiblePosts :many
 select id,
     title,
     summary,
     date,
     visible
 from posts
-where visible = ?
+where visible = 1
 order by date desc;
 -- name: SelectPost :one
 select *

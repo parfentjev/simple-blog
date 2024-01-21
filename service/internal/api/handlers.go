@@ -6,15 +6,15 @@ import (
 )
 
 func Register(e *gin.Engine) {
-	h := NewRequestHandler(db.New(db.Connection))
+	h := NewStorageHandler(db.New(db.Connection))
 	registerPostHandlers(e, h)
 	registerUserHandlers(e, h)
 }
 
-type RequestHandler struct {
+type StorageHandler struct {
 	Queries *db.Queries
 }
 
-func NewRequestHandler(queries *db.Queries) *RequestHandler {
-	return &RequestHandler{queries}
+func NewStorageHandler(queries *db.Queries) *StorageHandler {
+	return &StorageHandler{queries}
 }

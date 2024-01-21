@@ -12,8 +12,8 @@ import (
 )
 
 type GeneratedToken struct {
-	Token          string `json:"token"`
-	ExpirationDate int64  `json:"expiration_date"`
+	Token          string
+	ExpirationDate int64
 }
 
 func HashPassword(password string) (string, error) {

@@ -3,7 +3,11 @@ import { PostDto } from '../../../api/models/post'
 import { useAuthContext } from '../../../store/auth-context'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import { getPost, postPost, putPost } from '../../../api/postService'
+import {
+    getPostsEditorById,
+    postPostsEditor,
+    putPostsEditorById,
+} from '../../../api/postService'
 
 const PostEditor: FC = () => {
     const { id } = useParams()
@@ -23,7 +27,7 @@ const PostEditor: FC = () => {
             return
         }
 
-        getPost(token, id)
+        getPostsEditorById(token, id)
             .then((post) => setPostState(post))
             .catch(() => toast.error('Failed to load post.'))
     }, [id, token])
@@ -61,8 +65,8 @@ const PostEditor: FC = () => {
 
         try {
             postState.id.length > 0
-                ? putPost(token, postState.id, postState)
-                : postPost(token, postState)
+                ? putPostsEditorById(token, postState.id, postState)
+                : postPostsEditor(token, postState)
 
             toast.success('Success!')
         } catch (error) {

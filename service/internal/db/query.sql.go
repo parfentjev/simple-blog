@@ -88,54 +88,6 @@ func (q *Queries) SelectPost(ctx context.Context, id string) (Post, error) {
 	return i, err
 }
 
-const selectPosts = `-- name: SelectPosts :many
-select id,
-    title,
-    summary,
-    date,
-    visible
-from posts
-where visible = ?
-order by date desc
-`
-
-type SelectPostsRow struct {
-	ID      string    `json:"id"`
-	Title   string    `json:"title"`
-	Summary string    `json:"summary"`
-	Date    time.Time `json:"date"`
-	Visible bool      `json:"visible"`
-}
-
-func (q *Queries) SelectPosts(ctx context.Context, visible bool) ([]SelectPostsRow, error) {
-	rows, err := q.db.QueryContext(ctx, selectPosts, visible)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []SelectPostsRow
-	for rows.Next() {
-		var i SelectPostsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Title,
-			&i.Summary,
-			&i.Date,
-			&i.Visible,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const selectUser = `-- name: SelectUser :one
 select id,
     password,
@@ -176,6 +128,54 @@ func (q *Queries) SelectVisiblePost(ctx context.Context, id string) (Post, error
 		&i.Visible,
 	)
 	return i, err
+}
+
+const selectVisiblePosts = `-- name: SelectVisiblePosts :many
+select id,
+    title,
+    summary,
+    date,
+    visible
+from posts
+where visible = 1
+order by date desc
+`
+
+type SelectVisiblePostsRow struct {
+	ID      string    `json:"id"`
+	Title   string    `json:"title"`
+	Summary string    `json:"summary"`
+	Date    time.Time `json:"date"`
+	Visible bool      `json:"visible"`
+}
+
+func (q *Queries) SelectVisiblePosts(ctx context.Context) ([]SelectVisiblePostsRow, error) {
+	rows, err := q.db.QueryContext(ctx, selectVisiblePosts)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SelectVisiblePostsRow
+	for rows.Next() {
+		var i SelectVisiblePostsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Summary,
+			&i.Date,
+			&i.Visible,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const updatePost = `-- name: UpdatePost :exec

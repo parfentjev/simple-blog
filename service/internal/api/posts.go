@@ -11,21 +11,21 @@ import (
 	"github.com/parfentjev/simple-blog/internal/utils"
 )
 
-func registerPostHandlers(e *gin.Engine, h *RequestHandler) {
-	e.GET("/posts", h.getPosts)
-	e.GET("/posts/published/:id", h.getPublishedPost)
-	e.GET("/rss/posts", h.getRssFeed)
+func registerPostHandlers(public *gin.Engine, h *StorageHandler) {
+	public.GET("/posts/published", h.getPostsPublished)
+	public.GET("/posts/published/:id", h.getPostPublishedById)
+	public.GET("/rss/posts", h.getRssPosts)
 
-	g := e.Group("/")
-	g.Use(middlewares.Authenticate)
-	g.GET("/posts/:id", h.getPost)
-	g.POST("/posts", h.createPost)
-	g.PUT("/posts/:id", h.updatePost)
-	g.DELETE("/posts/:id", h.deletePost)
+	editor := public.Group("/")
+	editor.Use(middlewares.Authenticate)
+	editor.POST("/posts/editor", h.postPostsEditorById)
+	editor.GET("/posts/editor/:id", h.getPostsEditor)
+	editor.PUT("/posts/editor/:id", h.putPostsEditorById)
+	editor.DELETE("/posts/editor/:id", h.deletePostsEditorById)
 }
 
-func (h *RequestHandler) getPosts(c *gin.Context) {
-	posts, err := h.Queries.SelectPosts(c.Request.Context(), true)
+func (h *StorageHandler) getPostsPublished(c *gin.Context) {
+	posts, err := h.Queries.SelectVisiblePosts(c.Request.Context())
 	if err != nil {
 		panic(err)
 	}
@@ -33,8 +33,8 @@ func (h *RequestHandler) getPosts(c *gin.Context) {
 	c.JSON(http.StatusOK, posts)
 }
 
-func (h *RequestHandler) createPost(c *gin.Context) {
-	var request addPostRequest
+func (h *StorageHandler) postPostsEditorById(c *gin.Context) {
+	var request postPostsRequest
 	if err := c.ShouldBind(&request); err != nil {
 		c.Status(http.StatusBadRequest)
 		return
@@ -54,7 +54,7 @@ func (h *RequestHandler) createPost(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-func (h *RequestHandler) getPost(c *gin.Context) {
+func (h *StorageHandler) getPostsEditor(c *gin.Context) {
 	id := c.Param("id")
 
 	var (
@@ -71,7 +71,7 @@ func (h *RequestHandler) getPost(c *gin.Context) {
 	c.JSON(http.StatusOK, post)
 }
 
-func (h *RequestHandler) getPublishedPost(c *gin.Context) {
+func (h *StorageHandler) getPostPublishedById(c *gin.Context) {
 	id := c.Param("id")
 
 	var (
@@ -88,14 +88,14 @@ func (h *RequestHandler) getPublishedPost(c *gin.Context) {
 	c.JSON(http.StatusOK, post)
 }
 
-func (h *RequestHandler) updatePost(c *gin.Context) {
+func (h *StorageHandler) putPostsEditorById(c *gin.Context) {
 	id := c.Param("id")
 	if _, err := h.Queries.SelectPost(c.Request.Context(), id); err != nil {
 		c.Status(http.StatusNotFound)
 		return
 	}
 
-	var request updatePostRequest
+	var request putPostsRequest
 	if err := c.ShouldBind(&request); err != nil {
 		c.Status(http.StatusBadRequest)
 		return
@@ -115,7 +115,7 @@ func (h *RequestHandler) updatePost(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (h *RequestHandler) deletePost(c *gin.Context) {
+func (h *StorageHandler) deletePostsEditorById(c *gin.Context) {
 	id := c.Param("id")
 	if _, err := h.Queries.SelectPost(c.Request.Context(), id); err != nil {
 		c.Status(http.StatusNotFound)
@@ -129,8 +129,8 @@ func (h *RequestHandler) deletePost(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (h *RequestHandler) getRssFeed(c *gin.Context) {
-	posts, err := h.Queries.SelectPosts(c.Request.Context(), true)
+func (h *StorageHandler) getRssPosts(c *gin.Context) {
+	posts, err := h.Queries.SelectVisiblePosts(c.Request.Context())
 	if err != nil {
 		panic(err)
 	}
