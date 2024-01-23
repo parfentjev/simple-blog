@@ -7,21 +7,21 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/parfentjev/simple-blog/internal/db"
-	"github.com/parfentjev/simple-blog/internal/middlewares"
+	"github.com/parfentjev/simple-blog/internal/middleware"
 	"github.com/parfentjev/simple-blog/internal/utils"
 )
 
-func registerPostHandlers(public *gin.Engine, h *StorageHandler) {
-	public.GET("/posts/published", h.getPostsPublished)
-	public.GET("/posts/published/:id", h.getPostPublishedById)
-	public.GET("/rss/posts", h.getRssPosts)
+func registerPostHandlers(e *gin.Engine, h *StorageHandler) {
+	e.GET("/posts/published", h.getPostsPublished)
+	e.GET("/posts/published/:id", h.getPostPublishedById)
+	e.GET("/rss/posts", h.getRssPosts)
 
-	editor := public.Group("/")
-	editor.Use(middlewares.Authenticate)
-	editor.POST("/posts/editor", h.postPostsEditorById)
-	editor.GET("/posts/editor/:id", h.getPostsEditor)
-	editor.PUT("/posts/editor/:id", h.putPostsEditorById)
-	editor.DELETE("/posts/editor/:id", h.deletePostsEditorById)
+	auth := e.Group("/")
+	auth.Use(middleware.Authenticate)
+	auth.POST("/posts/editor", h.postPostsEditorById)
+	auth.GET("/posts/editor/:id", h.getPostsEditor)
+	auth.PUT("/posts/editor/:id", h.putPostsEditorById)
+	auth.DELETE("/posts/editor/:id", h.deletePostsEditorById)
 }
 
 func (h *StorageHandler) getPostsPublished(c *gin.Context) {
