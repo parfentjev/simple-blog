@@ -26,12 +26,12 @@ values(?, ?, ?, ?, ?, ?)
 `
 
 type InsertPostParams struct {
-	ID      string    `json:"id"`
-	Title   string    `json:"title"`
-	Summary string    `json:"summary"`
-	Text    string    `json:"text"`
-	Date    time.Time `json:"date"`
-	Visible bool      `json:"visible"`
+	ID      string
+	Title   string
+	Summary string
+	Text    string
+	Date    time.Time
+	Visible bool
 }
 
 func (q *Queries) InsertPost(ctx context.Context, arg InsertPostParams) error {
@@ -52,10 +52,10 @@ values(?, ?, ?, ?)
 `
 
 type InsertUserParams struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Active   bool   `json:"active"`
+	ID       string
+	Username string
+	Password string
+	Active   bool
 }
 
 func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) error {
@@ -66,6 +66,53 @@ func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) error {
 		arg.Active,
 	)
 	return err
+}
+
+const selectAllPosts = `-- name: SelectAllPosts :many
+select id,
+    title,
+    summary,
+    date,
+    visible
+from posts
+order by date desc
+`
+
+type SelectAllPostsRow struct {
+	ID      string
+	Title   string
+	Summary string
+	Date    time.Time
+	Visible bool
+}
+
+func (q *Queries) SelectAllPosts(ctx context.Context) ([]SelectAllPostsRow, error) {
+	rows, err := q.db.QueryContext(ctx, selectAllPosts)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SelectAllPostsRow
+	for rows.Next() {
+		var i SelectAllPostsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Summary,
+			&i.Date,
+			&i.Visible,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const selectPost = `-- name: SelectPost :one
@@ -97,9 +144,9 @@ where username = ?
 `
 
 type SelectUserRow struct {
-	ID       string `json:"id"`
-	Password string `json:"password"`
-	Active   bool   `json:"active"`
+	ID       string
+	Password string
+	Active   bool
 }
 
 func (q *Queries) SelectUser(ctx context.Context, username string) (SelectUserRow, error) {
@@ -142,11 +189,11 @@ order by date desc
 `
 
 type SelectVisiblePostsRow struct {
-	ID      string    `json:"id"`
-	Title   string    `json:"title"`
-	Summary string    `json:"summary"`
-	Date    time.Time `json:"date"`
-	Visible bool      `json:"visible"`
+	ID      string
+	Title   string
+	Summary string
+	Date    time.Time
+	Visible bool
 }
 
 func (q *Queries) SelectVisiblePosts(ctx context.Context) ([]SelectVisiblePostsRow, error) {
@@ -189,12 +236,12 @@ where id = ?
 `
 
 type UpdatePostParams struct {
-	Title   string    `json:"title"`
-	Summary string    `json:"summary"`
-	Text    string    `json:"text"`
-	Date    time.Time `json:"date"`
-	Visible bool      `json:"visible"`
-	ID      string    `json:"id"`
+	Title   string
+	Summary string
+	Text    string
+	Date    time.Time
+	Visible bool
+	ID      string
 }
 
 func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) error {

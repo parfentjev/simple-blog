@@ -1,4 +1,4 @@
-package routes
+package api
 
 import (
 	"net/http"
@@ -7,32 +7,27 @@ import (
 	"github.com/google/uuid"
 	"github.com/parfentjev/simple-blog/internal/config"
 	"github.com/parfentjev/simple-blog/internal/db"
-	"github.com/parfentjev/simple-blog/internal/utils"
+	"github.com/parfentjev/simple-blog/internal/user"
 )
 
-func registerUserHandlers(e *gin.Engine, h *StorageHandler) {
-	e.POST("/users", h.createUser)
-	e.POST("/users/token", h.createToken)
-}
-
-func (h *StorageHandler) createUser(c *gin.Context) {
+func (s *StorageHandler) PostUsers(c *gin.Context) {
 	if !config.App.RegistrationEnabled {
-		c.JSON(http.StatusForbidden, messageResponse{"User creation is disabled."})
+		c.JSON(http.StatusForbidden, MessageResponse{"User creation is disabled."})
 		return
 	}
 
-	var request postUsersRequest
-	if nil != c.ShouldBindJSON(&request) {
+	var request PostUsersJSONBody
+	if nil != c.Bind(&request) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	hashedPassword, err := utils.HashPassword(request.Password)
+	hashedPassword, err := user.HashPassword(request.Password)
 	if err != nil {
 		panic(err)
 	}
 
-	err = h.Queries.InsertUser(c.Request.Context(), db.InsertUserParams{
+	err = s.Queries.InsertUser(c.Request.Context(), db.InsertUserParams{
 		ID:       uuid.NewString(),
 		Username: request.Username,
 		Password: hashedPassword,
@@ -45,23 +40,23 @@ func (h *StorageHandler) createUser(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-func (h *StorageHandler) createToken(c *gin.Context) {
-	var request postUsersRequest
-	if nil != c.ShouldBindJSON(&request) {
+func (s *StorageHandler) PostUsersToken(c *gin.Context) {
+	var request PostUsersTokenJSONBody
+	if nil != c.Bind(&request) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	selectedUser, err := h.Queries.SelectUser(c.Request.Context(), request.Username)
-	if err != nil || !selectedUser.Active || !utils.PasswordValid(selectedUser.Password, request.Password) {
+	selectedUser, err := s.Queries.SelectUser(c.Request.Context(), request.Username)
+	if err != nil || !selectedUser.Active || !user.PasswordValid(selectedUser.Password, request.Password) {
 		c.Status(http.StatusUnauthorized)
 		return
 	}
 
-	token, err := utils.GenerateToken(selectedUser.ID)
+	token, err := user.GenerateToken(selectedUser.ID)
 	if err != nil {
 		panic(err)
 	}
 
-	c.JSON(http.StatusOK, tokenDto{Token: token.Token, ExpirationDate: token.ExpirationDate})
+	c.JSON(http.StatusOK, UserTokenDto{Token: token.Token, Expires: token.ExpirationDate})
 }

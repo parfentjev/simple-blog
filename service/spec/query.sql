@@ -1,3 +1,11 @@
+-- name: SelectAllPosts :many
+select id,
+    title,
+    summary,
+    date,
+    visible
+from posts
+order by date desc;
 -- name: SelectVisiblePosts :many
 select id,
     title,

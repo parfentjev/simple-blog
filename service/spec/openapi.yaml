@@ -1,7 +1,7 @@
-openapi: '3.0.0'
+openapi: "3.0.0"
 info:
   title: Simple Blog
-  version: '1.0'
+  version: "1.0"
 servers:
   - url: http://localhost:8080
   - url: https://service.fakeplastictrees.ee
@@ -29,13 +29,13 @@ paths:
                 - username
                 - password
       responses:
-        '201':
+        "201":
           description: User created
-        '400':
+        "400":
           description: Bad request body
-        '403':
+        "403":
           description: Registration is disabled
-        '500':
+        "500":
           description: Internal server error
   /users/token:
     post:
@@ -57,16 +57,16 @@ paths:
                 - username
                 - password
       responses:
-        '200':
+        "200":
           description: Token created
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/UserTokenDto'
-        '400':
+                $ref: "#/components/schemas/UserTokenDto"
+        "400":
           description: Bad request body
-        '500':
+        "500":
           description: Internal server error
   /posts/published:
     get:
@@ -74,14 +74,14 @@ paths:
         - Posts
       description: Get published posts
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/PostPreviewDto'
-        '500':
+                $ref: "#/components/schemas/PostPreviewDto"
+        "500":
           description: Internal server error
   /posts/published/{id}:
     get:
@@ -96,16 +96,16 @@ paths:
             type: string
           description: Post id
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/PostDto'
-        '404':
+                $ref: "#/components/schemas/PostDto"
+        "404":
           description: Post not found
-        '500':
+        "500":
           description: Internal server error
   /rss/posts:
     get:
@@ -113,13 +113,13 @@ paths:
         - Posts
       description: Get an RSS feed with published posts
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/rss+xml:
               schema:
                 type: string
-        '500':
+        "500":
           description: Internal server error
   /posts/editor:
     get:
@@ -129,16 +129,16 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/PostPreviewDto'
-        '401':
+                $ref: "#/components/schemas/PostPreviewDto"
+        "401":
           description: Unauthorized
-        '500':
+        "500":
           description: Internal server error
     post:
       tags:
@@ -149,15 +149,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostEditorDto'
+              $ref: "#/components/schemas/PostEditorDto"
       security:
         - bearerAuth: []
       responses:
-        '201':
+        "201":
           description: OK
-        '401':
+        "401":
           description: Unauthorized
-        '500':
+        "500":
           description: Internal server error
   /posts/editor/{id}:
     get:
@@ -174,18 +174,18 @@ paths:
             type: string
           description: Post id
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/PostDto'
-        '401':
+                $ref: "#/components/schemas/PostDto"
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Post not found
-        '500':
+        "500":
           description: Internal server error
     put:
       tags:
@@ -205,15 +205,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostEditorDto'
+              $ref: "#/components/schemas/PostEditorDto"
       responses:
-        '200':
+        "200":
           description: OK
-        '401':
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Post not found
-        '500':
+        "500":
           description: Internal server error
     delete:
       tags:
@@ -229,13 +229,13 @@ paths:
             type: string
           description: Post id
       responses:
-        '200':
+        "200":
           description: OK
-        '401':
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Post not found
-        '500':
+        "500":
           description: Internal server error
 components:
   securitySchemes:
@@ -250,7 +250,7 @@ components:
         token:
           type: string
         expires:
-          type: string
+          type: integer
       required:
         - token
         - expires
@@ -315,3 +315,15 @@ components:
         - summary
         - text
         - visible
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+        message:
+          type: string
+          description: Error message

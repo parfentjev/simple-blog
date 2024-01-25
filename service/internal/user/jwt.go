@@ -1,32 +1,21 @@
-package utils
+package user
 
 import (
-	"errors"
+	"fmt"
 	"log"
 	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/parfentjev/simple-blog/internal/config"
-	"golang.org/x/crypto/bcrypt"
 )
 
-type GeneratedToken struct {
+type Token struct {
 	Token          string
-	ExpirationDate int64
+	ExpirationDate int
 }
 
-func HashPassword(password string) (string, error) {
-	result, err := bcrypt.GenerateFromPassword([]byte(password), 10)
-
-	return string(result), err
-}
-
-func PasswordValid(hashedPassword string, password string) bool {
-	return nil == bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-}
-
-func GenerateToken(sub string) (GeneratedToken, error) {
+func GenerateToken(sub string) (Token, error) {
 	exp := time.Now().Add(time.Hour * 24 * 7).Unix()
 	signedToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": sub,
@@ -34,10 +23,10 @@ func GenerateToken(sub string) (GeneratedToken, error) {
 	}).SignedString([]byte(config.App.HashSecret))
 
 	if err != nil {
-		return GeneratedToken{}, err
+		return Token{}, err
 	}
 
-	return GeneratedToken{signedToken, exp}, nil
+	return Token{signedToken, int(exp)}, nil
 }
 
 func TokenValid(token string) bool {
@@ -49,7 +38,7 @@ func TokenValid(token string) bool {
 	parsedToken, err := jwt.Parse(splitToken[1], func(token *jwt.Token) (any, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
-			return nil, errors.New("signing method is not valid")
+			return nil, fmt.Errorf("signing method is not valid")
 		}
 
 		return []byte(config.App.HashSecret), nil

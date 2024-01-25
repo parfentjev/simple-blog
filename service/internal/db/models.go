@@ -9,17 +9,17 @@ import (
 )
 
 type Post struct {
-	ID      string    `json:"id"`
-	Title   string    `json:"title"`
-	Summary string    `json:"summary"`
-	Text    string    `json:"text"`
-	Date    time.Time `json:"date"`
-	Visible bool      `json:"visible"`
+	ID      string
+	Title   string
+	Summary string
+	Text    string
+	Date    time.Time
+	Visible bool
 }
 
 type User struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Active   bool   `json:"active"`
+	ID       string
+	Username string
+	Password string
+	Active   bool
 }

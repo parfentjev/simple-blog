@@ -1,15 +1,8 @@
-package routes
+package api
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/parfentjev/simple-blog/internal/db"
 )
-
-func Register(e *gin.Engine) {
-	h := NewStorageHandler(db.New(db.Connection))
-	registerPostHandlers(e, h)
-	registerUserHandlers(e, h)
-}
 
 type StorageHandler struct {
 	Queries *db.Queries
@@ -17,4 +10,12 @@ type StorageHandler struct {
 
 func NewStorageHandler(queries *db.Queries) *StorageHandler {
 	return &StorageHandler{queries}
+}
+
+type MessageResponse struct {
+	Message string `json:"message"`
+}
+
+func AuthenticationFunc() {
+
 }

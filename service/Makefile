@@ -10,7 +10,8 @@ migrate:
 	sqlite3 data/server.db < spec/schema.sql
 
 codegen:
-	sqlc generate
+	sqlc -f spec/sqlite.yaml generate
+	oapi-codegen -package api -generate spec,types,gin -o internal/api/server.gen.go spec/openapi.yaml
 
 release:
 	docker build -t simple-blog-service .
