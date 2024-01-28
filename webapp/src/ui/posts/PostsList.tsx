@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { PostPreviewDto } from '../../api/models/post'
 import PostPreview from './PostPreview'
+import { PostPreviewDto } from '../../api/codegen'
 
 const PostsList: FC<{ posts: PostPreviewDto[] }> = ({ posts }) => {
     return (

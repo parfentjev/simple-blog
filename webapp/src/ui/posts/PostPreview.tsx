@@ -1,8 +1,8 @@
 import { FC } from 'react'
-import { PostPreviewDto } from '../../api/models/post'
 import { encodeTitle, jsonDateToString } from '../../utils/string-utils'
 import MarkdownRenderer from './MarkdownRenderer'
 import { Link } from 'react-router-dom'
+import { PostPreviewDto } from '../../api/codegen'
 
 const PostPreview: FC<{ post: PostPreviewDto }> = ({ post }) => {
     const postUrl = '/post/' + post.id + '/' + encodeTitle(post.title)

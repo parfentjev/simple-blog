@@ -1,19 +1,15 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
-import { PostDto } from '../../../api/models/post'
 import { useAuthContext } from '../../../store/auth-context'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import {
-    getPostsEditorById,
-    postPostsEditor,
-    putPostsEditorById,
-} from '../../../api/postService'
+import { PostEditorDto } from '../../../api/codegen'
+import { postsApi } from '../../../api/api'
 
 const PostEditor: FC = () => {
     const { id } = useParams()
     const { token } = useAuthContext()
 
-    const [postState, setPostState] = useState<PostDto>({
+    const [postState, setPostState] = useState<PostEditorDto>({
         id: '',
         title: '',
         summary: '',
@@ -27,7 +23,8 @@ const PostEditor: FC = () => {
             return
         }
 
-        getPostsEditorById(token, id)
+        postsApi(token)
+            .postsEditorIdGet({ id })
             .then((post) => setPostState(post))
             .catch(() => toast.error('Failed to load post.'))
     }, [id, token])
@@ -64,9 +61,12 @@ const PostEditor: FC = () => {
         }
 
         try {
-            postState.id.length > 0
-                ? putPostsEditorById(token, postState.id, postState)
-                : postPostsEditor(token, postState)
+            postState.id
+                ? postsApi(token).postsEditorIdPut({
+                      id: postState.id,
+                      postEditorDto: postState,
+                  })
+                : postsApi(token).postsEditorPost({ postEditorDto: postState })
 
             toast.success('Success!')
         } catch (error) {

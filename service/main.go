@@ -1,8 +1,6 @@
 package main
 
 import (
-	"time"
-
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -21,18 +19,18 @@ func main() {
 	db.Init()
 	config.Init()
 	engine := gin.Default()
+
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{"https://fakeplastictrees.ee", "https://www.fakeplastictrees.ee", "http://localhost:3000"}
+
 	engine.Use(middleware.OapiRequestValidatorWithOptions(spec,
 		&middleware.Options{
 			Options: openapi3filter.Options{
 				AuthenticationFunc: api.NewAuthenticator(),
 			},
-		}))
-	engine.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"https://fakeplastictrees.ee", "https://www.fakeplastictrees.ee", "http://localhost:3000"},
-		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
-		AllowHeaders: []string{"content-type", "authorization"},
-		MaxAge:       12 * time.Hour,
-	}))
+		}),
+		cors.New(corsConfig))
+
 	api.RegisterHandlers(engine, api.NewStorageHandler(db.New(db.Connection)))
 	engine.Run()
 }

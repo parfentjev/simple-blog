@@ -1,13 +1,16 @@
-import axios from 'axios'
-import { TokenDto } from './models/user'
+import { Configuration, PostsApi, UserTokenDto, UsersApi } from './codegen'
 
-export const api = () =>
-    axios.create({
-        baseURL: process.env.REACT_APP_SERVICE_URL,
+const configuration = (token?: UserTokenDto) => {
+    return new Configuration({
+        basePath: process.env.REACT_APP_SERVICE_URL,
+        accessToken: token?.token,
     })
+}
 
-export const authApi = (token: TokenDto) =>
-    axios.create({
-        baseURL: process.env.REACT_APP_SERVICE_URL,
-        headers: { Authorization: 'Brearer ' + token.token },
-    })
+export const usersApi = () => {
+    return new UsersApi(configuration())
+}
+
+export const postsApi = (token?: UserTokenDto) => {
+    return new PostsApi(configuration(token))
+}

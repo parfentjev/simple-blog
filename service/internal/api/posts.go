@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -132,8 +133,9 @@ func (h *StorageHandler) PutPostsEditorId(c *gin.Context, id string) {
 		return
 	}
 
-	date, err := time.Parse(*request.Date, time.RFC3339)
+	date, err := time.Parse(time.RFC3339, *request.Date)
 	if err != nil {
+		fmt.Println("time", *request.Date, err)
 		c.Status(http.StatusBadRequest)
 		return
 	}

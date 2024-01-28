@@ -7,11 +7,11 @@ import {
     useEffect,
     useState,
 } from 'react'
-import { TokenDto } from '../api/models/user'
 import { useNavigate } from 'react-router-dom'
+import { UserTokenDto } from '../api/codegen'
 
 type AuthContextType = {
-    token?: TokenDto
+    token?: UserTokenDto
     signin: Function
     signout: Function
 }
@@ -26,7 +26,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     children,
 }) => {
     const navigate = useNavigate()
-    const [token, setToken] = useState<TokenDto>()
+    const [token, setToken] = useState<UserTokenDto>()
 
     useEffect(() => {
         const localToken = loadLocalToken()
@@ -36,7 +36,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
         }
 
         const currentDate = new Date().getTime()
-        const localTokenExpirationDate = localToken.expirationDate * 1000
+        const localTokenExpirationDate = localToken.expires * 1000
         if (currentDate > localTokenExpirationDate) {
             removeLocalToken()
             setToken(undefined)
@@ -46,7 +46,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     }, [])
 
     const handleSingIn = useCallback(
-        (token: TokenDto) => {
+        (token: UserTokenDto) => {
             setToken(token)
             saveLocalToken(token)
             navigate('/admin')
@@ -80,11 +80,11 @@ export const ProtectedRoute: FC<{ children: ReactNode }> = ({ children }) => {
     )
 }
 
-const saveLocalToken = (token: TokenDto) => {
+const saveLocalToken = (token: UserTokenDto) => {
     localStorage.setItem('token', JSON.stringify(token))
 }
 
-const loadLocalToken = (): TokenDto | null => {
+const loadLocalToken = (): UserTokenDto | null => {
     const token = localStorage.getItem('token')
 
     return token ? JSON.parse(token) : null

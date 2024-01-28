@@ -1,14 +1,15 @@
 import { FC, useEffect, useState } from 'react'
-import { getPostsPublished } from '../../../api/postService'
 import { toast } from 'react-toastify'
-import { PostPreviewDto } from '../../../api/models/post'
 import PostsList from '../../../ui/posts/PostsList'
+import { PostPreviewDto } from '../../../api/codegen'
+import { postsApi } from '../../../api/api'
 
 const PostsPage: FC = () => {
     const [posts, setPosts] = useState<PostPreviewDto[]>()
 
     useEffect(() => {
-        getPostsPublished()
+        postsApi()
+            .postsPublishedGet()
             .then((posts) => setPosts(posts))
             .catch(() => toast.error('Failed to laod posts.'))
     }, [])

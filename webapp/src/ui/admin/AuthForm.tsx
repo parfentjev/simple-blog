@@ -1,7 +1,7 @@
 import { FC, FormEvent, useCallback, useRef } from 'react'
 import { toast } from 'react-toastify'
 import { useAuthContext } from '../../store/auth-context'
-import { postUsersToken } from '../../api/userService'
+import { usersApi } from '../../api/api'
 
 const AuthForm: FC = () => {
     const { signin } = useAuthContext()
@@ -22,7 +22,8 @@ const AuthForm: FC = () => {
                 return
             }
 
-            postUsersToken({ username, password })
+            usersApi()
+                .usersTokenPost({ usersPostRequest: { username, password } })
                 .then((token) => signin(token))
                 .catch(() => toast.error("Couldn't auhtorize."))
         },

@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { PostDto } from '../../../api/models/post'
-import { getPublishedPostsById } from '../../../api/postService'
 import { toast } from 'react-toastify'
 import SinglePost from '../../../ui/posts/SinglePost'
+import { postsApi } from '../../../api/api'
+import { PostDto } from '../../../api/codegen'
 
 const PostPage: FC = () => {
     const { id } = useParams()
@@ -12,7 +12,8 @@ const PostPage: FC = () => {
 
     useEffect(() => {
         if (id) {
-            getPublishedPostsById(id)
+            postsApi()
+                .postsPublishedIdGet({ id })
                 .then((post) => setPost(post))
                 .catch(() => toast.error('Failed to load post.'))
         }
