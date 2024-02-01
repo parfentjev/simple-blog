@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"github.com/parfentjev/simple-blog/internal/db"
@@ -14,8 +14,4 @@ func NewStorageHandler(queries *db.Queries) *StorageHandler {
 
 type MessageResponse struct {
 	Message string `json:"message"`
-}
-
-func AuthenticationFunc() {
-
 }

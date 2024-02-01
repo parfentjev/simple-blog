@@ -7,13 +7,14 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	middleware "github.com/oapi-codegen/gin-middleware"
-	"github.com/parfentjev/simple-blog/internal/api"
 	"github.com/parfentjev/simple-blog/internal/config"
 	"github.com/parfentjev/simple-blog/internal/db"
+	"github.com/parfentjev/simple-blog/internal/server"
+	"github.com/parfentjev/simple-blog/internal/server/auth"
 )
 
 func main() {
-	spec, err := api.GetSwagger()
+	spec, err := server.GetSwagger()
 	if err != nil {
 		panic(err)
 	}
@@ -33,10 +34,10 @@ func main() {
 		middleware.OapiRequestValidatorWithOptions(spec,
 			&middleware.Options{
 				Options: openapi3filter.Options{
-					AuthenticationFunc: api.NewAuthenticator(),
+					AuthenticationFunc: auth.NewAuthenticator(auth.NewTokenHandler()),
 				},
 			}))
 
-	api.RegisterHandlers(engine, api.NewStorageHandler(db.New(db.Connection)))
+	server.RegisterHandlers(engine, server.NewStorageHandler(db.New(db.Connection)))
 	engine.Run()
 }

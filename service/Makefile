@@ -11,7 +11,7 @@ migrate:
 
 codegen:
 	sqlc -f spec/sqlite.yaml generate
-	oapi-codegen -package api -generate spec,types,gin -o internal/api/server.gen.go spec/openapi.yaml
+	oapi-codegen -package server -generate spec,types,gin -o internal/server/server.gen.go spec/openapi.yaml
 
 release:
 	docker build -t simple-blog-service .

@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"net/http"
@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/parfentjev/simple-blog/internal/config"
 	"github.com/parfentjev/simple-blog/internal/db"
-	"github.com/parfentjev/simple-blog/internal/user"
+	"github.com/parfentjev/simple-blog/internal/server/auth"
 )
 
 func (s *StorageHandler) PostUsers(c *gin.Context) {
@@ -22,7 +22,8 @@ func (s *StorageHandler) PostUsers(c *gin.Context) {
 		return
 	}
 
-	hashedPassword, err := user.HashPassword(request.Password)
+	passAuth := auth.NewPasswordAuth()
+	hashedPassword, err := passAuth.HashPassword(request.Password)
 	if err != nil {
 		panic(err)
 	}
@@ -47,13 +48,14 @@ func (s *StorageHandler) PostUsersToken(c *gin.Context) {
 		return
 	}
 
+	passAuth := auth.NewPasswordAuth()
 	selectedUser, err := s.Queries.SelectUser(c.Request.Context(), request.Username)
-	if err != nil || !selectedUser.Active || !user.PasswordValid(selectedUser.Password, request.Password) {
+	if err != nil || !selectedUser.Active || !passAuth.PasswordValid(selectedUser.Password, request.Password) {
 		c.Status(http.StatusUnauthorized)
 		return
 	}
 
-	token, err := user.GenerateToken(selectedUser.ID)
+	token, err := auth.NewTokenHandler().CreateToken(selectedUser.ID)
 	if err != nil {
 		panic(err)
 	}
