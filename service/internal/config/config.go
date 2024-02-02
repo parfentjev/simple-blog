@@ -7,9 +7,13 @@ import (
 )
 
 type app struct {
-	PasswordSecret      string `env:"PASSWORD_SECRET,required"`
-	JWTSecret           string `env:"JWT_SECRET,required"`
-	RegistrationEnabled bool   `env:"REGISTRATION_ENABLED,required"`
+	PasswordSecret      string   `env:"PASSWORD_SECRET,required"`
+	JWTSecret           string   `env:"JWT_SECRET,required"`
+	RegistrationEnabled bool     `env:"REGISTRATION_ENABLED,required"`
+	RssFeedTitle        string   `env:"RSS_FEED_TITLE,required"`
+	RssFeedDescription  string   `env:"RSS_FEED_DESCRIPTION,required"`
+	RssFeedBaseUrl      string   `env:"RSS_FEED_BASE_URL,required"`
+	AllowOrigins        []string `env:"ALLOW_ORIGINS,required"`
 }
 
 var App = app{}

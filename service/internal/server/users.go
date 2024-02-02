@@ -12,7 +12,7 @@ import (
 
 func (s *StorageHandler) PostUsers(c *gin.Context) {
 	if !config.App.RegistrationEnabled {
-		c.JSON(http.StatusForbidden, MessageResponse{"User creation is disabled."})
+		c.JSON(http.StatusForbidden, MessageResponse{"user creation is disabled"})
 		return
 	}
 

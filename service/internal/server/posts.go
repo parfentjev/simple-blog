@@ -7,8 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/gorilla/feeds"
+	"github.com/parfentjev/simple-blog/internal/config"
 	"github.com/parfentjev/simple-blog/internal/db"
-	"github.com/parfentjev/simple-blog/internal/helper"
 )
 
 func (h *StorageHandler) GetPostsPublished(c *gin.Context) {
@@ -54,7 +55,7 @@ func (h *StorageHandler) GetRssPosts(c *gin.Context) {
 		panic(err)
 	}
 
-	feed, err := helper.GenerateRss(posts)
+	feed, err := generateRssFeed(posts)
 	if err != nil {
 		panic(err)
 	}
@@ -135,7 +136,6 @@ func (h *StorageHandler) PutPostsEditorId(c *gin.Context, id string) {
 
 	date, err := time.Parse(time.RFC3339, *request.Date)
 	if err != nil {
-		fmt.Println("time", *request.Date, err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
@@ -165,4 +165,25 @@ func (h *StorageHandler) DeletePostsEditorId(c *gin.Context, id string) {
 	}
 
 	c.Status(http.StatusOK)
+}
+
+func generateRssFeed(posts []db.SelectVisiblePostsRow) (string, error) {
+	feed := &feeds.Feed{
+		Title:       config.App.RssFeedTitle,
+		Link:        &feeds.Link{Href: config.App.RssFeedBaseUrl},
+		Description: config.App.RssFeedDescription,
+		Created:     time.Now(),
+	}
+
+	for _, p := range posts {
+		feed.Items = append(feed.Items, &feeds.Item{
+			Id:          p.ID,
+			Title:       p.Title,
+			Description: p.Summary,
+			Link:        &feeds.Link{Href: fmt.Sprintf("%v/post/%v", config.App.RssFeedBaseUrl, p.ID)},
+			Created:     p.Date,
+		})
+	}
+
+	return feed.ToAtom()
 }

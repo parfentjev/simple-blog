@@ -25,7 +25,7 @@ func main() {
 
 	engine.Use(
 		cors.New(cors.Config{
-			AllowOrigins:     []string{"https://fakeplastictrees.ee", "https://www.fakeplastictrees.ee", "http://localhost:3000"},
+			AllowOrigins:     config.App.AllowOrigins,
 			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 			AllowCredentials: false,
