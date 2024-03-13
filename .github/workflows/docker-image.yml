@@ -19,5 +19,5 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the Docker image
       run: |
-        docker build . --file service/Dockerfile --tag ghcr.io/${{ github.repository }}/simple-blog-service:latest
+        docker build --file service/Dockerfile --tag ghcr.io/${{ github.repository }}/simple-blog-service:latest ./service
         docker push ghcr.io/${{ github.repository }}/simple-blog-service:latest
