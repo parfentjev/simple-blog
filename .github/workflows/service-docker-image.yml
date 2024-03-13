@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Service docker image
 
 on:
   push:
@@ -20,5 +20,5 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the Docker image
       run: |
-        docker build ./service --file service/Dockerfile --tag ghcr.io/${{ github.repository }}/simple-blog-service:latest
-        docker push ghcr.io/${{ github.repository }}/simple-blog-service:latest
+        docker build ./service --file service/Dockerfile --tag ghcr.io/parfentjev/simple-blog-service:latest
+        docker push ghcr.io/parfentjev/simple-blog-service:latest
