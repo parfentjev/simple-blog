@@ -22,21 +22,3 @@ generate_env_example:
 			echo "$$key=" >> .env.example; \
 		fi \
 	done < .env
-
-.PHONY: release
-release:
-	$(MAKE) generate_env_example
-	docker build -t simple-blog-service .
-	docker save simple-blog-service:latest > simple-blog-service.tar
-
-.PHONY: deploy
-deploy:
-	scp simple-blog-service.tar ${SIMPLE_BLOG_REMOTE_HOST}:${SIMPLE_BLOG_REMOTE_PATH}simple-blog-service.tar
-	ssh ${SIMPLE_BLOG_REMOTE_HOST} "cd ${SIMPLE_BLOG_REMOTE_PATH} && \
-		docker load < simple-blog-service.tar && \
-		docker-compose up -d && \
-		rm simple-blog-service.tar"
-	scp ${SIMPLE_BLOG_REMOTE_HOST}:${SIMPLE_BLOG_REMOTE_PATH}data/server.db data/server.prod.db
-	sqlite3 data/server.prod.db < spec/schema.sql
-	scp data/server.prod.db ${SIMPLE_BLOG_REMOTE_HOST}:${SIMPLE_BLOG_REMOTE_PATH}data/server.db
-	rm data/server.prod.db
