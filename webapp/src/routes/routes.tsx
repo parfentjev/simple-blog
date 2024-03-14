@@ -5,7 +5,7 @@ import { ReactNode } from 'react'
 import PostPage from './pages/posts/PostPage'
 import NotFoundPage from './pages/core/NotFoundPage'
 import AuthPage from './pages/admin/AuthPage'
-import AdminHome from './pages/admin/AdminHome'
+import AdminHomePage from './pages/admin/AdminHomePage'
 import { ProtectedRoute } from '../store/auth-context'
 import PostEditor from './pages/admin/PostEditor'
 
@@ -25,7 +25,7 @@ const routes: Route[] = [
         path: '/admin',
         element: (
             <ProtectedRoute>
-                <AdminHome />
+                <AdminHomePage />
             </ProtectedRoute>
         ),
     },
