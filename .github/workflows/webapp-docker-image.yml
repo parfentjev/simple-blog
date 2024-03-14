@@ -20,5 +20,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the Docker image
       run: |
-        docker build ./webapp --file webapp/Dockerfile --tag ghcr.io/parfentjev/simple-blog-webapp:latest
+        docker build ./webapp --file webapp/Dockerfile \
+          --build-arg REACT_APP_SERVICE_URL=${{ secrets.REACT_APP_SERVICE_URL }} \
+          --tag ghcr.io/parfentjev/simple-blog-webapp:latest
         docker push ghcr.io/parfentjev/simple-blog-webapp:latest
