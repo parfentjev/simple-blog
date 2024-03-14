@@ -9,4 +9,5 @@ ARG REACT_APP_SERVICE_URL
 RUN npm run build
 
 FROM nginx:mainline-alpine-slim
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /webapp/build /usr/share/nginx/html
