@@ -9,3 +9,7 @@ codegen:
 		-g typescript-fetch \
 		-o src/api/codegen \
 		--additional-properties hooks=true
+
+.PHONY: build
+build:
+	npm run build

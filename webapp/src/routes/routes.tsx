@@ -7,7 +7,8 @@ import NotFoundPage from './pages/core/NotFoundPage'
 import AuthPage from './pages/admin/AuthPage'
 import AdminHomePage from './pages/admin/AdminHomePage'
 import { ProtectedRoute } from '../store/auth-context'
-import PostEditor from './pages/admin/PostEditor'
+import PostEditor from './pages/admin/PostEditorPage'
+import EditorPostsPage from './pages/admin/EditorPostsPage'
 
 interface Route {
     path: string
@@ -42,6 +43,14 @@ const routes: Route[] = [
         element: (
             <ProtectedRoute>
                 <PostEditor />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/admin/posts',
+        element: (
+            <ProtectedRoute>
+                <EditorPostsPage />
             </ProtectedRoute>
         ),
     },

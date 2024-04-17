@@ -1,9 +1,9 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
-import { useAuthContext } from '../../../store/auth-context'
+import { useAuthContext } from '../../store/auth-context'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import { PostEditorDto } from '../../../api/codegen'
-import { postsApi } from '../../../api/api'
+import { PostEditorDto } from '../../api/codegen'
+import { postsApi } from '../../api/api'
 
 const PostEditor: FC = () => {
     const { id } = useParams()
