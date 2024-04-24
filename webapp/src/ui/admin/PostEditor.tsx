@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from 'react'
 import { useAuthContext } from '../../store/auth-context'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
@@ -53,6 +53,8 @@ const PostEditor: FC = () => {
         })
     }
 
+    const updateDateRef = useRef<HTMLInputElement>(null)
+
     const handleSave = async (event: FormEvent) => {
         event.preventDefault()
 
@@ -60,12 +62,16 @@ const PostEditor: FC = () => {
             return
         }
 
+        if (updateDateRef.current && updateDateRef.current.checked) {
+            postState.date = new Date().toJSON()
+        }
+
         try {
             postState.id
                 ? postsApi(token).postsEditorIdPut({
-                      id: postState.id,
-                      postEditorDto: postState,
-                  })
+                    id: postState.id,
+                    postEditorDto: postState,
+                })
                 : postsApi(token).postsEditorPost({ postEditorDto: postState })
 
             toast.success('Success!')
@@ -108,6 +114,12 @@ const PostEditor: FC = () => {
                     checked={postState.visible}
                 />
                 <label htmlFor="visible">Post is visible</label>
+                <input
+                    type="checkbox"
+                    id="updateDate"
+                    ref={updateDateRef}
+                />
+                <label htmlFor="updateDate">Update date</label>
             </div>
             <div className="text-center">
                 <button type="submit" className="primary-button">

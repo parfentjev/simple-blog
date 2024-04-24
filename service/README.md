@@ -11,9 +11,7 @@ To configure the service, create a `.env` file containing the necessary key-valu
 To run the service locally, first load the environment variables:
 
 ```shell
-set -a
-source .env
-set +a
+set -a && source .env && set +a
 ```
 
 This method ensures that all variables in `.env` are exported as environment variables. More details can be found [here](https://stackoverflow.com/a/43267603).

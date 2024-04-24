@@ -13,5 +13,6 @@ export const encodeTitle = (title: string) =>
             .replaceAll(':', '')
             .replaceAll(',', '')
             .replaceAll('"', '')
+	    .replaceAll('&', 'and')
             .toLocaleLowerCase()
     )
