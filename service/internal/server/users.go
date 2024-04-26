@@ -5,13 +5,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/parfentjev/simple-blog/internal/config"
 	"github.com/parfentjev/simple-blog/internal/db"
 	"github.com/parfentjev/simple-blog/internal/server/auth"
 )
 
-func (s *StorageHandler) PostUsers(c *gin.Context) {
-	if !config.App.RegistrationEnabled {
+func (h *RequestHandler) PostUsers(c *gin.Context) {
+	if !h.config.RegistrationEnabled {
 		c.JSON(http.StatusForbidden, MessageResponse{"user creation is disabled"})
 		return
 	}
@@ -22,13 +21,13 @@ func (s *StorageHandler) PostUsers(c *gin.Context) {
 		return
 	}
 
-	passAuth := auth.NewPasswordAuth()
+	passAuth := auth.NewPasswordAuth(h.config)
 	hashedPassword, err := passAuth.HashPassword(request.Password)
 	if err != nil {
 		panic(err)
 	}
 
-	err = s.Queries.InsertUser(c.Request.Context(), db.InsertUserParams{
+	err = h.queries.InsertUser(c.Request.Context(), db.InsertUserParams{
 		ID:       uuid.NewString(),
 		Username: request.Username,
 		Password: hashedPassword,
@@ -41,21 +40,21 @@ func (s *StorageHandler) PostUsers(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-func (s *StorageHandler) PostUsersToken(c *gin.Context) {
+func (h *RequestHandler) PostUsersToken(c *gin.Context) {
 	var request PostUsersTokenJSONBody
 	if nil != c.Bind(&request) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	passAuth := auth.NewPasswordAuth()
-	selectedUser, err := s.Queries.SelectUser(c.Request.Context(), request.Username)
+	passAuth := auth.NewPasswordAuth(h.config)
+	selectedUser, err := h.queries.SelectUser(c.Request.Context(), request.Username)
 	if err != nil || !selectedUser.Active || !passAuth.PasswordValid(selectedUser.Password, request.Password) {
 		c.Status(http.StatusUnauthorized)
 		return
 	}
 
-	token, err := auth.NewTokenHandler().CreateToken(selectedUser.ID)
+	token, err := auth.NewTokenHandler(h.config).CreateToken(selectedUser.ID)
 	if err != nil {
 		panic(err)
 	}

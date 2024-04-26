@@ -20,12 +20,12 @@ func main() {
 	}
 
 	db.Init()
-	config.Init()
+	config := config.NewConfig()
 	engine := gin.Default()
 
 	engine.Use(
 		cors.New(cors.Config{
-			AllowOrigins:     config.App.AllowOrigins,
+			AllowOrigins:     config.AllowOrigins,
 			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 			AllowCredentials: false,
@@ -34,10 +34,10 @@ func main() {
 		middleware.OapiRequestValidatorWithOptions(spec,
 			&middleware.Options{
 				Options: openapi3filter.Options{
-					AuthenticationFunc: auth.NewAuthenticator(auth.NewTokenHandler()),
+					AuthenticationFunc: auth.NewAuthenticator(auth.NewTokenHandler(&config)),
 				},
 			}))
 
-	server.RegisterHandlers(engine, server.NewStorageHandler(db.New(db.Connection)))
+	server.RegisterHandlers(engine, server.NewRequestHandler(db.New(db.Connection), &config))
 	engine.Run()
 }

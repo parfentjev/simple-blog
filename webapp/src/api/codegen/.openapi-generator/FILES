@@ -4,6 +4,8 @@ apis/UsersApi.ts
 apis/index.ts
 index.ts
 models/ModelError.ts
+models/PageDto.ts
+models/PagePostDto.ts
 models/PostDto.ts
 models/PostEditorDto.ts
 models/PostPreviewDto.ts

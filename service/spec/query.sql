@@ -5,7 +5,9 @@ select id,
     date,
     visible
 from posts
-order by date desc;
+order by date desc
+limit ?
+offset ?;
 -- name: SelectVisiblePosts :many
 select id,
     title,
@@ -14,7 +16,9 @@ select id,
     visible
 from posts
 where visible = 1
-order by date desc;
+order by date desc
+limit ?
+offset ?;
 -- name: SelectPost :one
 select *
 from posts
@@ -38,6 +42,11 @@ where id = ?;
 -- name: DeletePost :exec
 delete from posts
 where id = ?;
+-- name: CountAllPost :one
+select count(*) from posts;
+-- name: CountPublishedPost :one
+select count(*) from posts
+where visible = 1;
 -- name: SelectUser :one
 select id,
     password,

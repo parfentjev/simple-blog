@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 info:
   title: Simple Blog
-  version: "1.0"
+  version: "1.1"
 tags:
   - name: Users
   - name: Posts
@@ -70,15 +70,21 @@ paths:
       tags:
         - Posts
       description: Get published posts
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number
+          required: false
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/PostPreviewDto"
+                type: object
+                $ref: "#/components/schemas/PagePostDto"
         "500":
           description: Internal server error
   /posts/published/{id}:
@@ -126,15 +132,21 @@ paths:
       description: Get all posts, both published and drafts
       security:
         - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number
+          required: false
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/PostPreviewDto"
+                type: object
+                $ref: "#/components/schemas/PagePostDto"
         "401":
           description: Unauthorized
         "500":
@@ -321,8 +333,36 @@ components:
       properties:
         code:
           type: integer
-          format: int32
+          format: int64
           description: Error code
         message:
           type: string
           description: Error message
+    PageDto:
+      required:
+        - page
+        - totalPages
+        - items
+      properties:
+        page:
+          type: integer
+          format: int64
+          description: Current page
+        totalPages:
+          type: integer
+          format: int64
+          description: Total pages
+        items:
+          type: array
+          items: {}
+          description: Page items
+    PagePostDto:
+      allOf:
+        - $ref: '#/components/schemas/PageDto'
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/PostPreviewDto'
+

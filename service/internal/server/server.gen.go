@@ -22,6 +22,29 @@ const (
 	BearerAuthScopes = "bearerAuth.Scopes"
 )
 
+// PageDto defines model for PageDto.
+type PageDto struct {
+	// Items Page items
+	Items []interface{} `json:"items"`
+
+	// Page Current page
+	Page int64 `json:"page"`
+
+	// TotalPages Total pages
+	TotalPages int64 `json:"totalPages"`
+}
+
+// PagePostDto defines model for PagePostDto.
+type PagePostDto struct {
+	Items []PostPreviewDto `json:"items"`
+
+	// Page Current page
+	Page int64 `json:"page"`
+
+	// TotalPages Total pages
+	TotalPages int64 `json:"totalPages"`
+}
+
 // PostDto defines model for PostDto.
 type PostDto struct {
 	Date    string `json:"date"`
@@ -57,6 +80,18 @@ type UserTokenDto struct {
 	Token   string `json:"token"`
 }
 
+// GetPostsEditorParams defines parameters for GetPostsEditor.
+type GetPostsEditorParams struct {
+	// Page Page number
+	Page *int `form:"page,omitempty" json:"page,omitempty"`
+}
+
+// GetPostsPublishedParams defines parameters for GetPostsPublished.
+type GetPostsPublishedParams struct {
+	// Page Page number
+	Page *int `form:"page,omitempty" json:"page,omitempty"`
+}
+
 // PostUsersJSONBody defines parameters for PostUsers.
 type PostUsersJSONBody struct {
 	Password string `json:"password"`
@@ -85,7 +120,7 @@ type PostUsersTokenJSONRequestBody PostUsersTokenJSONBody
 type ServerInterface interface {
 
 	// (GET /posts/editor)
-	GetPostsEditor(c *gin.Context)
+	GetPostsEditor(c *gin.Context, params GetPostsEditorParams)
 
 	// (POST /posts/editor)
 	PostPostsEditor(c *gin.Context)
@@ -100,7 +135,7 @@ type ServerInterface interface {
 	PutPostsEditorId(c *gin.Context, id string)
 
 	// (GET /posts/published)
-	GetPostsPublished(c *gin.Context)
+	GetPostsPublished(c *gin.Context, params GetPostsPublishedParams)
 
 	// (GET /posts/published/{id})
 	GetPostsPublishedId(c *gin.Context, id string)
@@ -127,7 +162,20 @@ type MiddlewareFunc func(c *gin.Context)
 // GetPostsEditor operation middleware
 func (siw *ServerInterfaceWrapper) GetPostsEditor(c *gin.Context) {
 
+	var err error
+
 	c.Set(BearerAuthScopes, []string{})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetPostsEditorParams
+
+	// ------------- Optional query parameter "page" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "page", c.Request.URL.Query(), &params.Page)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter page: %w", err), http.StatusBadRequest)
+		return
+	}
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -136,7 +184,7 @@ func (siw *ServerInterfaceWrapper) GetPostsEditor(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.GetPostsEditor(c)
+	siw.Handler.GetPostsEditor(c, params)
 }
 
 // PostPostsEditor operation middleware
@@ -235,6 +283,19 @@ func (siw *ServerInterfaceWrapper) PutPostsEditorId(c *gin.Context) {
 // GetPostsPublished operation middleware
 func (siw *ServerInterfaceWrapper) GetPostsPublished(c *gin.Context) {
 
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetPostsPublishedParams
+
+	// ------------- Optional query parameter "page" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "page", c.Request.URL.Query(), &params.Page)
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter page: %w", err), http.StatusBadRequest)
+		return
+	}
+
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
 		if c.IsAborted() {
@@ -242,7 +303,7 @@ func (siw *ServerInterfaceWrapper) GetPostsPublished(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.GetPostsPublished(c)
+	siw.Handler.GetPostsPublished(c, params)
 }
 
 // GetPostsPublishedId operation middleware
@@ -350,22 +411,24 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

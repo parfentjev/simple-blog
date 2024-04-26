@@ -2,7 +2,9 @@ package server
 
 import (
 	"fmt"
+	"math"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -12,8 +14,17 @@ import (
 	"github.com/parfentjev/simple-blog/internal/db"
 )
 
-func (h *StorageHandler) GetPostsPublished(c *gin.Context) {
-	rows, err := h.Queries.SelectVisiblePosts(c.Request.Context())
+func (h *RequestHandler) GetPostsPublished(c *gin.Context, params GetPostsPublishedParams) {
+	requestedPage, err := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, MessageResponse{"page number should be integer"})
+		return
+	}
+
+	rows, err := h.queries.SelectVisiblePosts(c.Request.Context(), db.SelectVisiblePostsParams{
+		Limit:  h.config.ItemLimit,
+		Offset: calculateOffset(requestedPage, h.config.ItemLimit),
+	})
 	if err != nil {
 		panic(err)
 	}
@@ -29,11 +40,15 @@ func (h *StorageHandler) GetPostsPublished(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, posts)
+	c.JSON(http.StatusOK, PagePostDto{
+		Page:       requestedPage,
+		TotalPages: getTotalPages(c, h.queries, false, h.config.ItemLimit),
+		Items:      posts,
+	})
 }
 
-func (h *StorageHandler) GetPostsPublishedId(c *gin.Context, id string) {
-	row, err := h.Queries.SelectVisiblePost(c.Request.Context(), id)
+func (h *RequestHandler) GetPostsPublishedId(c *gin.Context, id string) {
+	row, err := h.queries.SelectVisiblePost(c.Request.Context(), id)
 	if err != nil {
 		c.Status(http.StatusNotFound)
 		return
@@ -49,13 +64,16 @@ func (h *StorageHandler) GetPostsPublishedId(c *gin.Context, id string) {
 	})
 }
 
-func (h *StorageHandler) GetRssPosts(c *gin.Context) {
-	posts, err := h.Queries.SelectVisiblePosts(c.Request.Context())
+func (h *RequestHandler) GetRssPosts(c *gin.Context) {
+	posts, err := h.queries.SelectVisiblePosts(c.Request.Context(), db.SelectVisiblePostsParams{
+		Limit:  20,
+		Offset: 0,
+	})
 	if err != nil {
 		panic(err)
 	}
 
-	feed, err := generateRssFeed(posts)
+	feed, err := generateRssFeed(posts, h.config)
 	if err != nil {
 		panic(err)
 	}
@@ -63,8 +81,17 @@ func (h *StorageHandler) GetRssPosts(c *gin.Context) {
 	c.Data(http.StatusOK, "application/rss+xml", []byte(feed))
 }
 
-func (h *StorageHandler) GetPostsEditor(c *gin.Context) {
-	rows, err := h.Queries.SelectAllPosts(c.Request.Context())
+func (h *RequestHandler) GetPostsEditor(c *gin.Context, params GetPostsEditorParams) {
+	requestedPage, err := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, MessageResponse{"page number should be integer"})
+		return
+	}
+
+	rows, err := h.queries.SelectAllPosts(c.Request.Context(), db.SelectAllPostsParams{
+		Limit:  h.config.ItemLimit,
+		Offset: calculateOffset(requestedPage, h.config.ItemLimit),
+	})
 	if err != nil {
 		c.Status(http.StatusNotFound)
 		return
@@ -81,17 +108,21 @@ func (h *StorageHandler) GetPostsEditor(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, posts)
+	c.JSON(http.StatusOK, PagePostDto{
+		Page:       requestedPage,
+		TotalPages: getTotalPages(c, h.queries, true, h.config.ItemLimit),
+		Items:      posts,
+	})
 }
 
-func (h *StorageHandler) PostPostsEditor(c *gin.Context) {
+func (h *RequestHandler) PostPostsEditor(c *gin.Context) {
 	var request PostPostsEditorJSONRequestBody
 	if nil != c.Bind(&request) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	if err := h.Queries.InsertPost(c.Request.Context(), db.InsertPostParams{
+	if err := h.queries.InsertPost(c.Request.Context(), db.InsertPostParams{
 		ID:      uuid.NewString(),
 		Title:   request.Title,
 		Summary: request.Summary,
@@ -105,8 +136,8 @@ func (h *StorageHandler) PostPostsEditor(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-func (h *StorageHandler) GetPostsEditorId(c *gin.Context, id string) {
-	row, err := h.Queries.SelectPost(c.Request.Context(), id)
+func (h *RequestHandler) GetPostsEditorId(c *gin.Context, id string) {
+	row, err := h.queries.SelectPost(c.Request.Context(), id)
 	if err != nil {
 		c.Status(http.StatusNotFound)
 		return
@@ -122,8 +153,8 @@ func (h *StorageHandler) GetPostsEditorId(c *gin.Context, id string) {
 	})
 }
 
-func (h *StorageHandler) PutPostsEditorId(c *gin.Context, id string) {
-	if _, err := h.Queries.SelectPost(c.Request.Context(), id); err != nil {
+func (h *RequestHandler) PutPostsEditorId(c *gin.Context, id string) {
+	if _, err := h.queries.SelectPost(c.Request.Context(), id); err != nil {
 		c.Status(http.StatusNotFound)
 		return
 	}
@@ -140,7 +171,7 @@ func (h *StorageHandler) PutPostsEditorId(c *gin.Context, id string) {
 		return
 	}
 
-	if err := h.Queries.UpdatePost(c.Request.Context(), db.UpdatePostParams{
+	if err := h.queries.UpdatePost(c.Request.Context(), db.UpdatePostParams{
 		ID:      id,
 		Title:   request.Title,
 		Summary: request.Summary,
@@ -154,24 +185,24 @@ func (h *StorageHandler) PutPostsEditorId(c *gin.Context, id string) {
 	c.Status(http.StatusOK)
 }
 
-func (h *StorageHandler) DeletePostsEditorId(c *gin.Context, id string) {
-	if _, err := h.Queries.SelectPost(c.Request.Context(), id); err != nil {
+func (h *RequestHandler) DeletePostsEditorId(c *gin.Context, id string) {
+	if _, err := h.queries.SelectPost(c.Request.Context(), id); err != nil {
 		c.Status(http.StatusNotFound)
 		return
 	}
 
-	if err := h.Queries.DeletePost(c.Request.Context(), id); err != nil {
+	if err := h.queries.DeletePost(c.Request.Context(), id); err != nil {
 		panic(err)
 	}
 
 	c.Status(http.StatusOK)
 }
 
-func generateRssFeed(posts []db.SelectVisiblePostsRow) (string, error) {
+func generateRssFeed(posts []db.SelectVisiblePostsRow, config *config.Config) (string, error) {
 	feed := &feeds.Feed{
-		Title:       config.App.RssFeedTitle,
-		Link:        &feeds.Link{Href: config.App.RssFeedBaseUrl},
-		Description: config.App.RssFeedDescription,
+		Title:       config.RssFeedTitle,
+		Link:        &feeds.Link{Href: config.RssFeedBaseUrl},
+		Description: config.RssFeedDescription,
 		Created:     time.Now(),
 	}
 
@@ -180,10 +211,33 @@ func generateRssFeed(posts []db.SelectVisiblePostsRow) (string, error) {
 			Id:          p.ID,
 			Title:       p.Title,
 			Description: p.Summary,
-			Link:        &feeds.Link{Href: fmt.Sprintf("%v/post/%v", config.App.RssFeedBaseUrl, p.ID)},
+			Link:        &feeds.Link{Href: fmt.Sprintf("%v/post/%v", config.RssFeedBaseUrl, p.ID)},
 			Created:     p.Date,
 		})
 	}
 
 	return feed.ToAtom()
+}
+
+func calculateOffset(requestedPage int64, itemLimit int64) int64 {
+	return requestedPage*itemLimit - itemLimit
+}
+
+func getTotalPages(c *gin.Context, q *db.Queries, includeDrafts bool, itemLimit int64) int64 {
+	var (
+		totalPosts int64
+		err        error
+	)
+
+	if includeDrafts {
+		totalPosts, err = q.CountAllPost(c)
+	} else {
+		totalPosts, err = q.CountPublishedPost(c)
+	}
+
+	if err != nil {
+		return 0
+	}
+
+	return int64(math.Ceil(float64(totalPosts) / float64(itemLimit)))
 }

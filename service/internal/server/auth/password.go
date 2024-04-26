@@ -9,8 +9,8 @@ type PasswordAuth struct {
 	secret string
 }
 
-func NewPasswordAuth() *PasswordAuth {
-	return &PasswordAuth{config.App.PasswordSecret}
+func NewPasswordAuth(config *config.Config) *PasswordAuth {
+	return &PasswordAuth{config.PasswordSecret}
 }
 
 func (p *PasswordAuth) HashPassword(password string) (string, error) {

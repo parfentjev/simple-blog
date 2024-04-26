@@ -10,6 +10,7 @@ import (
 
 type TokenHandler struct {
 	signingMethod *jwt.SigningMethodHMAC
+	config        *config.Config
 }
 
 type Token struct {
@@ -17,9 +18,10 @@ type Token struct {
 	ExpirationDate int
 }
 
-func NewTokenHandler() *TokenHandler {
+func NewTokenHandler(config *config.Config) *TokenHandler {
 	return &TokenHandler{
 		jwt.SigningMethodHS256,
+		config,
 	}
 }
 
@@ -30,7 +32,7 @@ func (h *TokenHandler) ValidateToken(token string) error {
 			return nil, fmt.Errorf("signing method is not valid")
 		}
 
-		return []byte(config.App.JWTSecret), nil
+		return []byte(h.config.JWTSecret), nil
 	})
 
 	if err != nil {
@@ -58,7 +60,7 @@ func (h *TokenHandler) CreateToken(userId string) (Token, error) {
 	signedToken, err := jwt.NewWithClaims(h.signingMethod, jwt.MapClaims{
 		"sub": userId,
 		"exp": exp,
-	}).SignedString([]byte(config.App.JWTSecret))
+	}).SignedString([]byte(h.config.JWTSecret))
 
 	if err != nil {
 		return Token{}, fmt.Errorf("create token: %w", err)

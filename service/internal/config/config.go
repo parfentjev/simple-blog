@@ -6,7 +6,7 @@ import (
 	"github.com/caarlos0/env/v10"
 )
 
-type app struct {
+type Config struct {
 	PasswordSecret      string   `env:"PASSWORD_SECRET,required"`
 	JWTSecret           string   `env:"JWT_SECRET,required"`
 	RegistrationEnabled bool     `env:"REGISTRATION_ENABLED,required"`
@@ -14,12 +14,15 @@ type app struct {
 	RssFeedDescription  string   `env:"RSS_FEED_DESCRIPTION,required"`
 	RssFeedBaseUrl      string   `env:"RSS_FEED_BASE_URL,required"`
 	AllowOrigins        []string `env:"ALLOW_ORIGINS,required"`
+	ItemLimit           int64    `env:"ITEM_LIMIT,required"`
 }
 
-var App = app{}
+func NewConfig() Config {
+	var config = Config{}
 
-func Init() {
-	if err := env.Parse(&App); err != nil {
+	if err := env.Parse(&config); err != nil {
 		panic(fmt.Errorf("app config init: %w", err))
 	}
+
+	return config
 }

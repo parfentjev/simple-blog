@@ -1,15 +1,17 @@
 package server
 
 import (
+	"github.com/parfentjev/simple-blog/internal/config"
 	"github.com/parfentjev/simple-blog/internal/db"
 )
 
-type StorageHandler struct {
-	Queries *db.Queries
+type RequestHandler struct {
+	queries *db.Queries
+	config  *config.Config
 }
 
-func NewStorageHandler(queries *db.Queries) *StorageHandler {
-	return &StorageHandler{queries}
+func NewRequestHandler(queries *db.Queries, config *config.Config) *RequestHandler {
+	return &RequestHandler{queries, config}
 }
 
 type MessageResponse struct {
