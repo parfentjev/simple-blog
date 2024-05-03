@@ -108,6 +108,14 @@ form div {
     margin-bottom: 1rem;
 }
 
+.paginator div {
+    margin: 1rem;
+}
+
+.paginator a {
+    margin: 0 0.5rem;
+}
+
 /* page header */
 header {
     text-align: center;
