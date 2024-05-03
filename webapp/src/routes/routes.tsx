@@ -17,6 +17,7 @@ interface Route {
 
 const routes: Route[] = [
     { path: '/', element: <PostsPage /> },
+    { path: '/posts/:page', element: <PostsPage /> },
     { path: '/search', element: <SearchPage /> },
     { path: '/license', element: <LicensePage /> },
     { path: '/post/:id', element: <PostPage /> },
