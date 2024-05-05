@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import SinglePost from '../../../ui/posts/SinglePost'
 import { postsApi } from '../../../api/api'
 import { PostDto } from '../../../api/codegen'
+import { setPageTitle } from '../../../utils/title-utils'
 
 const PostPage: FC = () => {
     const { id } = useParams()
@@ -14,7 +15,10 @@ const PostPage: FC = () => {
         if (id) {
             postsApi()
                 .postsPublishedIdGet({ id })
-                .then((post) => setPost(post))
+                .then((post) => {
+                    setPost(post)
+                    setPageTitle(post.title)
+                })
                 .catch(() => toast.error('Failed to load post.'))
         }
     }, [id])
