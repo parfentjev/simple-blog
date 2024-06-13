@@ -13,8 +13,8 @@ const Paginator: FC<PaginatorProps> = (props) => {
     return (
         <div className="text-center paginator">
             <div>
-                {showBack && <Link to={`/posts/${props.page - 1}`}>back</Link>}{' '}
-                {showNext && <Link to={`/posts/${props.page + 1}`}>next</Link>}
+                {showBack && <Link to={`/posts/${props.page - 1}`}>newer</Link>}{' '}
+                {showNext && <Link to={`/posts/${props.page + 1}`}>older</Link>}
             </div>
             <div>
                 page {props.page} of {props.totalPages}
