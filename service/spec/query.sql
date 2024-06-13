@@ -29,15 +29,16 @@ from posts
 where id = ?
     and visible = 1;
 -- name: InsertPost :exec
-insert into posts(id, title, summary, text, date, visible)
-values(?, ?, ?, ?, ?, ?);
+insert into posts(id, title, summary, text, date, visible, keywords)
+values(?, ?, ?, ?, ?, ?, ?);
 -- name: UpdatePost :exec
 update posts
 set title = ?,
     summary = ?,
     text = ?,
     date = ?,
-    visible = ?
+    visible = ?,
+    keywords = ?
 where id = ?;
 -- name: DeletePost :exec
 delete from posts

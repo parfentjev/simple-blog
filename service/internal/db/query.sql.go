@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"time"
 )
 
@@ -44,17 +45,18 @@ func (q *Queries) DeletePost(ctx context.Context, id string) error {
 }
 
 const insertPost = `-- name: InsertPost :exec
-insert into posts(id, title, summary, text, date, visible)
-values(?, ?, ?, ?, ?, ?)
+insert into posts(id, title, summary, text, date, visible, keywords)
+values(?, ?, ?, ?, ?, ?, ?)
 `
 
 type InsertPostParams struct {
-	ID      string
-	Title   string
-	Summary string
-	Text    string
-	Date    time.Time
-	Visible bool
+	ID       string
+	Title    string
+	Summary  string
+	Text     string
+	Date     time.Time
+	Visible  bool
+	Keywords sql.NullString
 }
 
 func (q *Queries) InsertPost(ctx context.Context, arg InsertPostParams) error {
@@ -65,6 +67,7 @@ func (q *Queries) InsertPost(ctx context.Context, arg InsertPostParams) error {
 		arg.Text,
 		arg.Date,
 		arg.Visible,
+		arg.Keywords,
 	)
 	return err
 }
@@ -146,7 +149,7 @@ func (q *Queries) SelectAllPosts(ctx context.Context, arg SelectAllPostsParams) 
 }
 
 const selectPost = `-- name: SelectPost :one
-select id, title, summary, text, date, visible
+select id, title, summary, text, date, visible, keywords
 from posts
 where id = ?
 `
@@ -161,6 +164,7 @@ func (q *Queries) SelectPost(ctx context.Context, id string) (Post, error) {
 		&i.Text,
 		&i.Date,
 		&i.Visible,
+		&i.Keywords,
 	)
 	return i, err
 }
@@ -187,7 +191,7 @@ func (q *Queries) SelectUser(ctx context.Context, username string) (SelectUserRo
 }
 
 const selectVisiblePost = `-- name: SelectVisiblePost :one
-select id, title, summary, text, date, visible
+select id, title, summary, text, date, visible, keywords
 from posts
 where id = ?
     and visible = 1
@@ -203,6 +207,7 @@ func (q *Queries) SelectVisiblePost(ctx context.Context, id string) (Post, error
 		&i.Text,
 		&i.Date,
 		&i.Visible,
+		&i.Keywords,
 	)
 	return i, err
 }
@@ -268,17 +273,19 @@ set title = ?,
     summary = ?,
     text = ?,
     date = ?,
-    visible = ?
+    visible = ?,
+    keywords = ?
 where id = ?
 `
 
 type UpdatePostParams struct {
-	Title   string
-	Summary string
-	Text    string
-	Date    time.Time
-	Visible bool
-	ID      string
+	Title    string
+	Summary  string
+	Text     string
+	Date     time.Time
+	Visible  bool
+	Keywords sql.NullString
+	ID       string
 }
 
 func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) error {
@@ -288,6 +295,7 @@ func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) error {
 		arg.Text,
 		arg.Date,
 		arg.Visible,
+		arg.Keywords,
 		arg.ID,
 	)
 	return err

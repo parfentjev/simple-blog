@@ -5,16 +5,18 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 )
 
 type Post struct {
-	ID      string
-	Title   string
-	Summary string
-	Text    string
-	Date    time.Time
-	Visible bool
+	ID       string
+	Title    string
+	Summary  string
+	Text     string
+	Date     time.Time
+	Visible  bool
+	Keywords sql.NullString
 }
 
 type User struct {

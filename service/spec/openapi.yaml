@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 info:
   title: Simple Blog
-  version: "1.1"
+  version: "1.2"
 tags:
   - name: Users
   - name: Posts
@@ -299,6 +299,8 @@ components:
           type: string
         visible:
           type: boolean
+        keywords:
+          type: string
       required:
         - id
         - title
@@ -321,6 +323,8 @@ components:
           type: string
         visible:
           type: boolean
+        keywords:
+          type: string
       required:
         - title
         - summary
@@ -358,11 +362,10 @@ components:
           description: Page items
     PagePostDto:
       allOf:
-        - $ref: '#/components/schemas/PageDto'
+        - $ref: "#/components/schemas/PageDto"
         - type: object
           properties:
             items:
               type: array
               items:
-                $ref: '#/components/schemas/PostPreviewDto'
-
+                $ref: "#/components/schemas/PostPreviewDto"

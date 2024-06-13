@@ -1,6 +1,7 @@
 package server
 
 import (
+	"database/sql"
 	"fmt"
 	"math"
 	"net/http"
@@ -55,12 +56,13 @@ func (h *RequestHandler) GetPostsPublishedId(c *gin.Context, id string) {
 	}
 
 	c.JSON(http.StatusOK, PostDto{
-		Id:      row.ID,
-		Title:   row.Title,
-		Summary: row.Summary,
-		Text:    row.Text,
-		Date:    row.Date.Format(time.RFC3339),
-		Visible: row.Visible,
+		Id:       row.ID,
+		Title:    row.Title,
+		Summary:  row.Summary,
+		Text:     row.Text,
+		Date:     row.Date.Format(time.RFC3339),
+		Visible:  row.Visible,
+		Keywords: &row.Keywords.String,
 	})
 }
 
@@ -122,13 +124,20 @@ func (h *RequestHandler) PostPostsEditor(c *gin.Context) {
 		return
 	}
 
+	keywords := sql.NullString{}
+	if request.Keywords != nil {
+		keywords.String = *request.Keywords
+		keywords.Valid = true
+	}
+
 	if err := h.queries.InsertPost(c.Request.Context(), db.InsertPostParams{
-		ID:      uuid.NewString(),
-		Title:   request.Title,
-		Summary: request.Summary,
-		Text:    request.Text,
-		Date:    time.Now(),
-		Visible: request.Visible,
+		ID:       uuid.NewString(),
+		Title:    request.Title,
+		Summary:  request.Summary,
+		Text:     request.Text,
+		Date:     time.Now(),
+		Visible:  request.Visible,
+		Keywords: keywords,
 	}); err != nil {
 		panic(err)
 	}
@@ -144,12 +153,13 @@ func (h *RequestHandler) GetPostsEditorId(c *gin.Context, id string) {
 	}
 
 	c.JSON(http.StatusOK, PostDto{
-		Id:      row.ID,
-		Title:   row.Title,
-		Summary: row.Summary,
-		Text:    row.Text,
-		Date:    row.Date.Format(time.RFC3339),
-		Visible: row.Visible,
+		Id:       row.ID,
+		Title:    row.Title,
+		Summary:  row.Summary,
+		Text:     row.Text,
+		Date:     row.Date.Format(time.RFC3339),
+		Visible:  row.Visible,
+		Keywords: &row.Keywords.String,
 	})
 }
 
@@ -171,13 +181,20 @@ func (h *RequestHandler) PutPostsEditorId(c *gin.Context, id string) {
 		return
 	}
 
+	keywords := sql.NullString{}
+	if request.Keywords != nil {
+		keywords.String = *request.Keywords
+		keywords.Valid = true
+	}
+
 	if err := h.queries.UpdatePost(c.Request.Context(), db.UpdatePostParams{
-		ID:      id,
-		Title:   request.Title,
-		Summary: request.Summary,
-		Text:    request.Text,
-		Date:    date,
-		Visible: request.Visible,
+		ID:       id,
+		Title:    request.Title,
+		Summary:  request.Summary,
+		Text:     request.Text,
+		Date:     date,
+		Visible:  request.Visible,
+		Keywords: keywords,
 	}); err != nil {
 		panic(err)
 	}
