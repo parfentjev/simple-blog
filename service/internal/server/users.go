@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/parfentjev/simple-blog/internal/db"
 	"github.com/parfentjev/simple-blog/internal/server/auth"
 )
@@ -28,10 +27,8 @@ func (h *RequestHandler) PostUsers(c *gin.Context) {
 	}
 
 	err = h.queries.InsertUser(c.Request.Context(), db.InsertUserParams{
-		ID:       uuid.NewString(),
 		Username: request.Username,
 		Password: hashedPassword,
-		Active:   true,
 	})
 	if err != nil {
 		panic(err)
@@ -49,12 +46,12 @@ func (h *RequestHandler) PostUsersToken(c *gin.Context) {
 
 	passAuth := auth.NewPasswordAuth(h.config)
 	selectedUser, err := h.queries.SelectUser(c.Request.Context(), request.Username)
-	if err != nil || !selectedUser.Active || !passAuth.PasswordValid(selectedUser.Password, request.Password) {
+	if err != nil || !passAuth.PasswordValid(selectedUser.Password, request.Password) {
 		c.Status(http.StatusUnauthorized)
 		return
 	}
 
-	token, err := auth.NewTokenHandler(h.config).CreateToken(selectedUser.ID)
+	token, err := auth.NewTokenHandler(h.config).CreateToken(selectedUser.ID.String())
 	if err != nil {
 		panic(err)
 	}

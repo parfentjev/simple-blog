@@ -1,9 +1,11 @@
 version: "2"
 sql:
-  - engine: "sqlite"
+  - engine: "postgresql"
     queries: "query.sql"
     schema: "schema.sql"
     gen:
       go:
         package: "db"
         out: "../internal/db"
+    database:
+      uri: postgresql://root:test@localhost:5432/blog

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"database/sql"
 	"fmt"
 	"math"
 	"net/http"
@@ -32,11 +33,11 @@ func (h *RequestHandler) GetPostsPublished(c *gin.Context, params GetPostsPublis
 	posts := make([]PostPreviewDto, len(rows))
 	for i, row := range rows {
 		posts[i] = PostPreviewDto{
-			Id:      row.ID,
-			Title:   row.Title,
-			Summary: row.Summary,
-			Date:    row.Date.Format(time.RFC3339),
-			Visible: row.Visible,
+			Id:      row.ID.String(),
+			Title:   row.Title.String,
+			Summary: row.Summary.String,
+			Date:    row.Date.Time.Format(time.RFC3339),
+			Visible: row.Visible.Bool,
 		}
 	}
 
@@ -48,19 +49,19 @@ func (h *RequestHandler) GetPostsPublished(c *gin.Context, params GetPostsPublis
 }
 
 func (h *RequestHandler) GetPostsPublishedId(c *gin.Context, id string) {
-	row, err := h.queries.SelectVisiblePost(c.Request.Context(), id)
+	row, err := h.queries.SelectVisiblePost(c.Request.Context(), uuid.MustParse(id))
 	if err != nil {
 		c.Status(http.StatusNotFound)
 		return
 	}
 
 	c.JSON(http.StatusOK, PostDto{
-		Id:      row.ID,
-		Title:   row.Title,
-		Summary: row.Summary,
-		Text:    row.Text,
-		Date:    row.Date.Format(time.RFC3339),
-		Visible: row.Visible,
+		Id:      row.ID.String(),
+		Title:   row.Title.String,
+		Summary: row.Summary.String,
+		Text:    row.Text.String,
+		Date:    row.Date.Time.Format(time.RFC3339),
+		Visible: row.Visible.Bool,
 	})
 }
 
@@ -100,11 +101,11 @@ func (h *RequestHandler) GetPostsEditor(c *gin.Context, params GetPostsEditorPar
 	posts := make([]PostPreviewDto, len(rows))
 	for i, row := range rows {
 		posts[i] = PostPreviewDto{
-			Id:      row.ID,
-			Title:   row.Title,
-			Summary: row.Summary,
-			Date:    row.Date.Format(time.RFC3339),
-			Visible: row.Visible,
+			Id:      row.ID.String(),
+			Title:   row.Title.String,
+			Summary: row.Summary.String,
+			Date:    row.Date.Time.Format(time.RFC3339),
+			Visible: row.Visible.Bool,
 		}
 	}
 
@@ -123,12 +124,11 @@ func (h *RequestHandler) PostPostsEditor(c *gin.Context) {
 	}
 
 	if err := h.queries.InsertPost(c.Request.Context(), db.InsertPostParams{
-		ID:      uuid.NewString(),
-		Title:   request.Title,
-		Summary: request.Summary,
-		Text:    request.Text,
-		Date:    time.Now(),
-		Visible: request.Visible,
+		Title:   sql.NullString{String: request.Title, Valid: true},
+		Summary: sql.NullString{String: request.Title, Valid: true},
+		Text:    sql.NullString{String: request.Text, Valid: true},
+		Date:    sql.NullTime{Time: time.Now(), Valid: true},
+		Visible: sql.NullBool{Bool: request.Visible, Valid: true},
 	}); err != nil {
 		panic(err)
 	}
@@ -137,24 +137,24 @@ func (h *RequestHandler) PostPostsEditor(c *gin.Context) {
 }
 
 func (h *RequestHandler) GetPostsEditorId(c *gin.Context, id string) {
-	row, err := h.queries.SelectPost(c.Request.Context(), id)
+	row, err := h.queries.SelectPost(c.Request.Context(), uuid.MustParse(id))
 	if err != nil {
 		c.Status(http.StatusNotFound)
 		return
 	}
 
 	c.JSON(http.StatusOK, PostDto{
-		Id:      row.ID,
-		Title:   row.Title,
-		Summary: row.Summary,
-		Text:    row.Text,
-		Date:    row.Date.Format(time.RFC3339),
-		Visible: row.Visible,
+		Id:      row.ID.String(),
+		Title:   row.Title.String,
+		Summary: row.Summary.String,
+		Text:    row.Text.String,
+		Date:    row.Date.Time.Format(time.RFC3339),
+		Visible: row.Visible.Bool,
 	})
 }
 
 func (h *RequestHandler) PutPostsEditorId(c *gin.Context, id string) {
-	if _, err := h.queries.SelectPost(c.Request.Context(), id); err != nil {
+	if _, err := h.queries.SelectPost(c.Request.Context(), uuid.MustParse(id)); err != nil {
 		c.Status(http.StatusNotFound)
 		return
 	}
@@ -172,12 +172,12 @@ func (h *RequestHandler) PutPostsEditorId(c *gin.Context, id string) {
 	}
 
 	if err := h.queries.UpdatePost(c.Request.Context(), db.UpdatePostParams{
-		ID:      id,
-		Title:   request.Title,
-		Summary: request.Summary,
-		Text:    request.Text,
-		Date:    date,
-		Visible: request.Visible,
+		Title:   sql.NullString{String: request.Title, Valid: true},
+		Summary: sql.NullString{String: request.Summary, Valid: true},
+		Text:    sql.NullString{String: request.Text, Valid: true},
+		Date:    sql.NullTime{Time: date, Valid: true},
+		Visible: sql.NullBool{Bool: request.Visible, Valid: true},
+		ID:      uuid.MustParse(id),
 	}); err != nil {
 		panic(err)
 	}
@@ -186,12 +186,12 @@ func (h *RequestHandler) PutPostsEditorId(c *gin.Context, id string) {
 }
 
 func (h *RequestHandler) DeletePostsEditorId(c *gin.Context, id string) {
-	if _, err := h.queries.SelectPost(c.Request.Context(), id); err != nil {
+	if _, err := h.queries.SelectPost(c.Request.Context(), uuid.MustParse(id)); err != nil {
 		c.Status(http.StatusNotFound)
 		return
 	}
 
-	if err := h.queries.DeletePost(c.Request.Context(), id); err != nil {
+	if err := h.queries.DeletePost(c.Request.Context(), uuid.MustParse(id)); err != nil {
 		panic(err)
 	}
 
@@ -208,11 +208,11 @@ func generateRssFeed(posts []db.SelectVisiblePostsRow, config *config.Config) (s
 
 	for _, p := range posts {
 		feed.Items = append(feed.Items, &feeds.Item{
-			Id:          p.ID,
-			Title:       p.Title,
-			Description: p.Summary,
+			Id:          p.ID.String(),
+			Title:       p.Title.String,
+			Description: p.Summary.String,
 			Link:        &feeds.Link{Href: fmt.Sprintf("%v/post/%v", config.RssFeedBaseUrl, p.ID)},
-			Created:     p.Date,
+			Created:     p.Date.Time,
 		})
 	}
 

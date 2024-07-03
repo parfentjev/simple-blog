@@ -7,11 +7,13 @@ package db
 
 import (
 	"context"
-	"time"
+	"database/sql"
+
+	"github.com/google/uuid"
 )
 
 const countAllPost = `-- name: CountAllPost :one
-select count(*) from posts
+select count(*) from public.post
 `
 
 func (q *Queries) CountAllPost(ctx context.Context) (int64, error) {
@@ -22,8 +24,8 @@ func (q *Queries) CountAllPost(ctx context.Context) (int64, error) {
 }
 
 const countPublishedPost = `-- name: CountPublishedPost :one
-select count(*) from posts
-where visible = 1
+select count(*) from public.post
+where visible = true
 `
 
 func (q *Queries) CountPublishedPost(ctx context.Context) (int64, error) {
@@ -34,32 +36,30 @@ func (q *Queries) CountPublishedPost(ctx context.Context) (int64, error) {
 }
 
 const deletePost = `-- name: DeletePost :exec
-delete from posts
-where id = ?
+delete from public.post
+where id = $1
 `
 
-func (q *Queries) DeletePost(ctx context.Context, id string) error {
+func (q *Queries) DeletePost(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.ExecContext(ctx, deletePost, id)
 	return err
 }
 
 const insertPost = `-- name: InsertPost :exec
-insert into posts(id, title, summary, text, date, visible)
-values(?, ?, ?, ?, ?, ?)
+insert into public.post(title, summary, text, date, visible)
+values($1, $2, $3, $4, $5)
 `
 
 type InsertPostParams struct {
-	ID      string
-	Title   string
-	Summary string
-	Text    string
-	Date    time.Time
-	Visible bool
+	Title   sql.NullString
+	Summary sql.NullString
+	Text    sql.NullString
+	Date    sql.NullTime
+	Visible sql.NullBool
 }
 
 func (q *Queries) InsertPost(ctx context.Context, arg InsertPostParams) error {
 	_, err := q.db.ExecContext(ctx, insertPost,
-		arg.ID,
 		arg.Title,
 		arg.Summary,
 		arg.Text,
@@ -70,24 +70,17 @@ func (q *Queries) InsertPost(ctx context.Context, arg InsertPostParams) error {
 }
 
 const insertUser = `-- name: InsertUser :exec
-insert into users(id, username, password, active)
-values(?, ?, ?, ?)
+insert into public.user(username, password)
+values($1, $2)
 `
 
 type InsertUserParams struct {
-	ID       string
 	Username string
 	Password string
-	Active   bool
 }
 
 func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) error {
-	_, err := q.db.ExecContext(ctx, insertUser,
-		arg.ID,
-		arg.Username,
-		arg.Password,
-		arg.Active,
-	)
+	_, err := q.db.ExecContext(ctx, insertUser, arg.Username, arg.Password)
 	return err
 }
 
@@ -97,10 +90,10 @@ select id,
     summary,
     date,
     visible
-from posts
+from public.post
 order by date desc
-limit ?
-offset ?
+limit $1
+offset $2
 `
 
 type SelectAllPostsParams struct {
@@ -109,11 +102,11 @@ type SelectAllPostsParams struct {
 }
 
 type SelectAllPostsRow struct {
-	ID      string
-	Title   string
-	Summary string
-	Date    time.Time
-	Visible bool
+	ID      uuid.UUID
+	Title   sql.NullString
+	Summary sql.NullString
+	Date    sql.NullTime
+	Visible sql.NullBool
 }
 
 func (q *Queries) SelectAllPosts(ctx context.Context, arg SelectAllPostsParams) ([]SelectAllPostsRow, error) {
@@ -147,11 +140,11 @@ func (q *Queries) SelectAllPosts(ctx context.Context, arg SelectAllPostsParams) 
 
 const selectPost = `-- name: SelectPost :one
 select id, title, summary, text, date, visible
-from posts
-where id = ?
+from public.post
+where id = $1
 `
 
-func (q *Queries) SelectPost(ctx context.Context, id string) (Post, error) {
+func (q *Queries) SelectPost(ctx context.Context, id uuid.UUID) (Post, error) {
 	row := q.db.QueryRowContext(ctx, selectPost, id)
 	var i Post
 	err := row.Scan(
@@ -166,34 +159,32 @@ func (q *Queries) SelectPost(ctx context.Context, id string) (Post, error) {
 }
 
 const selectUser = `-- name: SelectUser :one
-select id,
-    password,
-    active
-from users
-where username = ?
+select id, password
+from public.user
+where username = $1
+and active = true
 `
 
 type SelectUserRow struct {
-	ID       string
+	ID       uuid.UUID
 	Password string
-	Active   bool
 }
 
 func (q *Queries) SelectUser(ctx context.Context, username string) (SelectUserRow, error) {
 	row := q.db.QueryRowContext(ctx, selectUser, username)
 	var i SelectUserRow
-	err := row.Scan(&i.ID, &i.Password, &i.Active)
+	err := row.Scan(&i.ID, &i.Password)
 	return i, err
 }
 
 const selectVisiblePost = `-- name: SelectVisiblePost :one
 select id, title, summary, text, date, visible
-from posts
-where id = ?
-    and visible = 1
+from public.post
+where id = $1
+    and visible = true
 `
 
-func (q *Queries) SelectVisiblePost(ctx context.Context, id string) (Post, error) {
+func (q *Queries) SelectVisiblePost(ctx context.Context, id uuid.UUID) (Post, error) {
 	row := q.db.QueryRowContext(ctx, selectVisiblePost, id)
 	var i Post
 	err := row.Scan(
@@ -213,11 +204,11 @@ select id,
     summary,
     date,
     visible
-from posts
-where visible = 1
+from public.post
+where visible = true
 order by date desc
-limit ?
-offset ?
+limit $1
+offset $2
 `
 
 type SelectVisiblePostsParams struct {
@@ -226,11 +217,11 @@ type SelectVisiblePostsParams struct {
 }
 
 type SelectVisiblePostsRow struct {
-	ID      string
-	Title   string
-	Summary string
-	Date    time.Time
-	Visible bool
+	ID      uuid.UUID
+	Title   sql.NullString
+	Summary sql.NullString
+	Date    sql.NullTime
+	Visible sql.NullBool
 }
 
 func (q *Queries) SelectVisiblePosts(ctx context.Context, arg SelectVisiblePostsParams) ([]SelectVisiblePostsRow, error) {
@@ -263,22 +254,22 @@ func (q *Queries) SelectVisiblePosts(ctx context.Context, arg SelectVisiblePosts
 }
 
 const updatePost = `-- name: UpdatePost :exec
-update posts
-set title = ?,
-    summary = ?,
-    text = ?,
-    date = ?,
-    visible = ?
-where id = ?
+update public.post
+set title = $1,
+    summary = $2,
+    text = $3,
+    date = $4,
+    visible = $5
+where id = $6
 `
 
 type UpdatePostParams struct {
-	Title   string
-	Summary string
-	Text    string
-	Date    time.Time
-	Visible bool
-	ID      string
+	Title   sql.NullString
+	Summary sql.NullString
+	Text    sql.NullString
+	Date    sql.NullTime
+	Visible sql.NullBool
+	ID      uuid.UUID
 }
 
 func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) error {

@@ -8,7 +8,7 @@ migrate:
 
 .PHONY: codegen
 codegen:
-	sqlc -f spec/sqlite.yaml generate
+	sqlc -f spec/sqlc.yaml generate
 	oapi-codegen -package server -generate spec,types,gin -o internal/server/server.gen.go spec/openapi.yaml
 
 .PHONY: generate_env_example

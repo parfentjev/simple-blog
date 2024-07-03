@@ -19,9 +19,9 @@ func main() {
 		panic(err)
 	}
 
-	db.Init()
 	config := config.NewConfig()
 	engine := gin.Default()
+	db.Init(db.Config{User: config.DbUser, Password: config.DbPassword, Database: config.DbName, Host: config.DbHost})
 
 	engine.Use(
 		cors.New(cors.Config{

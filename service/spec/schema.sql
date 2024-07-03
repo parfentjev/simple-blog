@@ -1,14 +1,19 @@
-create table if not exists posts (
-    id TEXT PRIMARY KEY NOT NULL UNIQUE,
-    title TEXT NOT NULL,
-    summary TEXT NOT NULL,
-    text TEXT NOT NULL,
-    date DATETIME NOT NULL,
-    visible BOOLEAN NOT NULL
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE public.post (
+	id uuid DEFAULT uuid_generate_v4() NOT NULL,
+	title varchar(128) NULL,
+	summary text NULL,
+	"text" text NULL,
+	"date" timestamp NULL,
+	visible boolean NULL,
+	CONSTRAINT post_pk PRIMARY KEY (id)
 );
-create table if not exists users (
-    id TEXT PRIMARY KEY NOT NULL UNIQUE,
-    username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
-    active BOOLEAN NOT NULL
+
+CREATE TABLE public.user (
+	id uuid DEFAULT uuid_generate_v4() NOT NULL,
+	username varchar(128) NOT NULL,
+	password varchar(128) NOT NULL,
+	active boolean NULL,
+	CONSTRAINT user_pk PRIMARY KEY (id)
 );

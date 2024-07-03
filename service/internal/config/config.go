@@ -15,6 +15,10 @@ type Config struct {
 	RssFeedBaseUrl      string   `env:"RSS_FEED_BASE_URL,required"`
 	AllowOrigins        []string `env:"ALLOW_ORIGINS,required"`
 	ItemLimit           int64    `env:"ITEM_LIMIT,required"`
+	DbUser              string   `env:"DB_USER,required"`
+	DbPassword          string   `env:"DB_PASSWORD,required"`
+	DbName              string   `env:"DB_NAME,required"`
+	DbHost              string   `env:"DB_HOST,required"`
 }
 
 func NewConfig() Config {

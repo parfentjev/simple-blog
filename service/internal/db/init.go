@@ -3,16 +3,25 @@ package db
 import (
 	"database/sql"
 	_ "embed"
+	"fmt"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
 var Connection *sql.DB
 
-func Init() {
+type Config struct {
+	User     string
+	Password string
+	Database string
+	Host     string
+}
+
+func Init(c Config) {
 	var err error
 
-	Connection, err = sql.Open("sqlite3", "data/server.db")
+	connStr := fmt.Sprintf("user=%v password=%v dbname=%v host=%v sslmode=disable", c.User, c.Password, c.Database, c.Host)
+	Connection, err = sql.Open("postgres", connStr)
 	if err != nil {
 		panic(err)
 	}

@@ -5,21 +5,23 @@
 package db
 
 import (
-	"time"
+	"database/sql"
+
+	"github.com/google/uuid"
 )
 
 type Post struct {
-	ID      string
-	Title   string
-	Summary string
-	Text    string
-	Date    time.Time
-	Visible bool
+	ID      uuid.UUID
+	Title   sql.NullString
+	Summary sql.NullString
+	Text    sql.NullString
+	Date    sql.NullTime
+	Visible sql.NullBool
 }
 
 type User struct {
-	ID       string
+	ID       uuid.UUID
 	Username string
 	Password string
-	Active   bool
+	Active   sql.NullBool
 }
