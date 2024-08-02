@@ -1,0 +1,12 @@
+package ee.fakeplastictrees.core.model;
+
+public enum MessageDefinition {
+  SOMETHING_WENT_WRONG,
+  VALIDATION_ERROR,
+  BAD_CREDENTIALS,
+  ACCESS_DENIED,
+  INVALID_AUTH_TOKEN,
+  USERNAME_ALREADY_TAKEN,
+  USER_NOT_FOUND,
+  POST_NOT_FOUND
+}
