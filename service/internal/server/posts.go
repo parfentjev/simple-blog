@@ -125,7 +125,7 @@ func (h *RequestHandler) PostPostsEditor(c *gin.Context) {
 
 	if err := h.queries.InsertPost(c.Request.Context(), db.InsertPostParams{
 		Title:   sql.NullString{String: request.Title, Valid: true},
-		Summary: sql.NullString{String: request.Title, Valid: true},
+		Summary: sql.NullString{String: request.Summary, Valid: true},
 		Text:    sql.NullString{String: request.Text, Valid: true},
 		Date:    sql.NullTime{Time: time.Now(), Valid: true},
 		Visible: sql.NullBool{Bool: request.Visible, Valid: true},
