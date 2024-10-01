@@ -9,6 +9,7 @@ import ee.fakeplastictrees.post.repository.PostRepository;
 import ee.fakeplastictrees.post.util.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +20,7 @@ public class PostService {
   private PostRepository postRepository;
 
   public PageDto<PostPreviewDto> getPosts(Integer page) {
-    var postsPage = postRepository.findAll(PageRequest.of(page - 1, PAGE_SIZE));
+    var postsPage = postRepository.findAll(pageRequest(page));
 
     return PageDto.<PostPreviewDto>builder()
       .page(page)
@@ -29,13 +30,17 @@ public class PostService {
   }
 
   public PageDto<PostPreviewDto> getPublishedPosts(Integer page) {
-    var postsPage = postRepository.findByVisible(PageRequest.of(page - 1, PAGE_SIZE), true);
+    var postsPage = postRepository.findByVisible(pageRequest(page), true);
 
     return PageDto.<PostPreviewDto>builder()
       .page(page)
       .totalPages(postsPage.getTotalPages())
       .items(postsPage.get().map(PostMapper::postToPreviewDto).toList())
       .build();
+  }
+
+  private PageRequest pageRequest(int page) {
+    return PageRequest.of(page - 1, PAGE_SIZE).withSort(Sort.by("date").descending());
   }
 
   public PostDto getPost(String id) {

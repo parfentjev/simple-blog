@@ -21,8 +21,10 @@ public class Post {
   @Column(nullable = false)
   String title;
 
+  @Column(columnDefinition = "TEXT")
   String summary;
 
+  @Column(columnDefinition = "TEXT")
   String text;
 
   Instant date;
