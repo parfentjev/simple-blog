@@ -2,7 +2,6 @@ package ee.fakeplastictrees.core.configuration;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import ee.fakeplastictrees.user.service.TokenService;
-import ee.fakeplastictrees.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,9 +20,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
-  @Autowired
-  private UserService userService;
-
   @Autowired
   private TokenService tokenService;
 
