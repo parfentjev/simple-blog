@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -39,10 +39,10 @@ export interface PostPreviewDto {
     summary: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PostPreviewDto
      */
-    date: string;
+    date: Date;
     /**
      * 
      * @type {boolean}
@@ -54,15 +54,13 @@ export interface PostPreviewDto {
 /**
  * Check if a given object implements the PostPreviewDto interface.
  */
-export function instanceOfPostPreviewDto(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "title" in value;
-    isInstance = isInstance && "summary" in value;
-    isInstance = isInstance && "date" in value;
-    isInstance = isInstance && "visible" in value;
-
-    return isInstance;
+export function instanceOfPostPreviewDto(value: object): value is PostPreviewDto {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('title' in value) || value['title'] === undefined) return false;
+    if (!('summary' in value) || value['summary'] === undefined) return false;
+    if (!('date' in value) || value['date'] === undefined) return false;
+    if (!('visible' in value) || value['visible'] === undefined) return false;
+    return true;
 }
 
 export function PostPreviewDtoFromJSON(json: any): PostPreviewDto {
@@ -70,7 +68,7 @@ export function PostPreviewDtoFromJSON(json: any): PostPreviewDto {
 }
 
 export function PostPreviewDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): PostPreviewDto {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -78,25 +76,27 @@ export function PostPreviewDtoFromJSONTyped(json: any, ignoreDiscriminator: bool
         'id': json['id'],
         'title': json['title'],
         'summary': json['summary'],
-        'date': json['date'],
+        'date': (new Date(json['date'])),
         'visible': json['visible'],
     };
 }
 
-export function PostPreviewDtoToJSON(value?: PostPreviewDto | null): any {
-    if (value === undefined) {
-        return undefined;
+  export function PostPreviewDtoToJSON(json: any): PostPreviewDto {
+      return PostPreviewDtoToJSONTyped(json, false);
+  }
+
+  export function PostPreviewDtoToJSONTyped(value?: PostPreviewDto | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'id': value.id,
-        'title': value.title,
-        'summary': value.summary,
-        'date': value.date,
-        'visible': value.visible,
+        'id': value['id'],
+        'title': value['title'],
+        'summary': value['summary'],
+        'date': ((value['date']).toISOString()),
+        'visible': value['visible'],
     };
 }
 

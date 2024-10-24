@@ -1,5 +1,5 @@
-export const jsonDateToString = (date: string) =>
-    new Date(date).toLocaleDateString('uk')
+export const jsonDateToString = (date: Date) =>
+    date.toLocaleDateString('uk')
 
 export const encodeTitle = (title: string) =>
     encodeURI(

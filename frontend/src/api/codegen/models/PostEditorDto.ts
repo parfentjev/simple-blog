@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -45,10 +45,10 @@ export interface PostEditorDto {
     text: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PostEditorDto
      */
-    date?: string;
+    date?: Date;
     /**
      * 
      * @type {boolean}
@@ -60,14 +60,12 @@ export interface PostEditorDto {
 /**
  * Check if a given object implements the PostEditorDto interface.
  */
-export function instanceOfPostEditorDto(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "title" in value;
-    isInstance = isInstance && "summary" in value;
-    isInstance = isInstance && "text" in value;
-    isInstance = isInstance && "visible" in value;
-
-    return isInstance;
+export function instanceOfPostEditorDto(value: object): value is PostEditorDto {
+    if (!('title' in value) || value['title'] === undefined) return false;
+    if (!('summary' in value) || value['summary'] === undefined) return false;
+    if (!('text' in value) || value['text'] === undefined) return false;
+    if (!('visible' in value) || value['visible'] === undefined) return false;
+    return true;
 }
 
 export function PostEditorDtoFromJSON(json: any): PostEditorDto {
@@ -75,35 +73,37 @@ export function PostEditorDtoFromJSON(json: any): PostEditorDto {
 }
 
 export function PostEditorDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): PostEditorDto {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'title': json['title'],
         'summary': json['summary'],
         'text': json['text'],
-        'date': !exists(json, 'date') ? undefined : json['date'],
+        'date': json['date'] == null ? undefined : (new Date(json['date'])),
         'visible': json['visible'],
     };
 }
 
-export function PostEditorDtoToJSON(value?: PostEditorDto | null): any {
-    if (value === undefined) {
-        return undefined;
+  export function PostEditorDtoToJSON(json: any): PostEditorDto {
+      return PostEditorDtoToJSONTyped(json, false);
+  }
+
+  export function PostEditorDtoToJSONTyped(value?: PostEditorDto | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'id': value.id,
-        'title': value.title,
-        'summary': value.summary,
-        'text': value.text,
-        'date': value.date,
-        'visible': value.visible,
+        'id': value['id'],
+        'title': value['title'],
+        'summary': value['summary'],
+        'text': value['text'],
+        'date': value['date'] == null ? undefined : ((value['date']).toISOString()),
+        'visible': value['visible'],
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -45,10 +45,10 @@ export interface PostDto {
     text: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof PostDto
      */
-    date: string;
+    date: Date;
     /**
      * 
      * @type {boolean}
@@ -60,16 +60,14 @@ export interface PostDto {
 /**
  * Check if a given object implements the PostDto interface.
  */
-export function instanceOfPostDto(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "title" in value;
-    isInstance = isInstance && "summary" in value;
-    isInstance = isInstance && "text" in value;
-    isInstance = isInstance && "date" in value;
-    isInstance = isInstance && "visible" in value;
-
-    return isInstance;
+export function instanceOfPostDto(value: object): value is PostDto {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('title' in value) || value['title'] === undefined) return false;
+    if (!('summary' in value) || value['summary'] === undefined) return false;
+    if (!('text' in value) || value['text'] === undefined) return false;
+    if (!('date' in value) || value['date'] === undefined) return false;
+    if (!('visible' in value) || value['visible'] === undefined) return false;
+    return true;
 }
 
 export function PostDtoFromJSON(json: any): PostDto {
@@ -77,7 +75,7 @@ export function PostDtoFromJSON(json: any): PostDto {
 }
 
 export function PostDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): PostDto {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -86,26 +84,28 @@ export function PostDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'title': json['title'],
         'summary': json['summary'],
         'text': json['text'],
-        'date': json['date'],
+        'date': (new Date(json['date'])),
         'visible': json['visible'],
     };
 }
 
-export function PostDtoToJSON(value?: PostDto | null): any {
-    if (value === undefined) {
-        return undefined;
+  export function PostDtoToJSON(json: any): PostDto {
+      return PostDtoToJSONTyped(json, false);
+  }
+
+  export function PostDtoToJSONTyped(value?: PostDto | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'id': value.id,
-        'title': value.title,
-        'summary': value.summary,
-        'text': value.text,
-        'date': value.date,
-        'visible': value.visible,
+        'id': value['id'],
+        'title': value['title'],
+        'summary': value['summary'],
+        'text': value['text'],
+        'date': ((value['date']).toISOString()),
+        'visible': value['visible'],
     };
 }
 

@@ -8,10 +8,10 @@ import {
     useState,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { UserTokenDto } from '../api/codegen'
+import { TokenDto } from '../api/codegen'
 
 type AuthContextType = {
-    token?: UserTokenDto
+    token?: TokenDto
     signin: Function
     signout: Function
 }
@@ -26,7 +26,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     children,
 }) => {
     const navigate = useNavigate()
-    const [token, setToken] = useState<UserTokenDto>()
+    const [token, setToken] = useState<TokenDto>()
 
     useEffect(() => {
         const localToken = loadLocalToken()
@@ -46,7 +46,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     }, [])
 
     const handleSingIn = useCallback(
-        (token: UserTokenDto) => {
+        (token: TokenDto) => {
             setToken(token)
             saveLocalToken(token)
             navigate('/admin')
@@ -80,11 +80,11 @@ export const ProtectedRoute: FC<{ children: ReactNode }> = ({ children }) => {
     )
 }
 
-const saveLocalToken = (token: UserTokenDto) => {
+const saveLocalToken = (token: TokenDto) => {
     localStorage.setItem('token', JSON.stringify(token))
 }
 
-const loadLocalToken = (): UserTokenDto | null => {
+const loadLocalToken = (): TokenDto | null => {
     const token = localStorage.getItem('token')
 
     return token ? JSON.parse(token) : null

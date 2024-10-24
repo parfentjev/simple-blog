@@ -1,15 +1,14 @@
-.openapi-generator-ignore
 apis/PostsApi.ts
 apis/UsersApi.ts
 apis/index.ts
 index.ts
-models/ModelError.ts
+models/ErrorDto.ts
 models/PageDto.ts
 models/PagePostDto.ts
 models/PostDto.ts
 models/PostEditorDto.ts
 models/PostPreviewDto.ts
-models/UserTokenDto.ts
+models/TokenDto.ts
 models/UsersPostRequest.ts
 models/index.ts
 runtime.ts

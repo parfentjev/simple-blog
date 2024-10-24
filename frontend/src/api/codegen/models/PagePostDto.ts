@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { PostPreviewDto } from './PostPreviewDto';
 import {
     PostPreviewDtoFromJSON,
     PostPreviewDtoFromJSONTyped,
     PostPreviewDtoToJSON,
+    PostPreviewDtoToJSONTyped,
 } from './PostPreviewDto';
 
 /**
@@ -49,13 +50,11 @@ export interface PagePostDto {
 /**
  * Check if a given object implements the PagePostDto interface.
  */
-export function instanceOfPagePostDto(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "page" in value;
-    isInstance = isInstance && "totalPages" in value;
-    isInstance = isInstance && "items" in value;
-
-    return isInstance;
+export function instanceOfPagePostDto(value: object): value is PagePostDto {
+    if (!('page' in value) || value['page'] === undefined) return false;
+    if (!('totalPages' in value) || value['totalPages'] === undefined) return false;
+    if (!('items' in value) || value['items'] === undefined) return false;
+    return true;
 }
 
 export function PagePostDtoFromJSON(json: any): PagePostDto {
@@ -63,7 +62,7 @@ export function PagePostDtoFromJSON(json: any): PagePostDto {
 }
 
 export function PagePostDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): PagePostDto {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -74,18 +73,20 @@ export function PagePostDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean
     };
 }
 
-export function PagePostDtoToJSON(value?: PagePostDto | null): any {
-    if (value === undefined) {
-        return undefined;
+  export function PagePostDtoToJSON(json: any): PagePostDto {
+      return PagePostDtoToJSONTyped(json, false);
+  }
+
+  export function PagePostDtoToJSONTyped(value?: PagePostDto | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'page': value.page,
-        'totalPages': value.totalPages,
-        'items': ((value.items as Array<any>).map(PostPreviewDtoToJSON)),
+        'page': value['page'],
+        'totalPages': value['totalPages'],
+        'items': ((value['items'] as Array<any>).map(PostPreviewDtoToJSON)),
     };
 }
 

@@ -68,8 +68,8 @@ export class PostsApi extends runtime.BaseAPI {
     async postsEditorGetRaw(requestParameters: PostsEditorGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PagePostDto>> {
         const queryParameters: any = {};
 
-        if (requestParameters.page !== undefined) {
-            queryParameters['page'] = requestParameters.page;
+        if (requestParameters['page'] != null) {
+            queryParameters['page'] = requestParameters['page'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -104,8 +104,11 @@ export class PostsApi extends runtime.BaseAPI {
      * Delete an existing post
      */
     async postsEditorIdDeleteRaw(requestParameters: PostsEditorIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling postsEditorIdDelete.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postsEditorIdDelete().'
+            );
         }
 
         const queryParameters: any = {};
@@ -121,7 +124,7 @@ export class PostsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/posts/editor/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/posts/editor/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -141,8 +144,11 @@ export class PostsApi extends runtime.BaseAPI {
      * Get a post, whether it\'s published or not
      */
     async postsEditorIdGetRaw(requestParameters: PostsEditorIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostDto>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling postsEditorIdGet.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postsEditorIdGet().'
+            );
         }
 
         const queryParameters: any = {};
@@ -158,7 +164,7 @@ export class PostsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/posts/editor/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/posts/editor/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -179,12 +185,18 @@ export class PostsApi extends runtime.BaseAPI {
      * Update an existing post
      */
     async postsEditorIdPutRaw(requestParameters: PostsEditorIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling postsEditorIdPut.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postsEditorIdPut().'
+            );
         }
 
-        if (requestParameters.postEditorDto === null || requestParameters.postEditorDto === undefined) {
-            throw new runtime.RequiredError('postEditorDto','Required parameter requestParameters.postEditorDto was null or undefined when calling postsEditorIdPut.');
+        if (requestParameters['postEditorDto'] == null) {
+            throw new runtime.RequiredError(
+                'postEditorDto',
+                'Required parameter "postEditorDto" was null or undefined when calling postsEditorIdPut().'
+            );
         }
 
         const queryParameters: any = {};
@@ -202,11 +214,11 @@ export class PostsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/posts/editor/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/posts/editor/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: PostEditorDtoToJSON(requestParameters.postEditorDto),
+            body: PostEditorDtoToJSON(requestParameters['postEditorDto']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -223,8 +235,11 @@ export class PostsApi extends runtime.BaseAPI {
      * Create a new post
      */
     async postsEditorPostRaw(requestParameters: PostsEditorPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.postEditorDto === null || requestParameters.postEditorDto === undefined) {
-            throw new runtime.RequiredError('postEditorDto','Required parameter requestParameters.postEditorDto was null or undefined when calling postsEditorPost.');
+        if (requestParameters['postEditorDto'] == null) {
+            throw new runtime.RequiredError(
+                'postEditorDto',
+                'Required parameter "postEditorDto" was null or undefined when calling postsEditorPost().'
+            );
         }
 
         const queryParameters: any = {};
@@ -246,7 +261,7 @@ export class PostsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PostEditorDtoToJSON(requestParameters.postEditorDto),
+            body: PostEditorDtoToJSON(requestParameters['postEditorDto']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -265,8 +280,8 @@ export class PostsApi extends runtime.BaseAPI {
     async postsPublishedGetRaw(requestParameters: PostsPublishedGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PagePostDto>> {
         const queryParameters: any = {};
 
-        if (requestParameters.page !== undefined) {
-            queryParameters['page'] = requestParameters.page;
+        if (requestParameters['page'] != null) {
+            queryParameters['page'] = requestParameters['page'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -293,8 +308,11 @@ export class PostsApi extends runtime.BaseAPI {
      * Get a published post by id
      */
     async postsPublishedIdGetRaw(requestParameters: PostsPublishedIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostDto>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling postsPublishedIdGet.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling postsPublishedIdGet().'
+            );
         }
 
         const queryParameters: any = {};
@@ -302,7 +320,7 @@ export class PostsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/posts/published/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/posts/published/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

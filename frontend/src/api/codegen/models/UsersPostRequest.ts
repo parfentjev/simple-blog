@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -36,12 +36,10 @@ export interface UsersPostRequest {
 /**
  * Check if a given object implements the UsersPostRequest interface.
  */
-export function instanceOfUsersPostRequest(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "username" in value;
-    isInstance = isInstance && "password" in value;
-
-    return isInstance;
+export function instanceOfUsersPostRequest(value: object): value is UsersPostRequest {
+    if (!('username' in value) || value['username'] === undefined) return false;
+    if (!('password' in value) || value['password'] === undefined) return false;
+    return true;
 }
 
 export function UsersPostRequestFromJSON(json: any): UsersPostRequest {
@@ -49,7 +47,7 @@ export function UsersPostRequestFromJSON(json: any): UsersPostRequest {
 }
 
 export function UsersPostRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): UsersPostRequest {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -59,17 +57,19 @@ export function UsersPostRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-export function UsersPostRequestToJSON(value?: UsersPostRequest | null): any {
-    if (value === undefined) {
-        return undefined;
+  export function UsersPostRequestToJSON(json: any): UsersPostRequest {
+      return UsersPostRequestToJSONTyped(json, false);
+  }
+
+  export function UsersPostRequestToJSONTyped(value?: UsersPostRequest | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'username': value.username,
-        'password': value.password,
+        'username': value['username'],
+        'password': value['password'],
     };
 }
 

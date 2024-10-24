@@ -1,0 +1,18 @@
+CREATE TABLE `post` (
+  `visible` bit(1) NOT NULL,
+  `date` datetime(6) DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
+  `summary` text DEFAULT NULL,
+  `text` text DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+CREATE TABLE `user` (
+  `active` bit(1) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `id` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -42,13 +42,11 @@ export interface PageDto {
 /**
  * Check if a given object implements the PageDto interface.
  */
-export function instanceOfPageDto(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "page" in value;
-    isInstance = isInstance && "totalPages" in value;
-    isInstance = isInstance && "items" in value;
-
-    return isInstance;
+export function instanceOfPageDto(value: object): value is PageDto {
+    if (!('page' in value) || value['page'] === undefined) return false;
+    if (!('totalPages' in value) || value['totalPages'] === undefined) return false;
+    if (!('items' in value) || value['items'] === undefined) return false;
+    return true;
 }
 
 export function PageDtoFromJSON(json: any): PageDto {
@@ -56,7 +54,7 @@ export function PageDtoFromJSON(json: any): PageDto {
 }
 
 export function PageDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): PageDto {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -67,18 +65,20 @@ export function PageDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
     };
 }
 
-export function PageDtoToJSON(value?: PageDto | null): any {
-    if (value === undefined) {
-        return undefined;
+  export function PageDtoToJSON(json: any): PageDto {
+      return PageDtoToJSONTyped(json, false);
+  }
+
+  export function PageDtoToJSONTyped(value?: PageDto | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'page': value.page,
-        'totalPages': value.totalPages,
-        'items': value.items,
+        'page': value['page'],
+        'totalPages': value['totalPages'],
+        'items': value['items'],
     };
 }
 

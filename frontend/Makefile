@@ -4,19 +4,21 @@ run:
 
 .PHONY: codegen
 codegen:
-	rm -rf src/api/codegen
-	npx openapi-generator-cli generate -i ../service/spec/openapi.yaml \
+	rm -rf ./codegen/src/main/java/ee/fakeplastictrees/blog/codegen/*
+	docker run --rm \
+		-v ./../backend/spec:/workdir/spec:ro \
+		-v ./src/api/codegen:/workdir/out \
+		openapitools/openapi-generator-cli generate \
+		-i /workdir/spec/swagger.yaml \
 		-g typescript-fetch \
-		-o src/api/codegen \
+		-o /workdir/out
 		--additional-properties hooks=true
 
 .PHONY: build
 build:
-	npm run build
-
-.PHONY: deploy
-deploy:
-	docker build -t simple-blog-frontend:latest --build-arg REACT_APP_SERVICE_URL="http://service.fakeplastictrees.ee" .
+	docker build -t simple-blog-frontend:latest --build-arg REACT_APP_SERVICE_URL="https://service.fakeplastictrees.ee" .
 	docker save simple-blog-frontend:latest > simple-blog-frontend.tar
-	gzip -f simple-blog-frontend.tar
-	scp simple-blog-frontend.tar.gz $(FPT_FRONTEND_PWD)
+
+.PHONY: push
+push:
+	scp simple-blog-frontend.tar $(FPT_FRONTEND_PWD)

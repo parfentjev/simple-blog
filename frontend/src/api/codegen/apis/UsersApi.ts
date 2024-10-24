@@ -15,12 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
-  UserTokenDto,
+  TokenDto,
   UsersPostRequest,
 } from '../models/index';
 import {
-    UserTokenDtoFromJSON,
-    UserTokenDtoToJSON,
+    TokenDtoFromJSON,
+    TokenDtoToJSON,
     UsersPostRequestFromJSON,
     UsersPostRequestToJSON,
 } from '../models/index';
@@ -41,9 +41,12 @@ export class UsersApi extends runtime.BaseAPI {
     /**
      * Create a new user
      */
-    async usersPostRaw(requestParameters: UsersPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.usersPostRequest === null || requestParameters.usersPostRequest === undefined) {
-            throw new runtime.RequiredError('usersPostRequest','Required parameter requestParameters.usersPostRequest was null or undefined when calling usersPost.');
+    async usersPostRaw(requestParameters: UsersPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenDto>> {
+        if (requestParameters['usersPostRequest'] == null) {
+            throw new runtime.RequiredError(
+                'usersPostRequest',
+                'Required parameter "usersPostRequest" was null or undefined when calling usersPost().'
+            );
         }
 
         const queryParameters: any = {};
@@ -57,25 +60,29 @@ export class UsersApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UsersPostRequestToJSON(requestParameters.usersPostRequest),
+            body: UsersPostRequestToJSON(requestParameters['usersPostRequest']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => TokenDtoFromJSON(jsonValue));
     }
 
     /**
      * Create a new user
      */
-    async usersPost(requestParameters: UsersPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.usersPostRaw(requestParameters, initOverrides);
+    async usersPost(requestParameters: UsersPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenDto> {
+        const response = await this.usersPostRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
      * Generate a user token
      */
-    async usersTokenPostRaw(requestParameters: UsersTokenPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserTokenDto>> {
-        if (requestParameters.usersPostRequest === null || requestParameters.usersPostRequest === undefined) {
-            throw new runtime.RequiredError('usersPostRequest','Required parameter requestParameters.usersPostRequest was null or undefined when calling usersTokenPost.');
+    async usersTokenPostRaw(requestParameters: UsersTokenPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenDto>> {
+        if (requestParameters['usersPostRequest'] == null) {
+            throw new runtime.RequiredError(
+                'usersPostRequest',
+                'Required parameter "usersPostRequest" was null or undefined when calling usersTokenPost().'
+            );
         }
 
         const queryParameters: any = {};
@@ -89,16 +96,16 @@ export class UsersApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UsersPostRequestToJSON(requestParameters.usersPostRequest),
+            body: UsersPostRequestToJSON(requestParameters['usersPostRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserTokenDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => TokenDtoFromJSON(jsonValue));
     }
 
     /**
      * Generate a user token
      */
-    async usersTokenPost(requestParameters: UsersTokenPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserTokenDto> {
+    async usersTokenPost(requestParameters: UsersTokenPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenDto> {
         const response = await this.usersTokenPostRaw(requestParameters, initOverrides);
         return await response.value();
     }

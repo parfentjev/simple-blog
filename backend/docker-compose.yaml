@@ -3,21 +3,6 @@ services:
     image: simple-blog-backend
     restart: unless-stopped
     env_file:
-      - service.env
+      - .env
     ports:
-      - "8081:8080"
-
-  mariadb:
-    image: mariadb:11.4.2
-    restart: unless-stopped
-    env_file:
-      - service.env
-    environment:
-      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
-    volumes:
-      - mariadb:/var/lib/mysql
-    ports:
-      - "3306:3306"
-
-volumes:
-  mariadb: { }
+      - "8080:8080"

@@ -1,0 +1,12 @@
+additionalProperties:
+  modelPackage: ee.fakeplastictrees.blog.codegen.model
+  apiPackage: ee.fakeplastictrees.blog.codegen.api
+  interfaceOnly: true
+  skipDefaultInterface: true
+  groupId: ee.fakeplastictrees
+  artifactId: codegen
+  artifactVersion: 1.0.0
+  openApiNullable: false
+  useSpringBoot3: true
+  hideGenerationTimestamp: true
+  dateLibrary: java8

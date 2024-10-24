@@ -14,7 +14,7 @@ const PostEditor: FC = () => {
         title: '',
         summary: '',
         text: '',
-        date: new Date().toJSON(),
+        date: new Date(),
         visible: false,
     })
 
@@ -63,15 +63,15 @@ const PostEditor: FC = () => {
         }
 
         if (updateDateRef.current && updateDateRef.current.checked) {
-            postState.date = new Date().toJSON()
+            postState.date = new Date()
         }
 
         try {
             postState.id
                 ? postsApi(token).postsEditorIdPut({
-                    id: postState.id,
-                    postEditorDto: postState,
-                })
+                      id: postState.id,
+                      postEditorDto: postState,
+                  })
                 : postsApi(token).postsEditorPost({ postEditorDto: postState })
 
             toast.success('Success!')
@@ -114,11 +114,7 @@ const PostEditor: FC = () => {
                     checked={postState.visible}
                 />
                 <label htmlFor="visible">Post is visible</label>
-                <input
-                    type="checkbox"
-                    id="updateDate"
-                    ref={updateDateRef}
-                />
+                <input type="checkbox" id="updateDate" ref={updateDateRef} />
                 <label htmlFor="updateDate">Update date</label>
             </div>
             <div className="text-center">
