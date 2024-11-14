@@ -1,0 +1,13 @@
+:root {
+    --color-menu-bg: #1b1914;
+    --color-menu-link: #f9a70e;
+    --color-menu-link-hover: #ffcf76;
+    --color-bg: #211e19;
+    --color-primary: #f9a70e;
+    --color-primary-hover: #ffcf76;
+    --color-primary-muted: #866121;
+    --color-text: #c8c3bc;
+    --color-text-muted: #898989;
+    --color-code-inline: #ffc251;
+    --color-mobile-li-hover: #332e27;
+}

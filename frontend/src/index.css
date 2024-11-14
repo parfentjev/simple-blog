@@ -1,14 +1,5 @@
 /* core configuration */
-:root {
-    --color-black-chocolate: #1b1914;
-    --color-eerie-black: #211e19;
-    --color-dark-tangerine: #f9a70e;
-    --color-topaz: #ffcf76;
-    --color-golden-brown: #866121;
-    --color-pale-silver: #c8c3bc;
-    --color-taupe-gray: #898989;
-    --color-cola: #332e27;
-}
+@import 'colors-default.css';
 
 body {
     margin: 0;
@@ -16,18 +7,18 @@ body {
         'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: var(--color-eerie-black);
-    color: var(--color-pale-silver);
+    background: var(--color-bg);
+    color: var(--color-text);
 }
 
 /* common elements */
 a {
-    color: var(--color-dark-tangerine);
+    color: var(--color-primary);
     text-decoration: none;
 }
 
 a:hover {
-    color: var(--color-topaz);
+    color: var(--color-primary-hover);
 }
 
 main {
@@ -35,7 +26,7 @@ main {
 }
 
 h1 {
-    color: var(--color-dark-tangerine);
+    color: var(--color-primary);
     text-transform: capitalize;
 }
 
@@ -47,39 +38,39 @@ button {
     padding: 0.5rem;
     cursor: pointer;
     border-style: solid;
-    border-color: var(--color-dark-tangerine);
+    border-color: var(--color-primary);
     border-radius: 5px;
-    color: var(--color-eerie-black);
+    color: var(--color-bg);
 }
 
 button.primary-button {
-    background-color: var(--color-dark-tangerine);
+    background-color: var(--color-primary);
     margin: 0.5rem;
 }
 
 button.secondary-button {
-    background-color: var(--color-eerie-black);
-    border-color: var(--color-dark-tangerine);
-    color: var(--color-dark-tangerine);
+    background-color: var(--color-bg);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
     margin: 0.5rem;
 }
 
 input,
 textarea {
-    background-color: var(--color-eerie-black);
-    border: solid 1px var(--color-dark-tangerine);
+    background-color: var(--color-bg);
+    border: solid 1px var(--color-primary);
     border-radius: 5px;
     padding: 0.5rem;
     outline: none;
-    color: var(--color-pale-silver);
+    color: var(--color-text);
 }
 
 .text-muted {
-    color: var(--color-taupe-gray);
+    color: var(--color-text-muted);
 }
 
 .text-muted a {
-    color: var(--color-golden-brown);
+    color: var(--color-primary-muted);
 }
 
 .text-center {
@@ -154,12 +145,12 @@ form div {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 1rem;
-    border: 1px solid var(--color-dark-tangerine);
+    border: 1px solid var(--color-primary);
     border-radius: 5px;
     z-index: 1001;
     width: 80%;
     max-width: 400px;
-    background-color: var(--color-black-chocolate);
+    background-color: var(--color-menu-bg);
     display: none;
 }
 
@@ -183,7 +174,7 @@ header {
 }
 
 nav {
-    background: var(--color-black-chocolate);
+    background: var(--color-menu-bg);
     padding-top: 1rem;
 }
 
@@ -206,6 +197,14 @@ nav li {
     padding: 1rem 0 1rem 0;
 }
 
+nav a {
+    color: var(--color-menu-link);
+}
+
+nav a:hover {
+    color: var(--color-menu-link-hover);
+}
+
 /* page footer */
 footer {
     text-align: center;
@@ -213,7 +212,7 @@ footer {
 }
 
 footer a {
-    color: var(--color-golden-brown);
+    color: var(--color-primary-muted);
     margin: 0 1rem 0 1rem;
 }
 
@@ -254,7 +253,7 @@ footer a {
 }
 
 .post code {
-    color: #ffc251;
+    color: var(--color-code-inline);
 }
 
 .post pre code {
@@ -278,7 +277,7 @@ footer a {
     width: auto;
     height: 1rem;
     width: 1rem;
-    background-color: var(--color-eerie-black);
+    background-color: var(--color-bg);
 }
 
 /* priorities... */
@@ -325,6 +324,6 @@ footer a {
 @media (max-width: 839px) {
     nav li:hover,
     nav li:active {
-        background-color: var(--color-cola);
+        background-color: var(--color-mobile-li-hover);
     }
 }

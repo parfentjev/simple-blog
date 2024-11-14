@@ -11,7 +11,7 @@ codegen:
 		openapitools/openapi-generator-cli generate \
 		-i /workdir/spec/swagger.yaml \
 		-g typescript-fetch \
-		-o /workdir/out
+		-o /workdir/out \
 		--additional-properties hooks=true
 
 .PHONY: build

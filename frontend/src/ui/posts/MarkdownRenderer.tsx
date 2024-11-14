@@ -2,7 +2,7 @@ import { FC, ReactNode } from 'react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import { Link } from 'react-router-dom'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism'
+import { tomorrow as theme } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 
 const MarkdownRenderer: FC<{ children: ReactNode }> = ({ children }) => {
     return (
@@ -35,7 +35,7 @@ const MarkdownRenderer: FC<{ children: ReactNode }> = ({ children }) => {
                                 {...rest}
                                 PreTag="div"
                                 language={match != null ? match[1] : ''}
-                                style={tomorrow}
+                                style={theme}
                             >
                                 {String(children).replace(/\n$/, '')}
                             </SyntaxHighlighter>
