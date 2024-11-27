@@ -184,7 +184,7 @@ export class PostsApi extends runtime.BaseAPI {
     /**
      * Update an existing post
      */
-    async postsEditorIdPutRaw(requestParameters: PostsEditorIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postsEditorIdPutRaw(requestParameters: PostsEditorIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostDto>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -221,20 +221,21 @@ export class PostsApi extends runtime.BaseAPI {
             body: PostEditorDtoToJSON(requestParameters['postEditorDto']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => PostDtoFromJSON(jsonValue));
     }
 
     /**
      * Update an existing post
      */
-    async postsEditorIdPut(requestParameters: PostsEditorIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postsEditorIdPutRaw(requestParameters, initOverrides);
+    async postsEditorIdPut(requestParameters: PostsEditorIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostDto> {
+        const response = await this.postsEditorIdPutRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
      * Create a new post
      */
-    async postsEditorPostRaw(requestParameters: PostsEditorPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async postsEditorPostRaw(requestParameters: PostsEditorPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostDto>> {
         if (requestParameters['postEditorDto'] == null) {
             throw new runtime.RequiredError(
                 'postEditorDto',
@@ -264,14 +265,15 @@ export class PostsApi extends runtime.BaseAPI {
             body: PostEditorDtoToJSON(requestParameters['postEditorDto']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => PostDtoFromJSON(jsonValue));
     }
 
     /**
      * Create a new post
      */
-    async postsEditorPost(requestParameters: PostsEditorPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.postsEditorPostRaw(requestParameters, initOverrides);
+    async postsEditorPost(requestParameters: PostsEditorPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostDto> {
+        const response = await this.postsEditorPostRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

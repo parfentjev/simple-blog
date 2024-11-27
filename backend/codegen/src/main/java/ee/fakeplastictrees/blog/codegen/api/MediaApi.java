@@ -5,6 +5,7 @@
  */
 package ee.fakeplastictrees.blog.codegen.api;
 
+import ee.fakeplastictrees.blog.codegen.model.MediaPost200Response;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,21 +38,22 @@ import jakarta.annotation.Generated;
 public interface MediaApi {
 
     /**
-     * POST /media/{parentId}
+     * POST /media
      * Upload a file
      *
-     * @param parentId Parent object identified, e.g. post id (required)
      * @param file  (optional)
      * @return File uploaded successfully (status code 200)
      *         or Unauthorized (status code 401)
      *         or Internal server error (status code 500)
      */
     @Operation(
-        operationId = "mediaParentIdPost",
+        operationId = "mediaPost",
         description = "Upload a file",
         tags = { "Media" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "File uploaded successfully"),
+            @ApiResponse(responseCode = "200", description = "File uploaded successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = MediaPost200Response.class))
+            }),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
         },
@@ -61,12 +63,12 @@ public interface MediaApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/media/{parentId}",
+        value = "/media",
+        produces = { "application/json" },
         consumes = { "multipart/form-data" }
     )
     
-    ResponseEntity<Void> mediaParentIdPost(
-        @Parameter(name = "parentId", description = "Parent object identified, e.g. post id", required = true, in = ParameterIn.PATH) @PathVariable("parentId") String parentId,
+    ResponseEntity<MediaPost200Response> mediaPost(
         @Parameter(name = "file", description = "") @RequestPart(value = "file", required = false) MultipartFile file
     );
 

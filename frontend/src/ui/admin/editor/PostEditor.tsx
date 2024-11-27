@@ -1,9 +1,10 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from 'react'
-import { useAuthContext } from '../../store/auth-context'
+import { useAuthContext } from '../../../store/auth-context'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import { PostEditorDto } from '../../api/codegen'
-import { postsApi } from '../../api/api'
+import { PostEditorDto } from '../../../api/codegen'
+import { postsApi } from '../../../api/api'
+import MediaUploadingForm from './MediaUploadingForm'
 
 const PostEditor: FC = () => {
     const { id } = useParams()
@@ -106,6 +107,7 @@ const PostEditor: FC = () => {
                     value={postState.text}
                 />
             </div>
+            <MediaUploadingForm urlPrefix="/media/" />
             <div className="post-options">
                 <input
                     type="checkbox"

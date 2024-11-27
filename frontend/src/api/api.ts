@@ -1,4 +1,4 @@
-import { Configuration, PostsApi, TokenDto, UsersApi } from './codegen'
+import { Configuration, MediaApi, PostsApi, TokenDto, UsersApi } from './codegen'
 
 const configuration = (token?: TokenDto) => {
     return new Configuration({
@@ -13,4 +13,8 @@ export const usersApi = () => {
 
 export const postsApi = (token?: TokenDto) => {
     return new PostsApi(configuration(token))
+}
+
+export const mediaApi = (token?: TokenDto) => {
+    return new MediaApi(configuration(token))
 }

@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import PostEditor from '../../../ui/admin/PostEditor'
+import PostEditor from '../../../ui/admin/editor/PostEditor'
 
 const PostEditorPage: FC = () => {
     return <PostEditor />

@@ -6,3 +6,5 @@ services:
       - .env
     ports:
       - "8080:8080"
+    volumes:
+      - /path/to/media/served/by/nginx:/media

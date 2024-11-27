@@ -259,20 +259,13 @@ paths:
           description: Post not found
         "500":
           description: Internal server error
-  /media/{parentId}:
+  /media:
     post:
       tags:
         - Media
       security:
         - bearerAuth: [ ]
       description: Upload a file
-      parameters:
-        - name: parentId
-          in: path
-          required: true
-          description: Parent object identified, e.g. post id
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -286,6 +279,16 @@ paths:
       responses:
         "200":
           description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - filename
+                properties:
+                  filename:
+                    type: string
+                    description: Name of the file
         "401":
           description: Unauthorized
         "500":

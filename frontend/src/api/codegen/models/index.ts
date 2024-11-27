@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './ErrorDto';
+export * from './MediaPost200Response';
 export * from './PageDto';
 export * from './PagePostDto';
 export * from './PostDto';

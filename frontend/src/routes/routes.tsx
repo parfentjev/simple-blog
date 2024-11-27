@@ -9,6 +9,7 @@ import AdminHomePage from './pages/admin/AdminHomePage'
 import { ProtectedRoute } from '../store/auth-context'
 import PostEditor from './pages/admin/PostEditorPage'
 import EditorPostsPage from './pages/admin/EditorPostsPage'
+import MediaFilesPage from './pages/admin/MediaFilesPage'
 
 interface Route {
     path: string
@@ -52,6 +53,14 @@ const routes: Route[] = [
         element: (
             <ProtectedRoute>
                 <EditorPostsPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/admin/media',
+        element: (
+            <ProtectedRoute>
+                <MediaFilesPage />
             </ProtectedRoute>
         ),
     },

@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { PostPreviewDto } from '../../api/codegen'
+import { PostPreviewDto } from '../../../api/codegen'
 import { Link } from 'react-router-dom'
 
 const EditorPostsList: FC<{ posts: PostPreviewDto[] }> = ({ posts }) => {

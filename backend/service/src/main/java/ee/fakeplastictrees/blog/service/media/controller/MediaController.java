@@ -1,6 +1,7 @@
 package ee.fakeplastictrees.blog.service.media.controller;
 
 import ee.fakeplastictrees.blog.codegen.api.MediaApi;
+import ee.fakeplastictrees.blog.codegen.model.MediaPost200Response;
 import ee.fakeplastictrees.blog.service.core.annotation.PostEditor;
 import ee.fakeplastictrees.blog.service.media.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,7 @@ public class MediaController implements MediaApi {
 
   @Override
   @PostEditor
-  public ResponseEntity<Void> mediaParentIdPost(String parentId, MultipartFile file) {
-    mediaService.save(parentId, file);
-
-    return ResponseEntity.ok().build();
+  public ResponseEntity<MediaPost200Response> mediaPost(MultipartFile file) {
+    return ResponseEntity.ok(new MediaPost200Response().filename(mediaService.save(file)));
   }
 }
