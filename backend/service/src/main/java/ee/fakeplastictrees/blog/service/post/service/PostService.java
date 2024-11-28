@@ -3,7 +3,7 @@ package ee.fakeplastictrees.blog.service.post.service;
 import ee.fakeplastictrees.blog.codegen.model.PagePostDto;
 import ee.fakeplastictrees.blog.codegen.model.PostDto;
 import ee.fakeplastictrees.blog.codegen.model.PostEditorDto;
-import ee.fakeplastictrees.blog.service.post.exception.PostNotFoundException;
+import ee.fakeplastictrees.blog.service.post.model.PostExceptionFactory;
 import ee.fakeplastictrees.blog.service.post.model.PostRepository;
 import ee.fakeplastictrees.blog.service.post.util.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class PostService {
   }
 
   public PostDto getPost(String id) {
-    var post = postRepository.findById(id).stream().findFirst().orElseThrow(PostNotFoundException::new);
+    var post = postRepository.findById(id).stream().findFirst().orElseThrow(PostExceptionFactory::notFound);
 
     return PostMapper.postToDto(post);
   }

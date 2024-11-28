@@ -2,8 +2,7 @@ package ee.fakeplastictrees.blog.service.user.service;
 
 import ee.fakeplastictrees.blog.codegen.model.TokenDto;
 import ee.fakeplastictrees.blog.codegen.model.UsersPostRequest;
-import ee.fakeplastictrees.blog.service.user.exception.UserRegistrationDisabledException;
-import ee.fakeplastictrees.blog.service.user.exception.UsernameAlreadyTakenException;
+import ee.fakeplastictrees.blog.service.user.model.UserExceptionFactory;
 import ee.fakeplastictrees.blog.service.user.model.UserRepository;
 import ee.fakeplastictrees.blog.service.user.util.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +33,11 @@ public class UserService {
 
   public TokenDto createUser(UsersPostRequest request) {
     if (registrationDisabled) {
-      throw new UserRegistrationDisabledException();
+      throw UserExceptionFactory.registrationDisabled();
     }
 
     if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-      throw new UsernameAlreadyTakenException();
+      throw UserExceptionFactory.usernameAlreadyTaken();
     }
 
     var user = UserMapper.requestToUser(request);

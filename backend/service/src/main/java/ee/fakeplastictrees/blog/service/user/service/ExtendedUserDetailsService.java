@@ -1,6 +1,6 @@
 package ee.fakeplastictrees.blog.service.user.service;
 
-import ee.fakeplastictrees.blog.service.user.exception.UserNotFoundException;
+import ee.fakeplastictrees.blog.service.user.model.UserExceptionFactory;
 import ee.fakeplastictrees.blog.service.user.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,7 @@ public class ExtendedUserDetailsService implements UserDetailsService {
     var user = userRepository.findByUsername(username);
 
     if (user.isEmpty() || !user.get().getActive()) {
-      throw new UserNotFoundException();
+      throw UserExceptionFactory.notFound();
     }
 
     return org.springframework.security.core.userdetails.User

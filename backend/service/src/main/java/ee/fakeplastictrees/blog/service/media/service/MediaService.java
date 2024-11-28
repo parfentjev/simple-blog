@@ -1,5 +1,6 @@
 package ee.fakeplastictrees.blog.service.media.service;
 
+import ee.fakeplastictrees.blog.service.media.model.MediaExceptionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
