@@ -9,4 +9,8 @@ public class PublicExceptionFactory {
   public PublicException withData(String message, MessageDefinition definition, HttpStatus status) {
     return new PublicException(message, definition, status);
   }
+
+  public PublicException tooManyRequests() {
+    return withData("too many requests, blocked", MessageDefinition.TOO_MANY_REQUESTS, HttpStatus.TOO_MANY_REQUESTS);
+  }
 }

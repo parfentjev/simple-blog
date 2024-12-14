@@ -28,7 +28,7 @@ public class UserService {
   @Autowired
   private AuthenticationManager authenticationManager;
 
-  @Value("${registration.disabled}")
+  @Value("${user.registration.disabled}")
   private boolean registrationDisabled;
 
   public TokenDto createUser(UsersPostRequest request) {

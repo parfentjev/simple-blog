@@ -1,5 +1,6 @@
 package ee.fakeplastictrees.blog.service.user.service;
 
+import ee.fakeplastictrees.blog.service.core.exceiption.PublicExceptionFactory;
 import ee.fakeplastictrees.blog.service.user.model.UserExceptionFactory;
 import ee.fakeplastictrees.blog.service.user.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,16 @@ public class ExtendedUserDetailsService implements UserDetailsService {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private FailedAuthenticationService failedAuthenticationService;
+
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    var user = userRepository.findByUsername(username);
+    if (failedAuthenticationService.isBlocked()) {
+      throw PublicExceptionFactory.tooManyRequests();
+    }
 
+    var user = userRepository.findByUsername(username);
     if (user.isEmpty() || !user.get().getActive()) {
       throw UserExceptionFactory.notFound();
     }
