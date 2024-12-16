@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from 'react'
+import { FC, FormEvent, useEffect, useState } from 'react'
 import { useAuthContext } from '../../../store/auth-context'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
@@ -19,6 +19,8 @@ const PostEditor: FC = () => {
         visible: false,
     })
 
+    const [updateDate, setUpdateDate] = useState(false)
+
     useEffect(() => {
         if (!id || !token) {
             return
@@ -30,40 +32,14 @@ const PostEditor: FC = () => {
             .catch(() => toast.error('Failed to load post.'))
     }, [id, token])
 
-    const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setPostState((postDto) => {
-            return { ...postDto, title: event.target.value }
-        })
-    }
-
-    const handleSummaryChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        setPostState((postDto) => {
-            return { ...postDto, summary: event.target.value }
-        })
-    }
-
-    const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        setPostState((postDto) => {
-            return { ...postDto, text: event.target.value }
-        })
-    }
-
-    const handleVisibleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setPostState((postDto) => {
-            return { ...postDto, visible: event.target.checked }
-        })
-    }
-
-    const updateDateRef = useRef<HTMLInputElement>(null)
-
     const handleSave = async (event: FormEvent) => {
         event.preventDefault()
 
         if (!token) {
-            return
+            toast.error('Not authenticated.')
         }
 
-        if (updateDateRef.current && updateDateRef.current.checked) {
+        if (updateDate) {
             postState.date = new Date()
         }
 
@@ -87,7 +63,11 @@ const PostEditor: FC = () => {
                 <input
                     type="text"
                     placeholder="title"
-                    onChange={handleTitleChange}
+                    onChange={(e) =>
+                        setPostState((postDto) => {
+                            return { ...postDto, title: e.target.value }
+                        })
+                    }
                     value={postState.title}
                 />
             </div>
@@ -95,7 +75,11 @@ const PostEditor: FC = () => {
                 <textarea
                     rows={5}
                     placeholder="summary"
-                    onChange={handleSummaryChange}
+                    onChange={(e) =>
+                        setPostState((postDto) => {
+                            return { ...postDto, summary: e.target.value }
+                        })
+                    }
                     value={postState.summary}
                 />
             </div>
@@ -103,7 +87,11 @@ const PostEditor: FC = () => {
                 <textarea
                     rows={30}
                     placeholder="text"
-                    onChange={handleTextChange}
+                    onChange={(e) =>
+                        setPostState((postDto) => {
+                            return { ...postDto, text: e.target.value }
+                        })
+                    }
                     value={postState.text}
                 />
             </div>
@@ -112,11 +100,19 @@ const PostEditor: FC = () => {
                 <input
                     type="checkbox"
                     id="visible"
-                    onChange={handleVisibleChange}
+                    onChange={(e) => {
+                        setPostState((postDto) => {
+                            return { ...postDto, visible: e.target.checked }
+                        })
+                    }}
                     checked={postState.visible}
                 />
                 <label htmlFor="visible">Post is visible</label>
-                <input type="checkbox" id="updateDate" ref={updateDateRef} />
+                <input
+                    type="checkbox"
+                    id="updateDate"
+                    onChange={(e) => setUpdateDate((update) => !update)}
+                />
                 <label htmlFor="updateDate">Update date</label>
             </div>
             <div className="text-center">

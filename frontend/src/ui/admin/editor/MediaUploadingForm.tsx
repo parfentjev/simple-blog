@@ -9,16 +9,7 @@ interface MediaUploadingFormProps {
 
 const MediaUploadingForm: FC<MediaUploadingFormProps> = (props) => {
     const { token } = useAuthContext()
-
     const [uploadedFilename, setUploadedFilename] = useState('')
-    const filenameInputRef = useRef<HTMLInputElement>(null)
-
-    const handleFilenameInput = () => {
-        if (filenameInputRef.current) {
-            filenameInputRef.current.select()
-            navigator.clipboard.writeText(filenameInputRef.current.value)
-        }
-    }
 
     const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || event.target.files.length === 0) {
@@ -43,8 +34,10 @@ const MediaUploadingForm: FC<MediaUploadingFormProps> = (props) => {
                 <input
                     type="text"
                     value={uploadedFilename}
-                    onClick={handleFilenameInput}
-                    ref={filenameInputRef}
+                    onClick={(e) => {
+                        e.currentTarget.select()
+                        navigator.clipboard.writeText(e.currentTarget.value)
+                    }}
                     readOnly
                 />
             )}
