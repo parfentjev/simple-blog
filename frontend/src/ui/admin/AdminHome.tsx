@@ -26,6 +26,9 @@ const AdminHome: FC = () => {
                     onClick={onClickHandler}
                     readOnly
                 />
+                {token?.expires && (
+                    <p>expires at {new Date(token.expires).toJSON()}</p>
+                )}
             </div>
             <ul>
                 <li>
