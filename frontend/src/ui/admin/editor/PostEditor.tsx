@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import { PostEditorDto } from '../../../api/codegen'
 import { postsApi } from '../../../api/api'
-import MediaUploadingForm from './MediaUploadingForm'
+import MediaUploadingForm from '../media/MediaUploadingForm'
 
 const PostEditor: FC = () => {
     const { id } = useParams()

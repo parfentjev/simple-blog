@@ -1,9 +1,8 @@
 package ee.fakeplastictrees.blog.service.media.service;
 
-import ee.fakeplastictrees.blog.service.media.model.Media;
-import ee.fakeplastictrees.blog.service.media.model.MediaExceptionFactory;
-import ee.fakeplastictrees.blog.service.media.model.MediaRepository;
-import ee.fakeplastictrees.blog.service.media.model.ResourceDto;
+import ee.fakeplastictrees.blog.codegen.model.PageMediaDto;
+import ee.fakeplastictrees.blog.service.core.model.PageRequestFactory;
+import ee.fakeplastictrees.blog.service.media.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
@@ -21,6 +20,8 @@ import static java.lang.String.format;
 
 @Service
 public class MediaService {
+  private static final int PAGE_SIZE = 100;
+
   @Value("${media.upload.directory}")
   private String uploadDirectory;
 
@@ -30,7 +31,7 @@ public class MediaService {
   @Autowired
   private ResourceLoader resourceLoader;
 
-  public String save(MultipartFile inputFile) {
+  public String saveFile(MultipartFile inputFile) {
     if (inputFile == null || inputFile.isEmpty()) {
       throw MediaExceptionFactory.emptyFile();
     }
@@ -59,10 +60,19 @@ public class MediaService {
     return outputFile;
   }
 
-  public ResourceDto get(String id) {
+  public ResourceDto getFile(String id) {
     var media = mediaRepository.findById(id).orElseThrow(MediaExceptionFactory::loadFailed);
     var resource = resourceLoader.getResource("file:" + media.getPath());
 
     return ResourceDto.builder().contentType(media.getContentType()).resource(resource).build();
+  }
+
+  public PageMediaDto getFiles(Integer page) {
+    var mediaPage = mediaRepository.findAll(PageRequestFactory.withPage(page, PAGE_SIZE, "uploadedAt"));
+
+    return new PageMediaDto()
+      .page(page)
+      .totalPages(mediaPage.getTotalPages())
+      .items(mediaPage.get().map(MediaMapper::mediaToDto).toList());
   }
 }

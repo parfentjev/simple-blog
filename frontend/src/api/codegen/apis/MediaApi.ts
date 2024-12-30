@@ -16,11 +16,18 @@
 import * as runtime from '../runtime';
 import type {
   MediaPost200Response,
+  PageMediaDto,
 } from '../models/index';
 import {
     MediaPost200ResponseFromJSON,
     MediaPost200ResponseToJSON,
+    PageMediaDtoFromJSON,
+    PageMediaDtoToJSON,
 } from '../models/index';
+
+export interface MediaGetRequest {
+    page?: number;
+}
 
 export interface MediaIdGetRequest {
     id: string;
@@ -34,6 +41,44 @@ export interface MediaPostRequest {
  * 
  */
 export class MediaApi extends runtime.BaseAPI {
+
+    /**
+     * Get all media files
+     */
+    async mediaGetRaw(requestParameters: MediaGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageMediaDto>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['page'] != null) {
+            queryParameters['page'] = requestParameters['page'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/media`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PageMediaDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * Get all media files
+     */
+    async mediaGet(requestParameters: MediaGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageMediaDto> {
+        const response = await this.mediaGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Get a media file

@@ -24,7 +24,11 @@ const PostsPage: FC = () => {
     return (
         <>
             <PostsList posts={page.items} />
-            <Paginator page={page.page} totalPages={page.totalPages} />
+            <Paginator
+                page={page.page}
+                totalPages={page.totalPages}
+                urlPath="/posts/"
+            />
         </>
     )
 }

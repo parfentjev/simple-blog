@@ -35,7 +35,7 @@ const AdminHome: FC = () => {
                     <Link to="/admin/posts">Post list</Link>
                 </li>
                 <li>
-                    <Link to="/admin/media">Media files</Link>
+                    <Link to="/admin/media/1">Media files</Link>
                 </li>
             </ul>
         </>

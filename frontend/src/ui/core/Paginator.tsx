@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 interface PaginatorProps {
     page: number
     totalPages: number
+    urlPath: string
 }
 
 const Paginator: FC<PaginatorProps> = (props) => {
@@ -16,12 +17,18 @@ const Paginator: FC<PaginatorProps> = (props) => {
         <div className="text-center paginator">
             <div>
                 {showBack && (
-                    <Link to={`/posts/${props.page - 1}`} onClick={scrollTop}>
+                    <Link
+                        to={props.urlPath + (props.page - 1)}
+                        onClick={scrollTop}
+                    >
                         newer
                     </Link>
                 )}{' '}
                 {showNext && (
-                    <Link to={`/posts/${props.page + 1}`} onClick={scrollTop}>
+                    <Link
+                        to={props.urlPath + (props.page + 1)}
+                        onClick={scrollTop}
+                    >
                         older
                     </Link>
                 )}

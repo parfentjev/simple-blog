@@ -3,12 +3,11 @@ package ee.fakeplastictrees.blog.service.post.service;
 import ee.fakeplastictrees.blog.codegen.model.PagePostDto;
 import ee.fakeplastictrees.blog.codegen.model.PostDto;
 import ee.fakeplastictrees.blog.codegen.model.PostEditorDto;
+import ee.fakeplastictrees.blog.service.core.model.PageRequestFactory;
 import ee.fakeplastictrees.blog.service.post.model.PostExceptionFactory;
 import ee.fakeplastictrees.blog.service.post.model.PostRepository;
 import ee.fakeplastictrees.blog.service.post.util.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +18,7 @@ public class PostService {
   private PostRepository postRepository;
 
   public PagePostDto getPosts(Integer page) {
-    var postsPage = postRepository.findAll(pageRequest(page));
+    var postsPage = postRepository.findAll(PageRequestFactory.withPage(page, PAGE_SIZE, "date"));
 
     return new PagePostDto()
       .page(page)
@@ -28,16 +27,12 @@ public class PostService {
   }
 
   public PagePostDto getPublishedPosts(Integer page) {
-    var postsPage = postRepository.findByVisible(pageRequest(page), true);
+    var postsPage = postRepository.findByVisible(PageRequestFactory.withPage(page, PAGE_SIZE, "date"), true);
 
     return new PagePostDto()
       .page(page)
       .totalPages(postsPage.getTotalPages())
       .items(postsPage.get().map(PostMapper::postToPreviewDto).toList());
-  }
-
-  private PageRequest pageRequest(int page) {
-    return PageRequest.of(page - 1, PAGE_SIZE).withSort(Sort.by("date").descending());
   }
 
   public PostDto getPost(String id) {

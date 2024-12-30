@@ -260,6 +260,31 @@ paths:
         "500":
           description: Internal server error
   /media:
+    get:
+      tags:
+        - Media
+      description: Get all media files
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number
+          required: false
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageMediaDto"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal server error
     post:
       tags:
         - Media
@@ -438,3 +463,29 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/PostPreviewDto'
+    MediaDto:
+      type: object
+      properties:
+        id:
+          type: string
+        originalFilename:
+          type: string
+        contentType:
+          type: string
+        date:
+          type: string
+          format: date-time
+      required:
+        - id
+        - originalFilename
+        - contentType
+        - date
+    PageMediaDto:
+      allOf:
+        - $ref: '#/components/schemas/PageDto'
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/MediaDto'

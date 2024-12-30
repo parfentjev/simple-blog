@@ -6,6 +6,7 @@
 package ee.fakeplastictrees.blog.codegen.api;
 
 import ee.fakeplastictrees.blog.codegen.model.MediaPost200Response;
+import ee.fakeplastictrees.blog.codegen.model.PageMediaDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,6 +37,41 @@ import jakarta.annotation.Generated;
 @Validated
 @Tag(name = "Media", description = "the Media API")
 public interface MediaApi {
+
+    /**
+     * GET /media
+     * Get all media files
+     *
+     * @param page Page number (optional, default to 1)
+     * @return OK (status code 200)
+     *         or Unauthorized (status code 401)
+     *         or Internal server error (status code 500)
+     */
+    @Operation(
+        operationId = "mediaGet",
+        description = "Get all media files",
+        tags = { "Media" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = PageMediaDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/media",
+        produces = { "application/json" }
+    )
+    
+    ResponseEntity<PageMediaDto> mediaGet(
+        @Parameter(name = "page", description = "Page number", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "1") Integer page
+    );
+
 
     /**
      * GET /media/{id}
