@@ -5,9 +5,7 @@ const MediaFilesPage: FC = () => {
     return (
         <div>
             <h1>Upload</h1>
-            <MediaUploadingForm
-                urlPrefix={process.env.REACT_APP_MEDIA_URL || ''}
-            />
+            <MediaUploadingForm />
         </div>
     )
 }

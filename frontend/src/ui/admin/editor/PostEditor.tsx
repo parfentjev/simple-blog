@@ -95,7 +95,7 @@ const PostEditor: FC = () => {
                     value={postState.text}
                 />
             </div>
-            <MediaUploadingForm urlPrefix="/media/" />
+            <MediaUploadingForm />
             <div className="post-options">
                 <input
                     type="checkbox"

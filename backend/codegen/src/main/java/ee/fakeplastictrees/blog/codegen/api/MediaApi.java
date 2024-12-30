@@ -38,6 +38,38 @@ import jakarta.annotation.Generated;
 public interface MediaApi {
 
     /**
+     * GET /media/{id}
+     * Get a media file
+     *
+     * @param id Media file id (required)
+     * @return File content (status code 200)
+     *         or Media file not found (status code 404)
+     *         or Internal server error (status code 500)
+     */
+    @Operation(
+        operationId = "mediaIdGet",
+        description = "Get a media file",
+        tags = { "Media" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "File content", content = {
+                @Content(mediaType = "application/octet-stream", schema = @Schema(implementation = org.springframework.core.io.Resource.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "Media file not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/media/{id}",
+        produces = { "application/octet-stream" }
+    )
+    
+    ResponseEntity<org.springframework.core.io.Resource> mediaIdGet(
+        @Parameter(name = "id", description = "Media file id", required = true, in = ParameterIn.PATH) @PathVariable("id") String id
+    );
+
+
+    /**
      * POST /media
      * Upload a file
      *

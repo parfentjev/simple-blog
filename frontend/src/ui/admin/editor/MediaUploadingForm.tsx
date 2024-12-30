@@ -1,13 +1,11 @@
 import { toast } from 'react-toastify'
 import { mediaApi } from '../../../api/api'
-import { ChangeEvent, FC, useRef, useState } from 'react'
+import { ChangeEvent, FC, useState } from 'react'
 import { useAuthContext } from '../../../store/auth-context'
 
-interface MediaUploadingFormProps {
-    urlPrefix: string
-}
+const MEDIA_URL_PREFIX = process.env.REACT_APP_SERVICE_URL + '/media/'
 
-const MediaUploadingForm: FC<MediaUploadingFormProps> = (props) => {
+const MediaUploadingForm: FC = (props) => {
     const { token } = useAuthContext()
     const [uploadedFilename, setUploadedFilename] = useState('')
 
@@ -21,7 +19,7 @@ const MediaUploadingForm: FC<MediaUploadingFormProps> = (props) => {
             .then((response) => {
                 toast.success('Uploaded.')
 
-                setUploadedFilename(props.urlPrefix + response.filename)
+                setUploadedFilename(MEDIA_URL_PREFIX + response.id)
             })
             .catch(() => toast.error('Failed to upload.'))
     }
