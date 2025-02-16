@@ -16,3 +16,12 @@ CREATE TABLE `user` (
   `username` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+CREATE TABLE `media` (
+  `id` varchar(255) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `content_type` varchar(255) DEFAULT NULL,
+  `uploaded_at` datetime(6) DEFAULT NULL,
+  `original_filename` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;

@@ -11,6 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Log4j2
 @RestControllerAdvice
@@ -48,6 +49,12 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorDto> jwtVerificationException(JWTVerificationException e) {
     return errorResponse("auth token is not valid", MessageDefinition.INVALID_AUTH_TOKEN, HttpStatus.UNAUTHORIZED);
   }
+
+  @ExceptionHandler
+  public ResponseEntity<ErrorDto> noResourceFoundException(NoResourceFoundException e) {
+    return errorResponse("resource not found", MessageDefinition.FILE_FAILED_LOAD, HttpStatus.NOT_FOUND);
+  }
+
 
   @ExceptionHandler
   public ResponseEntity<ErrorDto> exception(Throwable e) {

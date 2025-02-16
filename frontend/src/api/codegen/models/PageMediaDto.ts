@@ -13,55 +13,55 @@
  */
 
 import { mapValues } from '../runtime';
-import type { PostPreviewDto } from './PostPreviewDto';
+import type { MediaDto } from './MediaDto';
 import {
-    PostPreviewDtoFromJSON,
-    PostPreviewDtoFromJSONTyped,
-    PostPreviewDtoToJSON,
-    PostPreviewDtoToJSONTyped,
-} from './PostPreviewDto';
+    MediaDtoFromJSON,
+    MediaDtoFromJSONTyped,
+    MediaDtoToJSON,
+    MediaDtoToJSONTyped,
+} from './MediaDto';
 
 /**
  * 
  * @export
- * @interface PagePostDto
+ * @interface PageMediaDto
  */
-export interface PagePostDto {
+export interface PageMediaDto {
     /**
      * Current page
      * @type {number}
-     * @memberof PagePostDto
+     * @memberof PageMediaDto
      */
     page: number;
     /**
      * Total pages
      * @type {number}
-     * @memberof PagePostDto
+     * @memberof PageMediaDto
      */
     totalPages: number;
     /**
      * 
-     * @type {Array<PostPreviewDto>}
-     * @memberof PagePostDto
+     * @type {Array<MediaDto>}
+     * @memberof PageMediaDto
      */
-    items: Array<PostPreviewDto>;
+    items: Array<MediaDto>;
 }
 
 /**
- * Check if a given object implements the PagePostDto interface.
+ * Check if a given object implements the PageMediaDto interface.
  */
-export function instanceOfPagePostDto(value: object): value is PagePostDto {
+export function instanceOfPageMediaDto(value: object): value is PageMediaDto {
     if (!('page' in value) || value['page'] === undefined) return false;
     if (!('totalPages' in value) || value['totalPages'] === undefined) return false;
     if (!('items' in value) || value['items'] === undefined) return false;
     return true;
 }
 
-export function PagePostDtoFromJSON(json: any): PagePostDto {
-    return PagePostDtoFromJSONTyped(json, false);
+export function PageMediaDtoFromJSON(json: any): PageMediaDto {
+    return PageMediaDtoFromJSONTyped(json, false);
 }
 
-export function PagePostDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): PagePostDto {
+export function PageMediaDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): PageMediaDto {
     if (json == null) {
         return json;
     }
@@ -69,15 +69,15 @@ export function PagePostDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'page': json['page'],
         'totalPages': json['totalPages'],
-        'items': ((json['items'] as Array<any>).map(PostPreviewDtoFromJSON)),
+        'items': ((json['items'] as Array<any>).map(MediaDtoFromJSON)),
     };
 }
 
-  export function PagePostDtoToJSON(json: any): PagePostDto {
-      return PagePostDtoToJSONTyped(json, false);
+  export function PageMediaDtoToJSON(json: any): PageMediaDto {
+      return PageMediaDtoToJSONTyped(json, false);
   }
 
-  export function PagePostDtoToJSONTyped(value?: PagePostDto | null, ignoreDiscriminator: boolean = false): any {
+  export function PageMediaDtoToJSONTyped(value?: PageMediaDto | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -86,7 +86,7 @@ export function PagePostDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'page': value['page'],
         'totalPages': value['totalPages'],
-        'items': ((value['items'] as Array<any>).map(PostPreviewDtoToJSON)),
+        'items': ((value['items'] as Array<any>).map(MediaDtoToJSON)),
     };
 }
 

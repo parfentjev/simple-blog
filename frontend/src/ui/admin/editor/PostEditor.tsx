@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import { PostEditorDto } from '../../../api/codegen'
 import { postsApi } from '../../../api/api'
-import MediaUploadingForm from './MediaUploadingForm'
+import MediaUploadingForm from '../media/MediaUploadingForm'
 
 const PostEditor: FC = () => {
     const { id } = useParams()
@@ -51,11 +51,24 @@ const PostEditor: FC = () => {
                   })
                 : postsApi(token).postsEditorPost({ postEditorDto: postState })
 
-            toast.success('Success!')
+            toast.success('Saved!')
         } catch (error) {
             toast.error('Failed to submit.')
         }
     }
+
+    const [deleteCounter, setDeleteCounter] = useState(0)
+
+    useEffect(() => {
+        if (deleteCounter < 3 || !postState.id) {
+            return
+        }
+
+        postsApi(token)
+            .postsEditorIdDelete({ id: postState.id })
+            .then(() => toast.success('Deleted.'))
+            .catch(() => toast.error('Failed to delete.'))
+    }, [deleteCounter, postState, token])
 
     return (
         <form onSubmit={handleSave} className="editor-form">
@@ -95,7 +108,7 @@ const PostEditor: FC = () => {
                     value={postState.text}
                 />
             </div>
-            <MediaUploadingForm urlPrefix="/media/" />
+            <MediaUploadingForm />
             <div className="post-options">
                 <input
                     type="checkbox"
@@ -118,6 +131,17 @@ const PostEditor: FC = () => {
             <div className="text-center">
                 <button type="submit" className="primary-button">
                     Save
+                </button>
+                <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => {
+                        setDeleteCounter((counter) => ++counter)
+                        setTimeout(() => setDeleteCounter(0), 1000)
+                    }}
+                    title="Click 3 times to confirm."
+                >
+                    Delete
                 </button>
             </div>
         </form>

@@ -22,7 +22,7 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.10.0-SNAPSHOT")
 public class MediaPost200Response {
 
-  private String filename;
+  private String id;
 
   public MediaPost200Response() {
     super();
@@ -31,28 +31,28 @@ public class MediaPost200Response {
   /**
    * Constructor with only required parameters
    */
-  public MediaPost200Response(String filename) {
-    this.filename = filename;
+  public MediaPost200Response(String id) {
+    this.id = id;
   }
 
-  public MediaPost200Response filename(String filename) {
-    this.filename = filename;
+  public MediaPost200Response id(String id) {
+    this.id = id;
     return this;
   }
 
   /**
-   * Name of the file
-   * @return filename
+   * Id of the media file
+   * @return id
    */
   @NotNull 
-  @Schema(name = "filename", description = "Name of the file", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("filename")
-  public String getFilename() {
-    return filename;
+  @Schema(name = "id", description = "Id of the media file", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("id")
+  public String getId() {
+    return id;
   }
 
-  public void setFilename(String filename) {
-    this.filename = filename;
+  public void setId(String id) {
+    this.id = id;
   }
 
   @Override
@@ -64,19 +64,19 @@ public class MediaPost200Response {
       return false;
     }
     MediaPost200Response mediaPost200Response = (MediaPost200Response) o;
-    return Objects.equals(this.filename, mediaPost200Response.filename);
+    return Objects.equals(this.id, mediaPost200Response.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(filename);
+    return Objects.hash(id);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class MediaPost200Response {\n");
-    sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

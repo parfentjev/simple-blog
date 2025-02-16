@@ -2,10 +2,14 @@ import { FC } from 'react'
 import PostPreview from './PostPreview'
 import { PostPreviewDto } from '../../api/codegen'
 
-const PostsList: FC<{ posts: PostPreviewDto[] }> = ({ posts }) => {
+interface PostsListProps {
+    posts: PostPreviewDto[]
+}
+
+const PostsList: FC<PostsListProps> = (props) => {
     return (
         <>
-            {posts.map((post) => (
+            {props.posts.map((post) => (
                 <PostPreview key={post.id} post={post} />
             ))}
         </>

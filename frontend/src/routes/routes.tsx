@@ -57,7 +57,7 @@ const routes: Route[] = [
         ),
     },
     {
-        path: '/admin/media',
+        path: '/admin/media/:page',
         element: (
             <ProtectedRoute>
                 <MediaFilesPage />

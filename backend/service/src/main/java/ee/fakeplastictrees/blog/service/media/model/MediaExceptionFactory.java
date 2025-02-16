@@ -13,6 +13,10 @@ public class MediaExceptionFactory {
   }
 
   public PublicException saveFailed() {
-    return PublicExceptionFactory.withData("failed to save", MessageDefinition.FILE_FAILED_SAVE, HttpStatus.INTERNAL_SERVER_ERROR);
+    return PublicExceptionFactory.withData("failed to save the media file", MessageDefinition.FILE_FAILED_SAVE, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  public PublicException loadFailed() {
+    return PublicExceptionFactory.withData("resource not found", MessageDefinition.FILE_FAILED_LOAD, HttpStatus.NOT_FOUND);
   }
 }

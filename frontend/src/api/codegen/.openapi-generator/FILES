@@ -4,8 +4,10 @@ apis/UsersApi.ts
 apis/index.ts
 index.ts
 models/ErrorDto.ts
+models/MediaDto.ts
 models/MediaPost200Response.ts
 models/PageDto.ts
+models/PageMediaDto.ts
 models/PagePostDto.ts
 models/PostDto.ts
 models/PostEditorDto.ts
