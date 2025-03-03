@@ -8,6 +8,9 @@ CREATE TABLE `post` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+CREATE INDEX `idx_post_visible` ON post(`visible`);
+CREATE INDEX `idx_post_date` ON post(`date`);
+
 CREATE TABLE `user` (
   `active` bit(1) NOT NULL,
   `created_at` datetime(6) NOT NULL,
@@ -25,3 +28,5 @@ CREATE TABLE `media` (
   `original_filename` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+CREATE INDEX `idx_media_uploaded_at` ON media(`uploaded_at`);
