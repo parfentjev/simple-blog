@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import AuthForm from '../../../ui/admin/AuthForm'
+import AuthForm from '../../../components/admin/AuthForm'
 
 const AuthPage: FC = () => {
     return <AuthForm />

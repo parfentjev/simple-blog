@@ -11,7 +11,9 @@ const ModalDialog: FC<ModalDialogProps> = (props) => {
     return (
         <>
             <div
-                className={`modal-overlay ${(props.visible && 'visible') || ''}`}
+                className={`modal-overlay ${
+                    (props.visible && 'visible') || ''
+                }`}
                 onClick={props.cancelFn}
             ></div>
             <div

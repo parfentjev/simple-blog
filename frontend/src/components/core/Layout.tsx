@@ -2,7 +2,7 @@ import { FC, ReactNode, useEffect } from 'react'
 import Header from './Header'
 import Notifications from './Notifications'
 import Footer from './Footer'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import { clearPageTitle } from '../../utils/title-utils'
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {

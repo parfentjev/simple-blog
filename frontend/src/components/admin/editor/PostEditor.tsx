@@ -1,10 +1,10 @@
 import { FC, FormEvent, useEffect, useState } from 'react'
 import { useAuthContext } from '../../../store/auth-context'
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
-import { PostEditorDto } from '../../../api/codegen'
+import { useParams } from 'react-router'
+import { PostEditorDto } from '../../../../codegen'
 import { postsApi } from '../../../api/api'
-import MediaUploadingForm from '../media/MediaUploadingForm'
+import MediaUploadForm from '../media/MediaUploadingForm'
 
 const PostEditor: FC = () => {
     const { id } = useParams()
@@ -108,7 +108,7 @@ const PostEditor: FC = () => {
                     value={postState.text}
                 />
             </div>
-            <MediaUploadingForm />
+            <MediaUploadForm />
             <div className="post-options">
                 <input
                     type="checkbox"
@@ -124,7 +124,7 @@ const PostEditor: FC = () => {
                 <input
                     type="checkbox"
                     id="updateDate"
-                    onChange={(e) => setUpdateDate((update) => !update)}
+                    onChange={() => setUpdateDate((update) => !update)}
                 />
                 <label htmlFor="updateDate">Update date</label>
             </div>

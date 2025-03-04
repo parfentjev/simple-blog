@@ -1,9 +1,9 @@
 import { FC } from 'react'
 import { encodeTitle, jsonDateToString } from '../../utils/string-utils'
 import MarkdownRenderer from './MarkdownRenderer'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { useAuthContext } from '../../store/auth-context'
-import { PostDto } from '../../api/codegen'
+import { PostDto } from '../../../codegen'
 
 const SinglePost: FC<{ post: PostDto }> = ({ post }) => {
     const { token } = useAuthContext()

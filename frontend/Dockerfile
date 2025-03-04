@@ -1,17 +1,12 @@
-FROM node:latest as builder
+FROM node:latest AS builder
 
+ARG VITE_SERVICE_URL
+ARG VITE_MEDIA_URL
 WORKDIR /webapp
-COPY ./package.json .
+COPY . .
 RUN npm install
-
-ARG REACT_APP_SERVICE_URL
-ARG REACT_APP_MEDIA_URL
-
-COPY ./public ./public
-COPY ./src ./src
-COPY ./tsconfig.json .
 RUN npm run build
 
 FROM nginx:mainline-alpine-slim
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /webapp/build /usr/share/nginx/html
+COPY --from=builder /webapp/dist /usr/share/nginx/html

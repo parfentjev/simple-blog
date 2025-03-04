@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import AdminHome from '../../../ui/admin/AdminHome'
+import AdminHome from '../../../components/admin/AdminHome'
 
 const AdminHomePage: FC = () => {
     return <AdminHome />

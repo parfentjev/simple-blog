@@ -1,8 +1,0 @@
-version: "3.8"
-
-services:
-  service:
-    restart: unless-stopped
-    image: simple-blog-webapp:latest
-    ports:
-      - 80:80

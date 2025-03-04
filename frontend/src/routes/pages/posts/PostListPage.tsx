@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import PostsList from '../../../ui/posts/PostsList'
-import { PagePostDto } from '../../../api/codegen'
+import PostsList from '../../../components/posts/PostsList'
+import { PagePostDto } from '../../../../codegen'
 import { postsApi } from '../../../api/api'
-import Paginator from '../../../ui/core/Paginator'
-import { useParams } from 'react-router-dom'
+import Paginator from '../../../components/core/Paginator'
+import { useParams } from 'react-router'
 
-const PostsPage: FC = () => {
+const PostListPage: FC = () => {
     const { page: pageNumber } = useParams()
     const [page, setPage] = useState<PagePostDto>()
 
@@ -33,4 +33,4 @@ const PostsPage: FC = () => {
     )
 }
 
-export default PostsPage
+export default PostListPage

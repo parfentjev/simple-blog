@@ -7,8 +7,8 @@ import {
     useEffect,
     useState,
 } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { TokenDto } from '../api/codegen'
+import { useNavigate } from 'react-router'
+import { TokenDto } from '../../codegen'
 
 type AuthContextType = {
     token?: TokenDto

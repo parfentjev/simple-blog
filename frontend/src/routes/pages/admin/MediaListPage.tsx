@@ -1,14 +1,14 @@
 import { FC, useEffect, useState } from 'react'
-import MediaUploadingForm from '../../../ui/admin/media/MediaUploadingForm'
-import MediaFilesList from '../../../ui/admin/media/MediaFilesList'
-import { useParams } from 'react-router-dom'
-import { PageMediaDto } from '../../../api/codegen'
+import MediaUploadForm from '../../../components/admin/media/MediaUploadingForm'
+import MediaFilesList from '../../../components/admin/media/MediaFilesList'
+import { useParams } from 'react-router'
+import { PageMediaDto } from '../../../../codegen'
 import { mediaApi } from '../../../api/api'
 import { useAuthContext } from '../../../store/auth-context'
 import { toast } from 'react-toastify'
-import Paginator from '../../../ui/core/Paginator'
+import Paginator from '../../../components/core/Paginator'
 
-const MediaFilesPage: FC = () => {
+const MediaListPage: FC = () => {
     const { token } = useAuthContext()
 
     const { page: pageNumber } = useParams()
@@ -29,7 +29,7 @@ const MediaFilesPage: FC = () => {
         <div>
             <h1>Media Files</h1>
             <h2>Upload</h2>
-            <MediaUploadingForm />
+            <MediaUploadForm />
             <h2>List</h2>
             <MediaFilesList files={page.items} />
             <Paginator
@@ -41,4 +41,4 @@ const MediaFilesPage: FC = () => {
     )
 }
 
-export default MediaFilesPage
+export default MediaListPage

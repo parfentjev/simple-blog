@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css'
 const Notifications: FC = () => {
     return (
         <ToastContainer
+            aria-label="notification"
             position="top-center"
             autoClose={5000}
             hideProgressBar={false}

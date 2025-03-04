@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from 'react'
-import { PagePostDto } from '../../../api/codegen'
+import { PagePostDto } from '../../../../codegen'
 import { postsApi } from '../../../api/api'
 import { useAuthContext } from '../../../store/auth-context'
 import { toast } from 'react-toastify'
-import EditorPostsList from '../../../ui/admin/editor/EditorPostsList'
+import EditorPostsList from '../../../components/admin/editor/EditorPostsList'
 
-const EditorPostsPage: FC = () => {
+const EditorPostListPage: FC = () => {
     const { token } = useAuthContext()
     const [page, setPage] = useState<PagePostDto>()
 
@@ -23,4 +23,4 @@ const EditorPostsPage: FC = () => {
     return <EditorPostsList posts={page.items} />
 }
 
-export default EditorPostsPage
+export default EditorPostListPage

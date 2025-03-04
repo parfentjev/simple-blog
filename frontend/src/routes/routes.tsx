@@ -1,4 +1,4 @@
-import PostsPage from './pages/posts/PostsPage'
+import PostListPage from './pages/posts/PostListPage'
 import SearchPage from './pages/core/SearchPage'
 import LicensePage from './pages/core/LicensePage'
 import { ReactNode } from 'react'
@@ -8,8 +8,8 @@ import AuthPage from './pages/admin/AuthPage'
 import AdminHomePage from './pages/admin/AdminHomePage'
 import { ProtectedRoute } from '../store/auth-context'
 import PostEditor from './pages/admin/PostEditorPage'
-import EditorPostsPage from './pages/admin/EditorPostsPage'
-import MediaFilesPage from './pages/admin/MediaFilesPage'
+import EditorPostListPage from './pages/admin/EditorPostListPage'
+import MediaListPage from './pages/admin/MediaListPage'
 
 interface Route {
     path: string
@@ -17,8 +17,8 @@ interface Route {
 }
 
 const routes: Route[] = [
-    { path: '/', element: <PostsPage /> },
-    { path: '/posts/:page', element: <PostsPage /> },
+    { path: '/', element: <PostListPage /> },
+    { path: '/posts/:page', element: <PostListPage /> },
     { path: '/search', element: <SearchPage /> },
     { path: '/license', element: <LicensePage /> },
     { path: '/post/:id', element: <PostPage /> },
@@ -52,7 +52,7 @@ const routes: Route[] = [
         path: '/admin/posts',
         element: (
             <ProtectedRoute>
-                <EditorPostsPage />
+                <EditorPostListPage />
             </ProtectedRoute>
         ),
     },
@@ -60,7 +60,7 @@ const routes: Route[] = [
         path: '/admin/media/:page',
         element: (
             <ProtectedRoute>
-                <MediaFilesPage />
+                <MediaListPage />
             </ProtectedRoute>
         ),
     },

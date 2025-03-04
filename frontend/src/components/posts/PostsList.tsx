@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import PostPreview from './PostPreview'
-import { PostPreviewDto } from '../../api/codegen'
+import { PostPreviewDto } from '../../../codegen'
 
 interface PostsListProps {
     posts: PostPreviewDto[]

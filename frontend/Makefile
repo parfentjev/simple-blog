@@ -1,6 +1,6 @@
 .PHONY: run
 run:
-	BROWSER=none npm start
+	BROWSER=none npm run dev
 
 .PHONY: codegen
 codegen:
@@ -17,8 +17,8 @@ codegen:
 .PHONY: build
 build:
 	docker build -t simple-blog-frontend:latest \
-		--build-arg REACT_APP_SERVICE_URL="https://service.fakeplastictrees.ee" \
-		--build-arg REACT_APP_MEDIA_URL="https://www.fakeplastictrees.ee/media/" \
+		--build-arg VITE_SERVICE_URL="https://service.fakeplastictrees.ee" \
+		--build-arg VITE_MEDIA_URL="https://www.fakeplastictrees.ee/media/" \
 		.
 	docker save simple-blog-frontend:latest > simple-blog-frontend.tar
 

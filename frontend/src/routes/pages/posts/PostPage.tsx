@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { toast } from 'react-toastify'
-import SinglePost from '../../../ui/posts/SinglePost'
+import SinglePost from '../../../components/posts/SinglePost'
 import { postsApi } from '../../../api/api'
-import { PostDto } from '../../../api/codegen'
+import { PostDto } from '../../../../codegen'
 import { setPageTitle } from '../../../utils/title-utils'
 
 const PostPage: FC = () => {

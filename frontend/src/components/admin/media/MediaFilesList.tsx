@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { MediaDto } from '../../../api/codegen'
+import { MediaDto } from '../../../../codegen'
 
 interface MediaFilesListProps {
     files: MediaDto[]
@@ -20,7 +20,7 @@ const MediaFilesList: FC<MediaFilesListProps> = (props) => {
                     <tr key={file.id}>
                         <td>
                             <a
-                                href={process.env.REACT_APP_MEDIA_URL + file.id}
+                                href={import.meta.env.VITE_MEDIA_URL + file.id}
                                 target="_blank"
                                 rel="noreferrer"
                             >

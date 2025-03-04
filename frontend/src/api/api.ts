@@ -1,8 +1,8 @@
-import { Configuration, MediaApi, PostsApi, TokenDto, UsersApi } from './codegen'
+import { Configuration, MediaApi, PostsApi, TokenDto, UsersApi } from '../../codegen'
 
 const configuration = (token?: TokenDto) => {
     return new Configuration({
-        basePath: process.env.REACT_APP_SERVICE_URL,
+        basePath: import.meta.env.VITE_SERVICE_URL,
         accessToken: token?.token,
     })
 }
