@@ -10,6 +10,7 @@ import { ProtectedRoute } from '../store/auth-context'
 import PostEditor from './pages/admin/PostEditorPage'
 import EditorPostListPage from './pages/admin/EditorPostListPage'
 import MediaListPage from './pages/admin/MediaListPage'
+import BannerPage from './pages/core/BannerPage'
 
 interface Route {
     path: string
@@ -21,6 +22,7 @@ const routes: Route[] = [
     { path: '/posts/:page', element: <PostListPage /> },
     { path: '/search', element: <SearchPage /> },
     { path: '/license', element: <LicensePage /> },
+    { path: '/banner', element: <BannerPage /> },
     { path: '/post/:id', element: <PostPage /> },
     { path: '/post/:id/:title', element: <PostPage /> },
     { path: '/admin/auth', element: <AuthPage /> },

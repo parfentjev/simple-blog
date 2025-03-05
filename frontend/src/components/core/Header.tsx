@@ -1,28 +1,40 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { Link } from 'react-router'
 
 const Header: FC = () => {
-    const [navbarVisible, setNavbarVisible] = useState(false)
-
-    const toggleMenu = () => {
-        setNavbarVisible(!navbarVisible)
-    }
-
     return (
         <header>
             <nav>
-                <button className="primary-button" onClick={toggleMenu}>
-                    show menu
-                </button>
-                <ul className={navbarVisible ? 'navbar-visible' : ''}>
+                <div>
+                    <Link to={'/'}>
+                        <img
+                            className="logo"
+                            src="/images/retro/logo.gif"
+                            alt="Logo"
+                        />
+                    </Link>
+                </div>
+                <ul>
                     <li>
-                        <Link to={'/'}>posts</Link>
+                        <Link to={'/'}>
+                            <img
+                                src="/images/retro/menu-posts.gif"
+                                alt="Posts"
+                            />
+                        </Link>
                     </li>
                     <li>
-                        <Link to={'/search'}>search</Link>
+                        <Link to={'/search'}>
+                            <img
+                                src="/images/retro/menu-search.gif"
+                                alt="Search"
+                            />
+                        </Link>
                     </li>
                     <li>
-                        <a href="/feed.xml">rss</a>
+                        <a href="/feed.xml">
+                            <img src="/images/retro/menu-rss.gif" alt="Rss" />
+                        </a>
                     </li>
                 </ul>
             </nav>

@@ -16,11 +16,11 @@ const PostPreview: FC<{ post: PostPreviewDto }> = ({ post }) => {
             <div className="post-text">
                 <MarkdownRenderer>{post.summary}</MarkdownRenderer>
             </div>
-            <div className="post-read-more">
-                <Link to={postUrl}>Read more...</Link>
-            </div>
-            <div className="text-muted">
-                <div className="post-date">{postDate}</div>
+            <div>
+                <div className="post-date text-muted">{postDate}</div>
+                <div className="post-read-more">
+                    <Link to={postUrl}>Read more...</Link>
+                </div>
             </div>
         </article>
     )
