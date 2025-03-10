@@ -38,6 +38,8 @@ const AuthForm: FC = () => {
                     <input
                         type="text"
                         placeholder="username"
+                        autoComplete="off"
+                        autoFocus
                         ref={usernameRef}
                     />
                 </div>

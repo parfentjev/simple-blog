@@ -76,6 +76,7 @@ const PostEditor: FC = () => {
                 <input
                     type="text"
                     placeholder="title"
+                    autoComplete="off"
                     onChange={(e) =>
                         setPostState((postDto) => {
                             return { ...postDto, title: e.target.value }

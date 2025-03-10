@@ -22,7 +22,12 @@ const SearchForm: FC = () => {
         <div className="text-center">
             <h1>Search</h1>
             <form onSubmit={handleOnSubmit}>
-                <input type="text" ref={textInputRef} />
+                <input
+                    type="text"
+                    placeholder="Search query..."
+                    autoFocus
+                    ref={textInputRef}
+                />
             </form>
         </div>
     )
