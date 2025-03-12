@@ -1,14 +1,20 @@
 /* core configuration */
 @import '/styles/retro/colors.css';
 
+@font-face {
+    font-family: 'Funnel Display';
+    src: url('/fonts/FunnelDisplay.woff2') format('woff2-variations');
+    font-weight: 300 400 500 600 700 800;
+    font-style: normal;
+  }
+
 body {
-    margin: 0;
-    font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-        'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Funnel Display', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: url('/images/retro/background.gif');
     color: var(--color-text);
+    margin: 0;
 }
 
 /* common elements */
