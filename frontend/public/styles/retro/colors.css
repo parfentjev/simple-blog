@@ -1,9 +1,13 @@
 :root {
-    --color-bg: #000000;
-    --color-primary: #f6ade7;
-    --color-primary-hover: #73f7cf;
+    color-scheme: light dark;
+}
+
+:root {
+    --color-bg: light-dark(#fff, #000);
+    --color-primary: light-dark(#fc88e5, #f6ade7);
+    --color-primary-hover: light-dark(#5dc1a3, #73f7cf);
     --color-primary-muted: #a26897;
-    --color-text: #fafafa;
+    --color-text: light-dark(#121212, #fafafa);
     --color-text-muted: #a5a5a5;
     --color-code-inline: #f6ade7;
     --color-mobile-li-hover: #332e27;

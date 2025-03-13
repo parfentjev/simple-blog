@@ -2,7 +2,14 @@ import { FC, ReactNode } from 'react'
 import Markdown from 'react-markdown'
 import { Link } from 'react-router'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { tomorrow as theme } from 'react-syntax-highlighter/dist/cjs/styles/prism'
+import {
+    materialLight as lightTheme,
+    tomorrow as darkTheme,
+} from 'react-syntax-highlighter/dist/cjs/styles/prism'
+
+const prefersLightTheme = window.matchMedia(
+    '(prefers-color-scheme: light)'
+).matches
 
 const MarkdownRenderer: FC<{ children: ReactNode }> = ({ children }) => {
     return (
@@ -37,7 +44,9 @@ const MarkdownRenderer: FC<{ children: ReactNode }> = ({ children }) => {
                             <SyntaxHighlighter
                                 PreTag="div"
                                 language={match != null ? match[1] : ''}
-                                style={theme}
+                                style={
+                                    prefersLightTheme ? lightTheme : darkTheme
+                                }
                             >
                                 {String(children).replace(/\n$/, '')}
                             </SyntaxHighlighter>
