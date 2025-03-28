@@ -39,7 +39,7 @@ public class PostRssController {
   @SneakyThrows
   @GetMapping(produces = MediaType.APPLICATION_RSS_XML_VALUE)
   public ResponseEntity<String> getRssFeed() {
-    var entries = postService.getPosts(1)
+    var entries = postService.getPublishedPosts(1)
       .getItems()
       .stream()
       .map(this::mapPostToEntry)
