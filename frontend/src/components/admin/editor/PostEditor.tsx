@@ -1,6 +1,6 @@
 import { FC, FormEvent, useEffect, useState } from 'react'
 import { useAuthContext } from '../../../store/auth-context'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import { useParams } from 'react-router'
 import { PostEditorDto } from '../../../../codegen'
 import { postsApi } from '../../../api/api'

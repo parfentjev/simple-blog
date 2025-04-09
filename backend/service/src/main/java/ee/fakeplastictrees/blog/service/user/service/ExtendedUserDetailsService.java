@@ -3,6 +3,7 @@ package ee.fakeplastictrees.blog.service.user.service;
 import ee.fakeplastictrees.blog.service.core.exceiption.PublicExceptionFactory;
 import ee.fakeplastictrees.blog.service.user.model.UserExceptionFactory;
 import ee.fakeplastictrees.blog.service.user.model.UserRepository;
+import ee.fakeplastictrees.blog.service.user.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,7 +32,7 @@ public class ExtendedUserDetailsService implements UserDetailsService {
     return org.springframework.security.core.userdetails.User
       .withUsername(user.get().getUsername())
       .password(user.get().getPassword())
-      .roles(new String[]{"POST_EDITOR"})
+      .roles(new String[]{UserRole.EDITOR.name()})
       .build();
   }
 }

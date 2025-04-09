@@ -3,7 +3,7 @@ package ee.fakeplastictrees.blog.service.media.controller;
 import ee.fakeplastictrees.blog.codegen.api.MediaApi;
 import ee.fakeplastictrees.blog.codegen.model.MediaPost200Response;
 import ee.fakeplastictrees.blog.codegen.model.PageMediaDto;
-import ee.fakeplastictrees.blog.service.core.annotation.PostEditor;
+import ee.fakeplastictrees.blog.service.core.annotation.RequireRoleEditor;
 import ee.fakeplastictrees.blog.service.media.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -18,13 +18,13 @@ public class MediaController implements MediaApi {
   private MediaService mediaService;
 
   @Override
-  @PostEditor
+  @RequireRoleEditor
   public ResponseEntity<PageMediaDto> mediaGet(Integer page) {
     return ResponseEntity.status(HttpStatus.OK).body(mediaService.getFiles(page));
   }
 
   @Override
-  @PostEditor
+  @RequireRoleEditor
   public ResponseEntity<MediaPost200Response> mediaPost(MultipartFile file) {
     return ResponseEntity.ok(new MediaPost200Response().id(mediaService.saveFile(file)));
   }

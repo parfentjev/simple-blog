@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react'
-import MediaUploadForm from '../../../components/admin/media/MediaUploadingForm'
-import MediaFilesList from '../../../components/admin/media/MediaFilesList'
+import MediaUploadForm from '../../components/admin/media/MediaUploadingForm'
+import MediaFilesList from '../../components/admin/media/MediaFilesList'
 import { useParams } from 'react-router'
-import { PageMediaDto } from '../../../../codegen'
-import { mediaApi } from '../../../api/api'
-import { useAuthContext } from '../../../store/auth-context'
-import { toast } from 'react-toastify'
-import Paginator from '../../../components/core/Paginator'
+import { PageMediaDto } from '../../../codegen'
+import { mediaApi } from '../../api/api'
+import { useAuthContext } from '../../store/auth-context'
+import toast from 'react-hot-toast'
+import Paginator from '../../components/core/Paginator'
 
 const MediaListPage: FC = () => {
     const { token } = useAuthContext()

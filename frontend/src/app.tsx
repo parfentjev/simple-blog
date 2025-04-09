@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import Layout from './components/core/Layout'
 import { BrowserRouter, Route, Routes } from 'react-router'
-import routes from './routes/routes'
+import routes from './pages/routes'
 import { AuthContextProvider } from './store/auth-context'
 
 const App: FC = () => {

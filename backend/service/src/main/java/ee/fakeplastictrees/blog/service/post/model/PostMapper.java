@@ -1,9 +1,8 @@
-package ee.fakeplastictrees.blog.service.post.util;
+package ee.fakeplastictrees.blog.service.post.model;
 
 import ee.fakeplastictrees.blog.codegen.model.PostDto;
 import ee.fakeplastictrees.blog.codegen.model.PostEditorDto;
 import ee.fakeplastictrees.blog.codegen.model.PostPreviewDto;
-import ee.fakeplastictrees.blog.service.post.model.Post;
 import lombok.experimental.UtilityClass;
 
 import java.time.ZoneOffset;

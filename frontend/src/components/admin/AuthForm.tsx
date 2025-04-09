@@ -1,5 +1,5 @@
 import { FC, FormEvent, useCallback, useRef } from 'react'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import { useAuthContext } from '../../store/auth-context'
 import { usersApi } from '../../api/api'
 

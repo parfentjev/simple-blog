@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react'
-import { PagePostDto } from '../../../../codegen'
-import { postsApi } from '../../../api/api'
-import { useAuthContext } from '../../../store/auth-context'
-import { toast } from 'react-toastify'
-import EditorPostsList from '../../../components/admin/editor/EditorPostsList'
+import { PagePostDto } from '../../../codegen'
+import { postsApi } from '../../api/api'
+import { useAuthContext } from '../../store/auth-context'
+import toast from 'react-hot-toast'
+import EditorPostsList from '../../components/admin/editor/EditorPostsList'
 
 const EditorPostListPage: FC = () => {
     const { token } = useAuthContext()

@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import { mediaApi } from '../../../api/api'
 import { ChangeEvent, FC, useState } from 'react'
 import { useAuthContext } from '../../../store/auth-context'

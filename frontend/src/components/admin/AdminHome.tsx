@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Link } from 'react-router'
 import { useAuthContext } from '../../store/auth-context'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 
 const AdminHome: FC = () => {
     const { token } = useAuthContext()

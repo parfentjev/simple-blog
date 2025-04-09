@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasRole('POST_EDITOR')")
-public @interface PostEditor {
+@PreAuthorize("hasRole('EDITOR')")
+public @interface RequireRoleEditor {
 
 }

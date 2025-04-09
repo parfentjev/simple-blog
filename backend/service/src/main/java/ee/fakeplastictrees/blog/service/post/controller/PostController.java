@@ -4,7 +4,7 @@ import ee.fakeplastictrees.blog.codegen.api.PostsApi;
 import ee.fakeplastictrees.blog.codegen.model.PagePostDto;
 import ee.fakeplastictrees.blog.codegen.model.PostDto;
 import ee.fakeplastictrees.blog.codegen.model.PostEditorDto;
-import ee.fakeplastictrees.blog.service.core.annotation.PostEditor;
+import ee.fakeplastictrees.blog.service.core.annotation.RequireRoleEditor;
 import ee.fakeplastictrees.blog.service.post.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ public class PostController implements PostsApi {
   private PostService postService;
 
   @Override
-  @PostEditor
+  @RequireRoleEditor
   public ResponseEntity<PagePostDto> postsEditorGet(Integer page) {
     return ResponseEntity
       .status(HttpStatus.OK)
@@ -25,7 +25,7 @@ public class PostController implements PostsApi {
   }
 
   @Override
-  @PostEditor
+  @RequireRoleEditor
   public ResponseEntity<Void> postsEditorIdDelete(String id) {
     postService.deletePost(id);
 
@@ -35,7 +35,7 @@ public class PostController implements PostsApi {
   }
 
   @Override
-  @PostEditor
+  @RequireRoleEditor
   public ResponseEntity<PostDto> postsEditorIdGet(String id) {
     return ResponseEntity
       .status(HttpStatus.OK)
@@ -43,7 +43,7 @@ public class PostController implements PostsApi {
   }
 
   @Override
-  @PostEditor
+  @RequireRoleEditor
   public ResponseEntity<PostDto> postsEditorIdPut(String id, PostEditorDto request) {
     return ResponseEntity
       .status(HttpStatus.OK)
@@ -51,7 +51,7 @@ public class PostController implements PostsApi {
   }
 
   @Override
-  @PostEditor
+  @RequireRoleEditor
   public ResponseEntity<PostDto> postsEditorPost(PostEditorDto request) {
     return ResponseEntity
       .status(HttpStatus.CREATED)

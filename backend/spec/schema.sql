@@ -1,32 +1,32 @@
-CREATE TABLE `post` (
-  `visible` bit(1) NOT NULL,
-  `date` datetime(6) DEFAULT NULL,
-  `id` varchar(255) NOT NULL,
-  `summary` text DEFAULT NULL,
-  `text` text DEFAULT NULL,
-  `title` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+CREATE TABLE post (
+  visible BIT(1) NOT NULL,
+  date DATETIME(6),
+  id VARCHAR(255) NOT NULL,
+  summary TEXT,
+  text TEXT,
+  title VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
 
-CREATE INDEX `idx_post_visible` ON post(`visible`);
-CREATE INDEX `idx_post_date` ON post(`date`);
+CREATE INDEX idx_post_visible ON post(visible);
+CREATE INDEX idx_post_date ON post(date);
 
-CREATE TABLE `user` (
-  `active` bit(1) NOT NULL,
-  `created_at` datetime(6) NOT NULL,
-  `id` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+CREATE TABLE user (
+  active BIT(1) NOT NULL,
+  created_at DATETIME(6) NOT NULL,
+  id VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  username VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
 
-CREATE TABLE `media` (
-  `id` varchar(255) NOT NULL,
-  `path` varchar(255) NOT NULL,
-  `content_type` varchar(255) DEFAULT NULL,
-  `uploaded_at` datetime(6) DEFAULT NULL,
-  `original_filename` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+CREATE TABLE media (
+  id VARCHAR(255) NOT NULL,
+  path VARCHAR(255) NOT NULL,
+  content_type VARCHAR(255),
+  uploaded_at DATETIME(6),
+  original_filename VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
 
-CREATE INDEX `idx_media_uploaded_at` ON media(`uploaded_at`);
+CREATE INDEX idx_media_uploaded_at ON media (uploaded_at);

@@ -1,7 +1,6 @@
-package ee.fakeplastictrees.blog.service.user.util;
+package ee.fakeplastictrees.blog.service.user.model;
 
 import ee.fakeplastictrees.blog.codegen.model.UsersPostRequest;
-import ee.fakeplastictrees.blog.service.user.model.User;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

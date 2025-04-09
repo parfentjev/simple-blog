@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Optional;
 
 @Service
 public class TokenService {
@@ -22,13 +21,16 @@ public class TokenService {
   @Value("${token.issuer}")
   private String issuer;
 
+  private static final String CLAIM_USERNAME = "username";
+  private static final String CLAIM_EXPIRES = "exp";
+
   public TokenDto generateToken(String username) {
     var expiresAt = Instant.now().plusSeconds(Duration.ofDays(lifespanDays).toSeconds());
 
     var token = JWT.create()
       .withIssuer(issuer)
-      .withClaim("username", username)
-      .withClaim("exp", expiresAt.getEpochSecond())
+      .withClaim(CLAIM_USERNAME, username)
+      .withClaim(CLAIM_EXPIRES, expiresAt.getEpochSecond())
       .sign(Algorithm.HMAC256(secret));
 
     return new TokenDto()
@@ -36,19 +38,17 @@ public class TokenService {
       .expires(expiresAt.toEpochMilli());
   }
 
-  public Optional<DecodedJWT> parseToken(String token) {
+  public DecodedJWT parseToken(String token) {
     var algorithm = Algorithm.HMAC256(secret);
     var verifier = JWT.require(algorithm).withIssuer(issuer).build();
-    var decodedToken = verifier.verify(token);
-
-    if (isTokenExpired(decodedToken)) {
-      return Optional.empty();
-    }
-
-    return Optional.of(decodedToken);
+    return verifier.verify(token);
   }
 
-  private boolean isTokenExpired(DecodedJWT decodedToken) {
-    return Instant.now().isAfter(Instant.ofEpochSecond(decodedToken.getClaim("exp").asLong()));
+  public boolean isExpired(DecodedJWT decodedToken) {
+    return Instant.now().isAfter(Instant.ofEpochSecond(decodedToken.getClaim(CLAIM_EXPIRES).asLong()));
+  }
+
+  public String getUsername(DecodedJWT token) {
+    return token.getClaim(CLAIM_USERNAME).asString();
   }
 }

@@ -4,7 +4,7 @@ import ee.fakeplastictrees.blog.codegen.model.TokenDto;
 import ee.fakeplastictrees.blog.codegen.model.UsersPostRequest;
 import ee.fakeplastictrees.blog.service.user.model.UserExceptionFactory;
 import ee.fakeplastictrees.blog.service.user.model.UserRepository;
-import ee.fakeplastictrees.blog.service.user.util.UserMapper;
+import ee.fakeplastictrees.blog.service.user.model.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;

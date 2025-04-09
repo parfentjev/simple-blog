@@ -6,7 +6,7 @@ import ee.fakeplastictrees.blog.codegen.model.PostEditorDto;
 import ee.fakeplastictrees.blog.service.core.model.PageRequestFactory;
 import ee.fakeplastictrees.blog.service.post.model.PostExceptionFactory;
 import ee.fakeplastictrees.blog.service.post.model.PostRepository;
-import ee.fakeplastictrees.blog.service.post.util.PostMapper;
+import ee.fakeplastictrees.blog.service.post.model.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import PostsList from '../../../components/posts/PostsList'
-import { PagePostDto } from '../../../../codegen'
-import { postsApi } from '../../../api/api'
-import Paginator from '../../../components/core/Paginator'
+import toast from 'react-hot-toast'
+import PostsList from '../../components/posts/PostsList'
+import { PagePostDto } from '../../../codegen'
+import { postsApi } from '../../api/api'
+import Paginator from '../../components/core/Paginator'
 import { useParams } from 'react-router'
 
 const PostListPage: FC = () => {
