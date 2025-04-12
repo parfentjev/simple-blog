@@ -71,11 +71,13 @@ export const useAuthContext = () => useContext(AuthContext)
 export const ProtectedRoute: FC<{ children: ReactNode }> = ({ children }) => {
     const { token } = useAuthContext()
 
-    return (
-        (token && <>{children}</>) || (
-            <p className="text-center">Not authorized.</p>
-        )
-    )
+    const navigate = useNavigate()
+
+    if (!token) {
+        return <p className="text-center" onClick={() => navigate('/admin/auth')}>Not authorized.</p>
+    }
+
+    return children
 }
 
 const saveLocalToken = (token: TokenDto) => {

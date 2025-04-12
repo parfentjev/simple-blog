@@ -1,0 +1,13 @@
+{
+    "name": "JavaScript Development",
+    "dockerComposeFile": "docker-compose.yaml",
+    "service": "simple-blog-frontend",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "esbenp.prettier-vscode"
+            ]
+        }
+    }
+}
