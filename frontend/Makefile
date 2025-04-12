@@ -16,12 +16,12 @@ codegen:
 
 .PHONY: build
 build:
-	docker build -t simple-blog-frontend:latest \
+	docker buildx use container-builder
+	docker buildx build --platform linux/arm64 -t simple-blog-frontend:latest --output type=docker,dest=image.tar \
 		--build-arg VITE_SERVICE_URL="https://service.fakeplastictrees.ee" \
 		--build-arg VITE_MEDIA_URL="https://www.fakeplastictrees.ee/media/" \
 		.
-	docker save simple-blog-frontend:latest > simple-blog-frontend.tar
 
 .PHONY: push
 push:
-	scp simple-blog-frontend.tar $(FPT_FRONTEND_PWD)
+	rsync image.tar $(FPT_FRONTEND_PWD)

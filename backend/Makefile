@@ -13,9 +13,9 @@ codegen:
 
 .PHONY: build
 build:
-	docker build -t simple-blog-backend:latest .
-	docker save simple-blog-backend:latest > simple-blog-backend.tar
+	docker buildx use container-builder
+	docker buildx build --platform linux/arm64 -t simple-blog-backend:latest --output type=docker,dest=image.tar .
 
 .PHONY: push
 push:
-	scp simple-blog-backend.tar $(FPT_BACKEND_PWD)
+	rsync image.tar $(FPT_BACKEND_PWD)
