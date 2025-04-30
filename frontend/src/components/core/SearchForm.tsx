@@ -1,6 +1,6 @@
 import { FC, FormEvent, useRef } from 'react'
 
-const SEARCH_PROVIDER = 'https://www.google.com/search?hl=en&q='
+const SEARCH_PROVIDER = 'https://www.ecosia.org/search?q='
 
 const SearchForm: FC = () => {
   const textInputRef = useRef<HTMLInputElement>(null)

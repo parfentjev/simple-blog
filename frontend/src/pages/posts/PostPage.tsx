@@ -12,15 +12,15 @@ const PostPage: FC = () => {
   const [post, setPost] = useState<PostDto>()
 
   useEffect(() => {
-    if (id) {
-      postsApi()
-        .postsPublishedIdGet({ id })
-        .then((post) => {
-          setPost(post)
-          setPageTitle(post.title)
-        })
-        .catch(() => toast.error('Failed to load post.'))
-    }
+    if (!id) return
+
+    postsApi()
+      .postsPublishedIdGet({ id })
+      .then((post) => {
+        setPost(post)
+        setPageTitle(post.title)
+      })
+      .catch(() => toast.error('Failed to load post.'))
   }, [id])
 
   if (!post) return <p className="text-center">Post not found!</p>
