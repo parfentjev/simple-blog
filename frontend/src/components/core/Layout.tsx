@@ -6,20 +6,20 @@ import { clearPageTitle } from '../../utils/title-utils'
 import { Toaster } from 'react-hot-toast'
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
-    const location = useLocation()
+  const location = useLocation()
 
-    useEffect(() => {
-        clearPageTitle()
-    }, [location])
+  useEffect(() => {
+    clearPageTitle()
+  }, [location])
 
-    return (
-        <>
-            <Toaster />
-            <Header />
-            <main>{children}</main>
-            <Footer />
-        </>
-    )
+  return (
+    <>
+      <Toaster />
+      <Header />
+      <main>{children}</main>
+      <Footer />
+    </>
+  )
 }
 
 export default Layout

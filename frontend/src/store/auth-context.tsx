@@ -1,95 +1,87 @@
-import {
-    FC,
-    ReactNode,
-    createContext,
-    useCallback,
-    useContext,
-    useEffect,
-    useState,
-} from 'react'
+import { FC, ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { TokenDto } from '../../codegen'
 
 type AuthContextType = {
-    token?: TokenDto
-    signin: Function
-    signout: Function
+  token?: TokenDto
+  signin: (token: TokenDto) => void
+  signout: () => void
 }
 
 const AuthContext = createContext<AuthContextType>({
-    token: undefined,
-    signin: () => {},
-    signout: () => {},
+  token: undefined,
+  signin: () => {},
+  signout: () => {},
 })
 
-export const AuthContextProvider: FC<{ children: ReactNode }> = ({
-    children,
-}) => {
-    const navigate = useNavigate()
-    const [token, setToken] = useState<TokenDto>()
+export const AuthContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const navigate = useNavigate()
+  const [token, setToken] = useState<TokenDto>()
 
-    useEffect(() => {
-        const localToken = loadLocalToken()
+  useEffect(() => {
+    const localToken = loadLocalToken()
 
-        if (!localToken) {
-            return
-        }
+    if (!localToken) return
 
-        if (new Date().getTime() < localToken.expires) {
-            setToken(localToken)
-        } else {
-            removeLocalToken()
-            setToken(undefined)
-        }
-    }, [])
-
-    const handleSingIn = useCallback(
-        (token: TokenDto) => {
-            setToken(token)
-            saveLocalToken(token)
-            navigate('/admin')
-        },
-        [navigate]
-    )
-
-    const handleSignOut = useCallback(() => {
-        removeLocalToken()
-        setToken(undefined)
-    }, [])
-
-    const value: AuthContextType = {
-        token: token,
-        signin: handleSingIn,
-        signout: handleSignOut,
+    if (new Date().getTime() < localToken.expires) {
+      setToken(localToken)
+    } else {
+      removeLocalToken()
+      setToken(undefined)
     }
+  }, [])
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  const handleSingIn = useCallback(
+    (token: TokenDto) => {
+      setToken(token)
+      saveLocalToken(token)
+      navigate('/admin')
+    },
+    [navigate]
+  )
+
+  const handleSignOut = useCallback(() => {
+    removeLocalToken()
+    setToken(undefined)
+  }, [])
+
+  const value: AuthContextType = {
+    token: token,
+    signin: handleSingIn,
+    signout: handleSignOut,
+  }
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export const useAuthContext = () => useContext(AuthContext)
 
 export const ProtectedRoute: FC<{ children: ReactNode }> = ({ children }) => {
-    const { token } = useAuthContext()
+  const { token } = useAuthContext()
 
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
-    if (!token) {
-        return <p className="text-center" onClick={() => navigate('/admin/auth')}>Not authorized.</p>
-    }
+  if (!token) {
+    return (
+      <p className="text-center" onClick={() => navigate('/admin/auth')}>
+        Not authorized.
+      </p>
+    )
+  }
 
-    return children
+  return children
 }
 
 const saveLocalToken = (token: TokenDto) => {
-    localStorage.setItem('token', JSON.stringify(token))
+  localStorage.setItem('token', JSON.stringify(token))
 }
 
 const loadLocalToken = (): TokenDto | null => {
-    const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token')
 
-    return token ? JSON.parse(token) : null
+  return token ? JSON.parse(token) : null
 }
 
 const removeLocalToken = () => {
-    localStorage.removeItem('token')
+  localStorage.removeItem('token')
 }

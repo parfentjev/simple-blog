@@ -7,27 +7,25 @@ import { PostDto } from '../../../codegen'
 import { setPageTitle } from '../../utils/title-utils'
 
 const PostPage: FC = () => {
-    const { id } = useParams()
+  const { id } = useParams()
 
-    const [post, setPost] = useState<PostDto>()
+  const [post, setPost] = useState<PostDto>()
 
-    useEffect(() => {
-        if (id) {
-            postsApi()
-                .postsPublishedIdGet({ id })
-                .then((post) => {
-                    setPost(post)
-                    setPageTitle(post.title)
-                })
-                .catch(() => toast.error('Failed to load post.'))
-        }
-    }, [id])
-
-    if (!post) {
-        return <p className="text-center">Post not found!</p>
+  useEffect(() => {
+    if (id) {
+      postsApi()
+        .postsPublishedIdGet({ id })
+        .then((post) => {
+          setPost(post)
+          setPageTitle(post.title)
+        })
+        .catch(() => toast.error('Failed to load post.'))
     }
+  }, [id])
 
-    return <SinglePost post={post} />
+  if (!post) return <p className="text-center">Post not found!</p>
+
+  return <SinglePost post={post} />
 }
 
 export default PostPage

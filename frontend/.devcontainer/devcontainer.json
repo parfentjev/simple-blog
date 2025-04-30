@@ -1,5 +1,5 @@
 {
-    "name": "JavaScript Development",
+    "name": "Node Development",
     "dockerComposeFile": "docker-compose.yaml",
     "service": "simple-blog-frontend",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",

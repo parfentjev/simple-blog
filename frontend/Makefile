@@ -24,4 +24,5 @@ build:
 
 .PHONY: push
 push:
-	rsync image.tar $(FPT_FRONTEND_PWD)
+	rsync image.tar root@$(VPS_HOST):$(FPT_FRONTEND_PWD)
+

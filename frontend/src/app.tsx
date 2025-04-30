@@ -5,23 +5,19 @@ import routes from './pages/routes'
 import { AuthContextProvider } from './store/auth-context'
 
 const App: FC = () => {
-    return (
-        <BrowserRouter>
-            <AuthContextProvider>
-                <Layout>
-                    <Routes>
-                        {routes.map((route) => (
-                            <Route
-                                key={route.path}
-                                path={route.path}
-                                element={route.element}
-                            />
-                        ))}
-                    </Routes>
-                </Layout>
-            </AuthContextProvider>
-        </BrowserRouter>
-    )
+  return (
+    <BrowserRouter>
+      <AuthContextProvider>
+        <Layout>
+          <Routes>
+            {routes.map((route) => (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ))}
+          </Routes>
+        </Layout>
+      </AuthContextProvider>
+    </BrowserRouter>
+  )
 }
 
 export default App

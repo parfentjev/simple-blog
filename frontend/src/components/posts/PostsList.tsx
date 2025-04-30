@@ -3,17 +3,17 @@ import PostPreview from './PostPreview'
 import { PostPreviewDto } from '../../../codegen'
 
 interface PostsListProps {
-    posts: PostPreviewDto[]
+  posts: PostPreviewDto[]
 }
 
 const PostsList: FC<PostsListProps> = (props) => {
-    return (
-        <>
-            {props.posts.map((post) => (
-                <PostPreview key={post.id} post={post} />
-            ))}
-        </>
-    )
+  return (
+    <>
+      {props.posts.map((post) => (
+        <PostPreview key={post.id} post={post} />
+      ))}
+    </>
+  )
 }
 
 export default PostsList
