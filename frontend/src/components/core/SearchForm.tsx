@@ -11,7 +11,7 @@ const SearchForm: FC = () => {
     const current = textInputRef.current
     if (!current) return
 
-    const request = current.value + ' site:' + window.location.origin
+    const request = current.value + ' site:' + window.location.hostname.replace('www.', '')
     window.location.href = SEARCH_PROVIDER + encodeURIComponent(request)
   }
 
@@ -19,7 +19,7 @@ const SearchForm: FC = () => {
     <div className="text-center">
       <h1>Search</h1>
       <form onSubmit={handleOnSubmit}>
-        <input type="text" placeholder="Search query..." autoFocus ref={textInputRef} />
+        <input type="text" placeholder="Search query..." autoFocus autoComplete="off" ref={textInputRef} />
       </form>
     </div>
   )
