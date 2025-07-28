@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title layout:title-pattern="$CONTENT_TITLE - Fake Plastic Trees">Fake Plastic Trees</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A simple blog about technical topics, life and other things.">
+    <link rel="icon" th:href="@{/favicon.ico}">
+    <link rel="alternate" type="application/rss+xml" title="Latest posts" th:href="@{/feed.xml}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div>
+            <a th:href="@{/}">
+                <img class="logo" src="/images/layout/logo.gif" alt="Logo"/>
+            </a>
+        </div>
+        <ul>
+            <li>
+                <a th:href="@{/}">
+                    <img src="/images/layout/menu-posts.gif" alt="Posts"/>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/search}">
+                    <img src="/images/layout/menu-search.gif" alt="Search"/>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/feed.xml}">
+                    <img src="/images/layout/menu-rss.gif" alt="RSS"/>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div layout:fragment="content"></div>
+</main>
+<footer>
+    <div>
+        <a href="mailto:aleksei@fakeplastictrees.ee">contact</a>
+        <a th:href="@{/license}" rel="license">license</a>
+        <a href="https://codeberg.org/parfentjev/simple-blog" target="_blank" rel="noreferrer">source</a>
+    </div>
+    <div>
+        <a th:href="@{/banner}"><img src="/images/banner.png" alt="Banner"/></a>
+    </div>
+</footer>
+</body>
+</html>

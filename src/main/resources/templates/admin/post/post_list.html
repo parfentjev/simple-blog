@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<head>
+    <title>Post list</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Post List</h1>
+    <ul>
+        <li th:each="post : ${page.posts}">
+            <a th:href="@{/admin/post/{id}(id=${post.id})}" th:text="${post.title}">Post title</a>
+        </li>
+    </ul>
+    <div th:replace="~{fragments/paginator :: paginator(${page}, '/admin/posts')}"></div>
+</div>
+</body>
+</html>

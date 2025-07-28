@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <title th:text="${post.title}">Post title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <article class="post">
+        <h1 class="post-title"><a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}" th:text="${post.title}">Post title</a></h1>
+        <div class="post-text" markdown:toHtml="${post.text}">Post summary...</div>
+        <div>
+            <div class="post-date text-muted" th:text="${#dates.format(post.date(), 'dd.MM.yyyy')}">Post date</div>
+        </div>
+    </article>
+</div>
+</body>
+</html>

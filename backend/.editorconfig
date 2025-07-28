@@ -1,4 +1,0 @@
-root = true
-
-[*.java]
-indent_size = 2

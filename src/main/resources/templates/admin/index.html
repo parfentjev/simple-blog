@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<head>
+    <title>Admin Panel</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="text-center">
+        <h1>Admin Panel</h1>
+    </div>
+    <ul>
+        <li><a th:href="@{/admin/new-post}">New post</a></li>
+        <li><a th:href="@{/admin/posts}">Post list</a></li>
+        <li><a th:href="@{/admin/files}">File list</a></li>
+    </ul>
+    <div class="text-center">
+        <form th:action="@{/logout}" method="post">
+            <button class="secondary-button">Logout</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

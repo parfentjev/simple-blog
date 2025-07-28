@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<nav th:fragment="paginator(page, baseUrl)" class="text-center paginator" th:if="${page.totalPages > 1}">
+    <p>
+        <a th:if="${page.pageNumber > 1}" th:href="@{__${baseUrl}__/{pageNumber}(pageNumber=${page.pageNumber - 1})}">
+            ← Newer posts
+        </a>
+        <a th:if="${page.pageNumber < page.totalPages}"
+           th:href="@{__${baseUrl}__/{pageNumber}(pageNumber=${page.pageNumber + 1})}">
+            Older posts →
+        </a>
+    </p>
+    <p th:text="'Page ' + ${page.pageNumber} + ' of ' + ${page.totalPages}"></p>
+</nav>
+</body>
+</html>

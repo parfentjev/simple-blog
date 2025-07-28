@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<head>
+    <title>Admin Panel</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Files</h1>
+    <h2>Upload</h2>
+    <div>
+        <form th:action="@{/admin/files}" method="POST" enctype="multipart/form-data">
+            <div>
+                <input type="file" name="file" required/>
+                <button type="submit" class="primary-button">Upload</button>
+            </div>
+            <p th:if="${param.newFileId}" class="text-success">
+                File uploaded: <a th:href="@{/media/{fileId}(fileId=${param.newFileId})}"
+                                  th:text="@{/media/{fileId}(fileId=${param.newFileId})}"
+                                  target="_blank">Link</a>
+            </p>
+        </form>
+    </div>
+    <h2>List</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Original name</th>
+            <th>Upload date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="file : ${page.files}">
+            <td>
+                <a th:href="@{/media/{fileId}(fileId=${file.id})}" th:text="${file.id}" target="_blank">ID</a>
+            </td>
+            <td th:text="${file.originalFilename}">Original name</td>
+            <td th:text="${#dates.format(file.date, 'dd.MM.yyyy HH:MM')}">Upload date</td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:replace="~{fragments/paginator :: paginator(${page}, '/admin/files')}"></div>
+</div>
+</body>
+</html>

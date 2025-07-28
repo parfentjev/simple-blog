@@ -1,9 +1,0 @@
-services:
-  simple-blog-frontend:
-    image: mcr.microsoft.com/devcontainers/javascript-node
-    network_mode: host
-    env_file:
-      - .env
-    command: ["sleep", "infinity"]
-    volumes:
-      - ../..:/workspaces:cached
