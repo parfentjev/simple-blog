@@ -9,7 +9,8 @@
     --color-primary-muted: #a26897;
     --color-text: light-dark(#121212, #fafafa);
     --color-text-muted: #a5a5a5;
-    --color-code-inline: #f6ade7;
+    --color-code-foreground: light-dark(#c62ca6, #f6ade7);
+    --color-code-background: light-dark(#eee, #000);
     --color-mobile-li-hover: #332e27;
 }
 
@@ -221,7 +222,8 @@ footer div {
 }
 
 .post code {
-    color: var(--color-code-inline);
+    color: var(--color-code-foreground);
+    background: var(--color-code-background);
 }
 
 .post pre code {
@@ -229,7 +231,7 @@ footer div {
     display: block;
 }
 
-/* post eidtor */
+/* post editor */
 .editor-form input,
 .editor-form textarea {
     width: 100%;
@@ -242,7 +244,6 @@ footer div {
 }
 
 .editor-form .post-options input {
-    width: auto;
     height: 1rem;
     width: 1rem;
     background-color: var(--color-bg);
