@@ -8,19 +8,14 @@ import java.time.Instant;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(unique = true)
   private String id;
 
-  @Column(nullable = false)
   private String username;
 
-  @Column(nullable = false)
   private String password;
 
-  @Column(nullable = false)
   private Instant createdAt;
 
-  @Column(nullable = false)
   private Boolean active;
 
   public String getId() {
