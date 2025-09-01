@@ -1,4 +1,4 @@
-package ee.fakeplastictrees.blog.core.configuration;
+package ee.fakeplastictrees.blog.core.markdown;
 
 import org.springframework.stereotype.Component;
 import org.thymeleaf.dialect.AbstractProcessorDialect;

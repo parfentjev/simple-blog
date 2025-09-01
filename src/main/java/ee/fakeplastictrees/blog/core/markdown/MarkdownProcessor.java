@@ -1,4 +1,4 @@
-package ee.fakeplastictrees.blog.core.configuration;
+package ee.fakeplastictrees.blog.core.markdown;
 
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -25,9 +25,11 @@ public class MarkdownProcessor extends AbstractAttributeTagProcessor {
   }
 
   private String markdownToHtml(String markdown) {
-    var parser = Parser.builder().build();
-    var document = parser.parse(markdown);
-    var renderer = HtmlRenderer.builder().build();
+    var document = Parser.builder().build().parse(markdown);
+    var renderer = HtmlRenderer.builder()
+      .attributeProviderFactory(LinkAttributeProvider::new)
+      .nodeRendererFactory(ImageNodeRenderer::new)
+      .build();
 
     return renderer.render(document);
   }
