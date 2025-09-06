@@ -19,4 +19,9 @@ public class CoreController {
   public String banner() {
     return "banner";
   }
+
+  @GetMapping("/contact")
+  public String contact() {
+    return "contact";
+  }
 }
