@@ -35,4 +35,12 @@ public class FileAdminController {
 
     return "redirect:/admin/files?newFileId=" + fileId;
   }
+
+  @PostMapping("/files/delete/{fileId}")
+  @ProtectedRoute
+  public String deleteFileById(@PathVariable String fileId) {
+    fileService.deleteFromDisk(fileId);
+
+    return "redirect:/admin/files";
+  }
 }

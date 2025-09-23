@@ -2,6 +2,7 @@ package ee.fakeplastictrees.blog.file.service;
 
 import ee.fakeplastictrees.blog.core.exceiption.ResourceNotFoundException;
 import ee.fakeplastictrees.blog.core.model.PageRequestFactory;
+import ee.fakeplastictrees.blog.file.exception.DeleteFileException;
 import ee.fakeplastictrees.blog.file.model.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
@@ -60,6 +61,20 @@ public class FileService {
     }
 
     return outputFile;
+  }
+
+  public void deleteFromDisk(String id) {
+    try {
+      if (getFile(id).resource().getFile().delete()) {
+        fileRepository.deleteById(id);
+
+        return;
+      }
+
+      throw new DeleteFileException();
+    } catch (IOException e) {
+      throw new DeleteFileException(e);
+    }
   }
 
   public ResourceDto getFile(String id) {
