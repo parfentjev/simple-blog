@@ -1,8 +1,10 @@
 package ee.fakeplastictrees.blog.post.service;
 
-import ee.fakeplastictrees.blog.core.exceiption.ResourceNotFoundException;
-import ee.fakeplastictrees.blog.core.model.PageRequestFactory;
+import ee.fakeplastictrees.blog.core.exception.ResourceNotFoundException;
+import ee.fakeplastictrees.blog.core.model.factory.PageRequestFactory;
 import ee.fakeplastictrees.blog.post.model.*;
+import ee.fakeplastictrees.blog.post.model.mapper.PostMapper;
+import ee.fakeplastictrees.blog.post.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;

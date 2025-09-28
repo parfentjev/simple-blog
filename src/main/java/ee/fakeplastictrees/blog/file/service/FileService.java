@@ -1,9 +1,11 @@
 package ee.fakeplastictrees.blog.file.service;
 
-import ee.fakeplastictrees.blog.core.exceiption.ResourceNotFoundException;
-import ee.fakeplastictrees.blog.core.model.PageRequestFactory;
+import ee.fakeplastictrees.blog.core.exception.ResourceNotFoundException;
+import ee.fakeplastictrees.blog.core.model.factory.PageRequestFactory;
 import ee.fakeplastictrees.blog.file.exception.DeleteFileException;
 import ee.fakeplastictrees.blog.file.model.*;
+import ee.fakeplastictrees.blog.file.model.mapper.FileMapper;
+import ee.fakeplastictrees.blog.file.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -63,9 +65,15 @@ public class FileService {
     return outputFile;
   }
 
-  public void deleteFromDisk(String id) {
+  public void updateFile(FileEditorDto fileEditorDto) {
+    var file = fileRepository.findById(fileEditorDto.id()).orElseThrow(ResourceNotFoundException::new);
+    file.setOriginalFilename(fileEditorDto.filename());
+    fileRepository.save(file);
+  }
+
+  public void deleteFile(String id) {
     try {
-      if (getFile(id).resource().getFile().delete()) {
+      if (getResource(id).resource().getFile().delete()) {
         fileRepository.deleteById(id);
 
         return;
@@ -77,7 +85,13 @@ public class FileService {
     }
   }
 
-  public ResourceDto getFile(String id) {
+  public FileDto getFile(String id) throws ResourceNotFoundException {
+    var entity = fileRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+
+    return FileMapper.fileToDto(entity);
+  }
+
+  public ResourceDto getResource(String id) throws ResourceNotFoundException {
     var entity = fileRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     var resource = resourceLoader.getResource("file:" + entity.getPath());
 
@@ -87,6 +101,6 @@ public class FileService {
   public FilePageDto getEditorFiles(Integer pageNumber) {
     var filePage = fileRepository.findAll(PageRequestFactory.withPage(pageNumber, PAGE_SIZE, "uploadedAt"));
 
-    return new FilePageDto(pageNumber, filePage.getTotalPages(), filePage.get().map(FileMapper::resourceToDto).toList());
+    return new FilePageDto(pageNumber, filePage.getTotalPages(), filePage.get().map(FileMapper::fileToDto).toList());
   }
 }

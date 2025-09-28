@@ -1,6 +1,6 @@
 package ee.fakeplastictrees.blog.user.controller;
 
-import ee.fakeplastictrees.blog.user.model.CreateUserException;
+import ee.fakeplastictrees.blog.user.exception.CreateUserException;
 import ee.fakeplastictrees.blog.user.model.UserRegistrationRequestDto;
 import ee.fakeplastictrees.blog.user.service.UserService;
 import jakarta.validation.Valid;

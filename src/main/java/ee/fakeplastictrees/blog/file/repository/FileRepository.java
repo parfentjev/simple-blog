@@ -1,5 +1,6 @@
-package ee.fakeplastictrees.blog.file.model;
+package ee.fakeplastictrees.blog.file.repository;
 
+import ee.fakeplastictrees.blog.file.model.File;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;

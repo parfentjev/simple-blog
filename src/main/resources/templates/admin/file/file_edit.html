@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+
+<head>
+  <title>Admin Panel</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+  <div class="text-center">
+    <h1>File Editor</h1>
+  </div>
+  <form class="editor-form" th:action="@{/admin/file/{id}(id=${file.id})}" method="POST">
+    <input name="id" type="hidden" th:value="${file.id}" required/>
+    <div>
+      <input name="filename" type="text" placeholder="Filename" autoComplete="off" th:value="${file.filename}"
+             required/>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="primary-button">Save</button>
+    </div>
+  </form>
+  <form class="editor-form text-center" th:action="@{/admin/file/{id}/delete(id=${file.id})}" method="POST">
+    <button type="submit" class="secondary-button">Delete</button>
+  </form>
+</div>
+</body>
+
+</html>

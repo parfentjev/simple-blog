@@ -1,4 +1,4 @@
-package ee.fakeplastictrees.blog.core.model;
+package ee.fakeplastictrees.blog.core.model.factory;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

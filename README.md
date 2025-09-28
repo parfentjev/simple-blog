@@ -12,7 +12,7 @@ To run the project locally, you’ll need to set up a database and configure env
       via [http://localhost:8080/register](http://localhost:8080/register).
     * Provide your database credentials.
     * Fill in the remaining values - all are required.
-3. Configure your IDE to use Java 21 and run `ee.fakeplastictrees.blog.Application`.
+3. Configure your IDE to use Java 25 and run `ee.fakeplastictrees.blog.Application`.
 
 Other important URLs:
 

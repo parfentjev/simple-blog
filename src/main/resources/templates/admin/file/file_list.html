@@ -24,7 +24,7 @@
   <table class="text-center">
     <thead>
     <tr>
-      <th>Original name</th>
+      <th>Filename</th>
       <th>Upload date</th>
       <th>Actions</th>
     </tr>
@@ -32,21 +32,18 @@
     <tbody>
     <tr th:each="file : ${page.files}">
       <td>
-        <a th:href="@{/media/{fileId}(fileId=${file.id})}" th:text="${file.originalFilename}" target="_blank">Link</a>
+        <a th:href="@{/media/{fileId}(fileId=${file.id})}" th:text="${file.filename}" target="_blank">Link</a>
       </td>
       <td th:text="${#dates.format(file.date, 'dd.MM.yyyy HH:MM')}">Upload date</td>
       <td>
-        <form th:action="@{/admin/files/delete/{id}(id=${file.id})}" method="POST">
-          <button class="plain-button" type="submit" onclick="return confirmAction()">
-            ❌
-          </button>
-        </form>
+        <a th:href="@{/admin/file/{fileId}(fileId=${file.id})}">
+          ✏️
+        </a>
       </td>
     </tr>
     </tbody>
   </table>
   <div th:replace="~{fragments/paginator :: paginator(${page}, '/admin/files')}"></div>
-  <script src="/js/files.js"></script>
 </div>
 </body>
 </html>

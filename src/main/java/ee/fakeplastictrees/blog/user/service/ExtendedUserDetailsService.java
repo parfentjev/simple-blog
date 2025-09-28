@@ -1,7 +1,7 @@
 package ee.fakeplastictrees.blog.user.service;
 
-import ee.fakeplastictrees.blog.core.exceiption.ResourceNotFoundException;
-import ee.fakeplastictrees.blog.user.model.UserRepository;
+import ee.fakeplastictrees.blog.core.exception.ResourceNotFoundException;
+import ee.fakeplastictrees.blog.user.repository.UserRepository;
 import ee.fakeplastictrees.blog.user.model.UserRole;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

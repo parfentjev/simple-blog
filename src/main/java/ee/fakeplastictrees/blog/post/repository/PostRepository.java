@@ -1,5 +1,6 @@
-package ee.fakeplastictrees.blog.post.model;
+package ee.fakeplastictrees.blog.post.repository;
 
+import ee.fakeplastictrees.blog.post.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

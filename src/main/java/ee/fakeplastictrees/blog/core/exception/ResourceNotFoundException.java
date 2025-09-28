@@ -1,4 +1,4 @@
-package ee.fakeplastictrees.blog.core.exceiption;
+package ee.fakeplastictrees.blog.core.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

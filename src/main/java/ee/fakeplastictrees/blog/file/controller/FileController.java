@@ -19,7 +19,7 @@ public class FileController {
 
   @GetMapping("/{fileId}")
   public ResponseEntity<Resource> getFileById(@PathVariable String fileId) {
-    var resource = fileService.getFile(fileId);
+    var resource = fileService.getResource(fileId);
 
     return ResponseEntity.ok().header("Content-Type", resource.contentType()).body(resource.resource());
   }

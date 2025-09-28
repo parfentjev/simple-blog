@@ -1,8 +1,8 @@
 package ee.fakeplastictrees.blog.user.service;
 
-import ee.fakeplastictrees.blog.user.model.CreateUserException;
+import ee.fakeplastictrees.blog.user.exception.CreateUserException;
 import ee.fakeplastictrees.blog.user.model.User;
-import ee.fakeplastictrees.blog.user.model.UserRepository;
+import ee.fakeplastictrees.blog.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
-package ee.fakeplastictrees.blog.user.model;
+package ee.fakeplastictrees.blog.user.repository;
 
+import ee.fakeplastictrees.blog.user.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
