@@ -2,41 +2,41 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
 
 <head>
-    <title>Admin Panel</title>
+  <title>Admin Panel</title>
 </head>
 
 <body>
-    <div layout:fragment="content">
-        <div class="text-center">
-            <h1>Post Editor</h1>
-        </div>
-        <form class="editor-form" th:action="@{/admin/post/{id}(id=${post.id})}" method="POST">
-            <input name="id" type="hidden" th:value="${post.id}" required />
-            <div>
-                <input name="title" type="text" placeholder="title" autoComplete="off" th:value="${post.title}"
-                    required />
-            </div>
-            <div>
-                <textarea name="summary" rows="5" placeholder="summary" th:text="${post.summary}" required></textarea>
-            </div>
-            <div>
-                <textarea name="text" rows="30" placeholder="text" th:text="${post.text}" required></textarea>
-            </div>
-            <div class="post-options">
-                <input name="visible" type="checkbox" th:checked="${post.visible}" id="visible" />
-                <label for="visible">Post is visible</label>
-                <input name="updateDate" type="checkbox" id="updateDate" />
-                <label for="updateDate">Update date</label>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="primary-button">Save</button>
-            </div>
-        </form>
-        <form class="editor-form text-center" th:action="@{/admin/post/{id}/delete(id=${post.id})}" method="POST">
-            <button type="submit" class="secondary-button">Delete</button>
-        </form>
-        <script src="/js/editor.js"></script>
+<div layout:fragment="content">
+  <div class="text-center">
+    <h1>Post Editor</h1>
+  </div>
+  <form class="editor-form" th:action="@{/admin/post/{id}(id=${post.id})}" method="POST">
+    <input name="id" type="hidden" th:value="${post.id}" required/>
+    <div>
+      <input name="title" type="text" placeholder="title" autoComplete="off" th:value="${post.title}"
+             required/>
     </div>
+    <div>
+      <textarea name="summary" rows="5" placeholder="summary" th:text="${post.summary}" required></textarea>
+    </div>
+    <div>
+      <textarea name="text" rows="30" placeholder="text" th:text="${post.text}"></textarea>
+    </div>
+    <div class="post-options">
+      <input name="visible" type="checkbox" th:checked="${post.visible}" id="visible"/>
+      <label for="visible">Post is visible</label>
+      <input name="updateDate" type="checkbox" id="updateDate"/>
+      <label for="updateDate">Update date</label>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="primary-button">Save</button>
+    </div>
+  </form>
+  <form class="editor-form text-center" th:action="@{/admin/post/{id}/delete(id=${post.id})}" method="POST">
+    <button type="submit" class="secondary-button">Delete</button>
+  </form>
+  <script src="/js/editor.js"></script>
+</div>
 </body>
 
 </html>

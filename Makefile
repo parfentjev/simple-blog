@@ -1,5 +1,5 @@
-.PHONY: setup-build
-setup-build:
+.PHONY: init
+init:
 	docker buildx create --name container-builder
 
 .PHONY: build

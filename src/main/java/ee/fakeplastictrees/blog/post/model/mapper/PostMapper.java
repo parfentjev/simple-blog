@@ -13,7 +13,8 @@ public class PostMapper {
       post.getSlug(),
       post.getSummary(),
       post.getDate(),
-      post.getVisible()
+      post.getVisible(),
+      hasMore(post)
     );
   }
 
@@ -24,8 +25,13 @@ public class PostMapper {
       post.getSummary(),
       post.getText(),
       post.getDate(),
-      post.getVisible()
+      post.getVisible(),
+      hasMore(post)
     );
+  }
+
+  private static boolean hasMore(Post post) {
+    return post.getText() != null && !post.getText().isBlank();
   }
 
   public static Post editorDtoToPost(PostEditorDto postEditorDto) {

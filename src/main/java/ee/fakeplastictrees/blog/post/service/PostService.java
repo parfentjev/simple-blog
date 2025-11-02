@@ -2,7 +2,9 @@ package ee.fakeplastictrees.blog.post.service;
 
 import ee.fakeplastictrees.blog.core.exception.ResourceNotFoundException;
 import ee.fakeplastictrees.blog.core.model.factory.PageRequestFactory;
-import ee.fakeplastictrees.blog.post.model.*;
+import ee.fakeplastictrees.blog.post.model.PostDto;
+import ee.fakeplastictrees.blog.post.model.PostEditorDto;
+import ee.fakeplastictrees.blog.post.model.PostPageDto;
 import ee.fakeplastictrees.blog.post.model.mapper.PostMapper;
 import ee.fakeplastictrees.blog.post.repository.PostRepository;
 import org.springframework.stereotype.Service;

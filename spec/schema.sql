@@ -1,8 +1,8 @@
 CREATE TABLE posts (
   visible BIT(1) NOT NULL,
-  date DATETIME(6),
+  date DATETIME(6) NOT NULL,
   id VARCHAR(255) NOT NULL,
-  summary TEXT,
+  summary TEXT NOT NULL,
   text TEXT,
   title VARCHAR(255) NOT NULL,
   slug VARCHAR(255) NOT NULL,
