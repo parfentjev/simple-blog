@@ -16,20 +16,28 @@ public class MarkdownProcessor extends AbstractAttributeTagProcessor {
   }
 
   @Override
-  protected void doProcess(ITemplateContext context, IProcessableElementTag tag, AttributeName attributeName, String attributeValue, IElementTagStructureHandler structureHandler) {
-    var content = (String) StandardExpressions.getExpressionParser(context.getConfiguration())
-      .parseExpression(context, attributeValue)
-      .execute(context);
+  protected void doProcess(
+      ITemplateContext context,
+      IProcessableElementTag tag,
+      AttributeName attributeName,
+      String attributeValue,
+      IElementTagStructureHandler structureHandler) {
+    var content =
+        (String)
+            StandardExpressions.getExpressionParser(context.getConfiguration())
+                .parseExpression(context, attributeValue)
+                .execute(context);
 
     structureHandler.setBody(markdownToHtml(content), false);
   }
 
   private String markdownToHtml(String markdown) {
     var document = Parser.builder().build().parse(markdown);
-    var renderer = HtmlRenderer.builder()
-      .attributeProviderFactory(LinkAttributeProvider::new)
-      .nodeRendererFactory(ImageNodeRenderer::new)
-      .build();
+    var renderer =
+        HtmlRenderer.builder()
+            .attributeProviderFactory(LinkAttributeProvider::new)
+            .nodeRendererFactory(ImageNodeRenderer::new)
+            .build();
 
     return renderer.render(document);
   }

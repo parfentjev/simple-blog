@@ -21,6 +21,8 @@ public class FileController {
   public ResponseEntity<Resource> getFileById(@PathVariable String fileId) {
     var resource = fileService.getResource(fileId);
 
-    return ResponseEntity.ok().header("Content-Type", resource.contentType()).body(resource.resource());
+    return ResponseEntity.ok()
+        .header("Content-Type", resource.contentType())
+        .body(resource.resource());
   }
 }

@@ -40,9 +40,10 @@ public class UserController {
   }
 
   @PostMapping("/register")
-  public String postRegistrationForm(@Valid @ModelAttribute UserRegistrationRequestDto request,
-                                     BindingResult bindingResult,
-                                     RedirectAttributes redirectAttributes) {
+  public String postRegistrationForm(
+      @Valid @ModelAttribute UserRegistrationRequestDto request,
+      BindingResult bindingResult,
+      RedirectAttributes redirectAttributes) {
     if (userService.isRegistrationDisabled()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }

@@ -15,24 +15,30 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    return http
-      .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/**").permitAll()
-        .requestMatchers("/admin/**").hasRole("ADMIN")
-        .anyRequest().authenticated())
-      .formLogin(form -> form
-        .loginPage("/login")
-        .loginProcessingUrl("/login")
-        .defaultSuccessUrl("/admin", true)
-        .failureUrl("/login?error=true")
-        .permitAll())
-      .logout(logout -> logout
-        .logoutUrl("/logout")
-        .logoutSuccessUrl("/")
-        .invalidateHttpSession(true)
-        .deleteCookies("JSESSIONID")
-        .permitAll())
-      .build();
+    return http.authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers("/**")
+                    .permitAll()
+                    .requestMatchers("/admin/**")
+                    .hasRole("ADMIN")
+                    .anyRequest()
+                    .authenticated())
+        .formLogin(
+            form ->
+                form.loginPage("/login")
+                    .loginProcessingUrl("/login")
+                    .defaultSuccessUrl("/admin", true)
+                    .failureUrl("/login?error=true")
+                    .permitAll())
+        .logout(
+            logout ->
+                logout
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/")
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID")
+                    .permitAll())
+        .build();
   }
 
   @Bean

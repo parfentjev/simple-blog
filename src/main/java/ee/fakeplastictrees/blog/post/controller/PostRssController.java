@@ -40,11 +40,8 @@ public class PostRssController {
 
   @GetMapping(produces = MediaType.APPLICATION_RSS_XML_VALUE)
   public ResponseEntity<String> getRssFeed() throws FeedException {
-    var entries = postService.getPublishedPosts(1)
-      .posts()
-      .stream()
-      .map(this::mapPostToEntry)
-      .toList();
+    var entries =
+        postService.getPublishedPosts(1).posts().stream().map(this::mapPostToEntry).toList();
 
     var feed = new SyndFeedImpl();
     feed.setFeedType("rss_2.0");

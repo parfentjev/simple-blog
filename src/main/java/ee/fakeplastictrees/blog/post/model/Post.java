@@ -1,7 +1,6 @@
 package ee.fakeplastictrees.blog.post.model;
 
 import jakarta.persistence.*;
-
 import java.time.Instant;
 
 @Entity(name = "posts")

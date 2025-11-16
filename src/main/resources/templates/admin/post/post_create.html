@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<html layout:decorate="~{layout/base}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
   <title>Admin Panel</title>
@@ -10,24 +10,24 @@
   <div class="text-center">
     <h1>Post Editor</h1>
   </div>
-  <form class="editor-form" th:action="@{/admin/post}" method="POST">
+  <form class="editor-form" method="POST" th:action="@{/admin/post}">
     <div>
-      <input name="title" type="text" placeholder="title" autoComplete="off" required/>
+      <input autoComplete="off" name="title" placeholder="title" required type="text"/>
     </div>
     <div>
-      <textarea name="summary" rows="5" placeholder="summary" required></textarea>
+      <textarea name="summary" placeholder="summary" required rows="5"></textarea>
     </div>
     <div>
-      <textarea name="text" rows="30" placeholder="text"></textarea>
+      <textarea name="text" placeholder="text" rows="30"></textarea>
     </div>
     <div class="post-options">
-      <input name="visible" type="checkbox" id="visible"/>
+      <input id="visible" name="visible" type="checkbox"/>
       <label for="visible">Post is visible</label>
-      <input name="updateDate" type="checkbox" id="updateDate"/>
+      <input id="updateDate" name="updateDate" type="checkbox"/>
       <label for="updateDate">Update date</label>
     </div>
     <div class="text-center">
-      <button type="submit" class="primary-button">Save</button>
+      <button class="primary-button" type="submit">Save</button>
     </div>
   </form>
   <script src="/js/editor.js"></script>

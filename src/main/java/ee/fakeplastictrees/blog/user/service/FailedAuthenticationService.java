@@ -4,24 +4,22 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 @Service
 public class FailedAuthenticationService {
+  private static LoadingCache<String, Integer> cache;
+  private final HttpServletRequest request;
+
   @Value("${user.auth.max.attempts}")
   private Integer maxAttempts;
 
   @Value("${user.auth.timeout.minutes}")
   private Long timeoutDuration;
-
-  private static LoadingCache<String, Integer> cache;
-
-  private final HttpServletRequest request;
 
   public FailedAuthenticationService(HttpServletRequest request) {
     this.request = request;
@@ -29,12 +27,16 @@ public class FailedAuthenticationService {
 
   private LoadingCache<String, Integer> getCache() {
     if (cache == null) {
-      cache = CacheBuilder.newBuilder().expireAfterWrite(timeoutDuration, TimeUnit.MINUTES).build(new CacheLoader<>() {
-        @Override
-        public Integer load(String key) {
-          return 0;
-        }
-      });
+      cache =
+          CacheBuilder.newBuilder()
+              .expireAfterWrite(timeoutDuration, TimeUnit.MINUTES)
+              .build(
+                  new CacheLoader<>() {
+                    @Override
+                    public Integer load(String key) {
+                      return 0;
+                    }
+                  });
     }
 
     return cache;

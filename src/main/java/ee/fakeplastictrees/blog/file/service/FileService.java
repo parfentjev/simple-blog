@@ -1,35 +1,32 @@
 package ee.fakeplastictrees.blog.file.service;
 
+import static java.lang.String.format;
+
 import ee.fakeplastictrees.blog.core.exception.ResourceNotFoundException;
 import ee.fakeplastictrees.blog.core.model.factory.PageRequestFactory;
 import ee.fakeplastictrees.blog.file.exception.DeleteFileException;
 import ee.fakeplastictrees.blog.file.model.*;
 import ee.fakeplastictrees.blog.file.model.mapper.FileMapper;
 import ee.fakeplastictrees.blog.file.repository.FileRepository;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.UUID;
-
-import static java.lang.String.format;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileService {
   private static final int PAGE_SIZE = 100;
+  private final FileRepository fileRepository;
+  private final ResourceLoader resourceLoader;
 
   @Value("${media.upload.directory}")
   private String uploadDirectory;
-
-  private final FileRepository fileRepository;
-
-  private final ResourceLoader resourceLoader;
 
   public FileService(FileRepository fileRepository, ResourceLoader resourceLoader) {
     this.fileRepository = fileRepository;
@@ -51,10 +48,11 @@ public class FileService {
   }
 
   private Path saveToDisk(MultipartFile inputFile) {
-    var outputFile = Paths.get(this.uploadDirectory)
-      .resolve(Paths.get(format("%d-%s", Instant.now().toEpochMilli(), UUID.randomUUID())))
-      .normalize()
-      .toAbsolutePath();
+    var outputFile =
+        Paths.get(this.uploadDirectory)
+            .resolve(Paths.get(format("%d-%s", Instant.now().toEpochMilli(), UUID.randomUUID())))
+            .normalize()
+            .toAbsolutePath();
 
     try (var inputStream = inputFile.getInputStream()) {
       Files.copy(inputStream, outputFile);
@@ -66,7 +64,8 @@ public class FileService {
   }
 
   public void updateFile(FileEditorDto fileEditorDto) {
-    var file = fileRepository.findById(fileEditorDto.id()).orElseThrow(ResourceNotFoundException::new);
+    var file =
+        fileRepository.findById(fileEditorDto.id()).orElseThrow(ResourceNotFoundException::new);
     file.setOriginalFilename(fileEditorDto.filename());
     fileRepository.save(file);
   }
@@ -99,8 +98,10 @@ public class FileService {
   }
 
   public FilePageDto getEditorFiles(Integer pageNumber) {
-    var filePage = fileRepository.findAll(PageRequestFactory.withPage(pageNumber, PAGE_SIZE, "uploadedAt"));
+    var filePage =
+        fileRepository.findAll(PageRequestFactory.withPage(pageNumber, PAGE_SIZE, "uploadedAt"));
 
-    return new FilePageDto(pageNumber, filePage.getTotalPages(), filePage.get().map(FileMapper::fileToDto).toList());
+    return new FilePageDto(
+        pageNumber, filePage.getTotalPages(), filePage.get().map(FileMapper::fileToDto).toList());
   }
 }

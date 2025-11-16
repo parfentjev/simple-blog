@@ -45,7 +45,8 @@ public class FileAdminController {
 
   @PostMapping("/file/{fileId}")
   @ProtectedRoute
-  public String updateFileById(@ModelAttribute FileEditorDto fileEditorDto, @PathVariable String fileId, Model model) {
+  public String updateFileById(
+      @ModelAttribute FileEditorDto fileEditorDto, @PathVariable String fileId, Model model) {
     fileService.updateFile(fileEditorDto);
 
     return "redirect:/admin/files";

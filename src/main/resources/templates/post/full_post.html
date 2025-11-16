@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{layout/base}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/base}">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <title th:text="${post.title}">Post title</title>
 </head>
@@ -10,8 +10,8 @@
   <article class="post">
     <h1 class="post-title"><a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}" th:text="${post.title}">Post
       title</a></h1>
-    <div th:if="${post.hasMore}" class="post-text" markdown:toHtml="${post.text}">Post text...</div>
-    <div th:unless="${post.hasMore}" class="post-text" markdown:toHtml="${post.summary}">Post summary...</div>
+    <div class="post-text" markdown:toHtml="${post.text}" th:if="${post.hasMore}">Post text...</div>
+    <div class="post-text" markdown:toHtml="${post.summary}" th:unless="${post.hasMore}">Post summary...</div>
     <div>
       <div class="post-date text-muted" th:text="${#dates.format(post.date(), 'dd.MM.yyyy')}">Post date</div>
     </div>

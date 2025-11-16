@@ -1,3 +1,7 @@
+CREATE DATABASE blog;
+
+USE blog;
+
 CREATE TABLE posts (
   visible BIT(1) NOT NULL,
   date DATETIME(6) NOT NULL,

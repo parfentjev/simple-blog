@@ -1,7 +1,6 @@
 package ee.fakeplastictrees.blog.file.model;
 
 import jakarta.persistence.*;
-
 import java.time.Instant;
 
 @Entity(name = "files")

@@ -1,14 +1,13 @@
 package ee.fakeplastictrees.blog.core.markdown;
 
+import java.util.Map;
+import java.util.Set;
 import org.commonmark.node.Image;
 import org.commonmark.node.Node;
 import org.commonmark.node.Text;
 import org.commonmark.renderer.NodeRenderer;
 import org.commonmark.renderer.html.HtmlNodeRendererContext;
 import org.commonmark.renderer.html.HtmlWriter;
-
-import java.util.Map;
-import java.util.Set;
 
 public class ImageNodeRenderer implements NodeRenderer {
   private final HtmlWriter writer;

@@ -3,11 +3,10 @@ package ee.fakeplastictrees.blog.user.service;
 import ee.fakeplastictrees.blog.user.exception.CreateUserException;
 import ee.fakeplastictrees.blog.user.model.User;
 import ee.fakeplastictrees.blog.user.repository.UserRepository;
+import java.time.Instant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
 
 @Service
 public class UserService {

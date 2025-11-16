@@ -7,11 +7,10 @@ import ee.fakeplastictrees.blog.post.model.PostEditorDto;
 import ee.fakeplastictrees.blog.post.model.PostPageDto;
 import ee.fakeplastictrees.blog.post.model.mapper.PostMapper;
 import ee.fakeplastictrees.blog.post.repository.PostRepository;
-import org.springframework.stereotype.Service;
-
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PostService {
@@ -24,9 +23,14 @@ public class PostService {
   }
 
   public PostPageDto getPublishedPosts(Integer pageNumber) {
-    var postsPage = postRepository.findByVisible(PageRequestFactory.withPage(pageNumber, PAGE_SIZE, "date"), true);
+    var postsPage =
+        postRepository.findByVisible(
+            PageRequestFactory.withPage(pageNumber, PAGE_SIZE, "date"), true);
 
-    return new PostPageDto(pageNumber, postsPage.getTotalPages(), postsPage.get().map(PostMapper::postToPreviewDto).toList());
+    return new PostPageDto(
+        pageNumber,
+        postsPage.getTotalPages(),
+        postsPage.get().map(PostMapper::postToPreviewDto).toList());
   }
 
   public PostDto getPublishedPost(String id) {
@@ -36,9 +40,13 @@ public class PostService {
   }
 
   public PostPageDto getEditorPosts(Integer pageNumber) {
-    var postsPage = postRepository.findAll(PageRequestFactory.withPage(pageNumber, PAGE_SIZE, "date"));
+    var postsPage =
+        postRepository.findAll(PageRequestFactory.withPage(pageNumber, PAGE_SIZE, "date"));
 
-    return new PostPageDto(pageNumber, postsPage.getTotalPages(), postsPage.get().map(PostMapper::postToPreviewDto).toList());
+    return new PostPageDto(
+        pageNumber,
+        postsPage.getTotalPages(),
+        postsPage.get().map(PostMapper::postToPreviewDto).toList());
   }
 
   public PostDto getEditorPost(String id) {
@@ -56,12 +64,16 @@ public class PostService {
   }
 
   public PostDto updatePost(PostEditorDto postEditorDto) {
-    var post = postRepository.findById(postEditorDto.id()).orElseThrow(ResourceNotFoundException::new);
+    var post =
+        postRepository.findById(postEditorDto.id()).orElseThrow(ResourceNotFoundException::new);
     post.setTitle(postEditorDto.title());
     post.setSummary(postEditorDto.summary());
     post.setText(postEditorDto.text());
     post.setVisible(postEditorDto.visible() != null && postEditorDto.visible());
-    post.setDate(postEditorDto.updateDate() != null && postEditorDto.updateDate() ? Instant.now() : post.getDate());
+    post.setDate(
+        postEditorDto.updateDate() != null && postEditorDto.updateDate()
+            ? Instant.now()
+            : post.getDate());
 
     return PostMapper.postToDto(postRepository.save(post));
   }
@@ -71,18 +83,19 @@ public class PostService {
   }
 
   private String encodeTitle(String title) {
-    return URLEncoder.encode(title
-      .replaceAll(" ", "-")
-      .replaceAll("\\.", "")
-      .replaceAll("\\?", "")
-      .replaceAll("!", "")
-      .replaceAll("#", "")
-      .replaceAll("@", "")
-      .replaceAll(":", "")
-      .replaceAll(",", "")
-      .replaceAll("\"", "")
-      .replaceAll("&", "and")
-      .toLowerCase(), StandardCharsets.UTF_8
-    );
+    return URLEncoder.encode(
+        title
+            .replaceAll(" ", "-")
+            .replaceAll("\\.", "")
+            .replaceAll("\\?", "")
+            .replaceAll("!", "")
+            .replaceAll("#", "")
+            .replaceAll("@", "")
+            .replaceAll(":", "")
+            .replaceAll(",", "")
+            .replaceAll("\"", "")
+            .replaceAll("&", "and")
+            .toLowerCase(),
+        StandardCharsets.UTF_8);
   }
 }

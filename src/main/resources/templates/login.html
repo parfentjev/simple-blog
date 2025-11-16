@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<html layout:decorate="~{layout/base}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
   <title>Login</title>
 </head>
@@ -7,18 +7,18 @@
 <div layout:fragment="content">
   <div class="text-center">
     <h1>Login</h1>
-    <form th:action="@{/login}" method="post">
+    <form method="post" th:action="@{/login}">
       <div th:if="${message}" th:text="${message}"></div>
       <div>
-        <input name="username" type="text" placeholder="username" autoComplete="off" required/>
+        <input autoComplete="off" name="username" placeholder="username" required type="text"/>
       </div>
       <div>
-        <input name="password" type="password" placeholder="password" required/>
+        <input name="password" placeholder="password" required type="password"/>
       </div>
       <div class="text-error" th:if="${param.error}">
         Invalid username or password.
       </div>
-      <button type="submit" class="primary-button">
+      <button class="primary-button" type="submit">
         Login
       </button>
     </form>

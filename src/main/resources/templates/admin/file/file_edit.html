@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<html layout:decorate="~{layout/base}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
   <title>Admin Panel</title>
@@ -10,18 +10,18 @@
   <div class="text-center">
     <h1>File Editor</h1>
   </div>
-  <form class="editor-form" th:action="@{/admin/file/{id}(id=${file.id})}" method="POST">
-    <input name="id" type="hidden" th:value="${file.id}" required/>
+  <form class="editor-form" method="POST" th:action="@{/admin/file/{id}(id=${file.id})}">
+    <input name="id" required th:value="${file.id}" type="hidden"/>
     <div>
-      <input name="filename" type="text" placeholder="Filename" autoComplete="off" th:value="${file.filename}"
-             required/>
+      <input autoComplete="off" name="filename" placeholder="Filename" required th:value="${file.filename}"
+             type="text"/>
     </div>
     <div class="text-center">
-      <button type="submit" class="primary-button">Save</button>
+      <button class="primary-button" type="submit">Save</button>
     </div>
   </form>
-  <form class="editor-form text-center" th:action="@{/admin/file/{id}/delete(id=${file.id})}" method="POST">
-    <button type="submit" class="secondary-button">Delete</button>
+  <form class="editor-form text-center" method="POST" th:action="@{/admin/file/{id}/delete(id=${file.id})}">
+    <button class="secondary-button" type="submit">Delete</button>
   </form>
 </div>
 </body>

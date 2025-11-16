@@ -23,7 +23,8 @@ public class PostController {
   }
 
   @GetMapping({"/post/{postId}", "/post/{postId}/{slug}"})
-  public String getPostById(@PathVariable String postId, @PathVariable(required = false) String slug, Model model) {
+  public String getPostById(
+      @PathVariable String postId, @PathVariable(required = false) String slug, Model model) {
     var post = postService.getPublishedPost(postId);
     model.addAttribute("post", post);
 

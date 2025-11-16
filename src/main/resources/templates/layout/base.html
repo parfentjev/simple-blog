@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <title layout:title-pattern="$CONTENT_TITLE - Fake Plastic Trees">Fake Plastic Trees</title>
   <meta charset="UTF-8">
-  <meta name="description" content="A simple blog about technical topics, life and other things.">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="fediverse:creator" content="@placebo@mastodon.ie">
+  <meta content="A simple blog about technical topics, life and other things." name="description">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="@placebo@mastodon.ie" name="fediverse:creator">
   <link rel="icon" th:href="@{/favicon.ico}">
-  <link rel="alternate" type="application/rss+xml" title="Latest posts" th:href="@{/feed.xml}">
+  <link rel="alternate" th:href="@{/feed.xml}" title="Latest posts" type="application/rss+xml">
   <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
@@ -17,23 +17,23 @@
   <nav class="navbar">
     <div>
       <a th:href="@{/}">
-        <img class="logo" src="/images/layout/logo.gif" alt="Site logo"/>
+        <img alt="Site logo" class="logo" src="/images/layout/logo.gif"/>
       </a>
     </div>
     <ul>
       <li>
         <a th:href="@{/}">
-          <img src="/images/layout/menu-posts.gif" alt="Posts"/>
+          <img alt="Posts" src="/images/layout/menu-posts.gif"/>
         </a>
       </li>
       <li>
         <a th:href="@{/search}">
-          <img src="/images/layout/menu-search.gif" alt="Search"/>
+          <img alt="Search" src="/images/layout/menu-search.gif"/>
         </a>
       </li>
       <li>
         <a th:href="@{/feed.xml}">
-          <img src="/images/layout/menu-rss.gif" alt="RSS"/>
+          <img alt="RSS" src="/images/layout/menu-rss.gif"/>
         </a>
       </li>
     </ul>
@@ -49,7 +49,7 @@
     <a href="https://codeberg.org/parfentjev/simple-blog" target="_blank">source</a>
   </div>
   <div>
-    <a th:href="@{/banner}"><img src="/images/banner.png" alt="Banner"/></a>
+    <a th:href="@{/banner}"><img alt="Banner" src="/images/banner.png"/></a>
   </div>
 </footer>
 </body>

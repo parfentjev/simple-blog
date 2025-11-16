@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<html layout:decorate="~{layout/base}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
   <title>Admin Panel</title>
@@ -10,30 +10,30 @@
   <div class="text-center">
     <h1>Post Editor</h1>
   </div>
-  <form class="editor-form" th:action="@{/admin/post/{id}(id=${post.id})}" method="POST">
-    <input name="id" type="hidden" th:value="${post.id}" required/>
+  <form class="editor-form" method="POST" th:action="@{/admin/post/{id}(id=${post.id})}">
+    <input name="id" required th:value="${post.id}" type="hidden"/>
     <div>
-      <input name="title" type="text" placeholder="title" autoComplete="off" th:value="${post.title}"
-             required/>
+      <input autoComplete="off" name="title" placeholder="title" required th:value="${post.title}"
+             type="text"/>
     </div>
     <div>
-      <textarea name="summary" rows="5" placeholder="summary" th:text="${post.summary}" required></textarea>
+      <textarea name="summary" placeholder="summary" required rows="5" th:text="${post.summary}"></textarea>
     </div>
     <div>
-      <textarea name="text" rows="30" placeholder="text" th:text="${post.text}"></textarea>
+      <textarea name="text" placeholder="text" rows="30" th:text="${post.text}"></textarea>
     </div>
     <div class="post-options">
-      <input name="visible" type="checkbox" th:checked="${post.visible}" id="visible"/>
+      <input id="visible" name="visible" th:checked="${post.visible}" type="checkbox"/>
       <label for="visible">Post is visible</label>
-      <input name="updateDate" type="checkbox" id="updateDate"/>
+      <input id="updateDate" name="updateDate" type="checkbox"/>
       <label for="updateDate">Update date</label>
     </div>
     <div class="text-center">
-      <button type="submit" class="primary-button">Save</button>
+      <button class="primary-button" type="submit">Save</button>
     </div>
   </form>
-  <form class="editor-form text-center" th:action="@{/admin/post/{id}/delete(id=${post.id})}" method="POST">
-    <button type="submit" class="secondary-button">Delete</button>
+  <form class="editor-form text-center" method="POST" th:action="@{/admin/post/{id}/delete(id=${post.id})}">
+    <button class="secondary-button" type="submit">Delete</button>
   </form>
   <script src="/js/editor.js"></script>
 </div>

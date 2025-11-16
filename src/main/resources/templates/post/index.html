@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{layout/base}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/base}">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Home Page</title>
 </head>
@@ -14,7 +14,7 @@
     <div class="post-text" markdown:toHtml="${post.summary}">Post summary...</div>
     <div>
       <div class="post-date text-muted" th:text="${#dates.format(post.date(), 'dd.MM.yyyy')}">Post date</div>
-      <div th:if="${post.hasMore}" class="post-read-more">
+      <div class="post-read-more" th:if="${post.hasMore}">
         <a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}">Read more...</a>
       </div>
     </div>

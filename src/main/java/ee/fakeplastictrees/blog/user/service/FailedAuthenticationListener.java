@@ -6,12 +6,14 @@ import org.springframework.security.authentication.event.AuthenticationFailureBa
 import org.springframework.stereotype.Component;
 
 @Component
-public class FailedAuthenticationListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
+public class FailedAuthenticationListener
+    implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
   private final HttpServletRequest request;
 
   private final FailedAuthenticationService failedAuthenticationService;
 
-  public FailedAuthenticationListener(HttpServletRequest request, FailedAuthenticationService failedAuthenticationService) {
+  public FailedAuthenticationListener(
+      HttpServletRequest request, FailedAuthenticationService failedAuthenticationService) {
     this.request = request;
     this.failedAuthenticationService = failedAuthenticationService;
   }

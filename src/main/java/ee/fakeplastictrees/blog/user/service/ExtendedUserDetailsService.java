@@ -1,8 +1,8 @@
 package ee.fakeplastictrees.blog.user.service;
 
 import ee.fakeplastictrees.blog.core.exception.ResourceNotFoundException;
-import ee.fakeplastictrees.blog.user.repository.UserRepository;
 import ee.fakeplastictrees.blog.user.model.UserRole;
+import ee.fakeplastictrees.blog.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +14,8 @@ public class ExtendedUserDetailsService implements UserDetailsService {
 
   private final FailedAuthenticationService failedAuthenticationService;
 
-  public ExtendedUserDetailsService(UserRepository userRepository, FailedAuthenticationService failedAuthenticationService) {
+  public ExtendedUserDetailsService(
+      UserRepository userRepository, FailedAuthenticationService failedAuthenticationService) {
     this.userRepository = userRepository;
     this.failedAuthenticationService = failedAuthenticationService;
   }
@@ -30,10 +31,9 @@ public class ExtendedUserDetailsService implements UserDetailsService {
       throw new ResourceNotFoundException();
     }
 
-    return org.springframework.security.core.userdetails.User
-      .withUsername(user.get().getUsername())
-      .password(user.get().getPassword())
-      .roles(new String[]{UserRole.ADMIN.name()})
-      .build();
+    return org.springframework.security.core.userdetails.User.withUsername(user.get().getUsername())
+        .password(user.get().getPassword())
+        .roles(new String[] {UserRole.ADMIN.name()})
+        .build();
   }
 }

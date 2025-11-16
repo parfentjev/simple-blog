@@ -1,10 +1,9 @@
 package ee.fakeplastictrees.blog.core.markdown;
 
+import java.util.Set;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.dialect.AbstractProcessorDialect;
 import org.thymeleaf.processor.IProcessor;
-
-import java.util.Set;
 
 @Component
 public class MarkdownDialect extends AbstractProcessorDialect {
