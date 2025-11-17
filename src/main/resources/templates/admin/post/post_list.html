@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/base}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html layout:decorate="~{layout/admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <title>Post list</title>
+  <title>Post List</title>
 </head>
 <body>
-<div layout:fragment="content">
+<div layout:fragment="admin-content">
   <h1>Post List</h1>
   <ul>
     <li th:each="post : ${page.posts}">

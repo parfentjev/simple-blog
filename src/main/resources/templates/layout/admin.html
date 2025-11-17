@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/base}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <title layout:title-pattern="$CONTENT_TITLE - Admin Panel">Admin Panel</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div id="admin-menu">
+    <ul>
+      <li><a th:href="@{/admin}">Home</a></li>
+      <li><a th:href="@{/admin/new-post}">New post</a></li>
+      <li><a th:href="@{/admin/posts}">Posts</a></li>
+      <li><a th:href="@{/admin/files}">Files</a></li>
+    </ul>
+  </div>
+  <div layout:fragment="admin-content"></div>
+</div>
+</body>
+</html>

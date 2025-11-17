@@ -271,6 +271,22 @@ tbody tr {
     display: block;
 }
 
+/* admin panel */
+#admin-menu {
+  text-align: center;
+}
+
+#admin-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: .5rem;
+}
+
+#admin-menu ul li {
+  display: inline;
+  margin: 0 1rem;
+}
+
 /* large screen only */
 @media (min-width: 840px) {
     main {
