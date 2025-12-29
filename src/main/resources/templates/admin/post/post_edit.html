@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+  <head>
+    <title>Edit Post</title>
+  </head>
 
-<head>
-  <title>Edit Post</title>
-</head>
-
-<body>
-<div layout:fragment="admin-content">
-  <div class="text-center">
-    <h1>Post Editor</h1>
-  </div>
-  <form class="editor-form" method="POST" th:action="@{/admin/post/{id}(id=${post.id})}">
-    <input name="id" required th:value="${post.id}" type="hidden"/>
-    <div>
-      <input autoComplete="off" name="title" placeholder="title" required th:value="${post.title}"
-             type="text"/>
+  <body>
+    <div layout:fragment="admin-content">
+      <div class="text-center">
+        <h1>Post Editor</h1>
+      </div>
+      <form class="editor-form" method="POST" th:action="@{/admin/post/{id}(id=${post.id})}">
+        <input name="id" required th:value="${post.id}" type="hidden" />
+        <div>
+          <input autocomplete="off" name="title" placeholder="title" required th:value="${post.title}" type="text" />
+        </div>
+        <div>
+          <textarea name="summary" placeholder="summary" required rows="5" th:text="${post.summary}"></textarea>
+        </div>
+        <div>
+          <textarea name="text" placeholder="text" rows="30" th:text="${post.text}"></textarea>
+        </div>
+        <div class="post-options">
+          <input id="visible" name="visible" th:checked="${post.visible}" type="checkbox" />
+          <label for="visible">Post is visible</label>
+          <input id="updateDate" name="updateDate" type="checkbox" />
+          <label for="updateDate">Update date</label>
+        </div>
+        <div class="text-center">
+          <button class="primary-button" type="submit">Save</button>
+        </div>
+      </form>
+      <form class="editor-form text-center" method="POST" th:action="@{/admin/post/{id}/delete(id=${post.id})}">
+        <button class="secondary-button" type="submit">Delete</button>
+      </form>
+      <script th:src="@{/js/editor.js}"></script>
     </div>
-    <div>
-      <textarea name="summary" placeholder="summary" required rows="5" th:text="${post.summary}"></textarea>
-    </div>
-    <div>
-      <textarea name="text" placeholder="text" rows="30" th:text="${post.text}"></textarea>
-    </div>
-    <div class="post-options">
-      <input id="visible" name="visible" th:checked="${post.visible}" type="checkbox"/>
-      <label for="visible">Post is visible</label>
-      <input id="updateDate" name="updateDate" type="checkbox"/>
-      <label for="updateDate">Update date</label>
-    </div>
-    <div class="text-center">
-      <button class="primary-button" type="submit">Save</button>
-    </div>
-  </form>
-  <form class="editor-form text-center" method="POST" th:action="@{/admin/post/{id}/delete(id=${post.id})}">
-    <button class="secondary-button" type="submit">Delete</button>
-  </form>
-  <script src="/js/editor.js"></script>
-</div>
-</body>
-
+  </body>
 </html>

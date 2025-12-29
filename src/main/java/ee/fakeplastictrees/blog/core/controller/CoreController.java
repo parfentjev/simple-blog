@@ -24,4 +24,9 @@ public class CoreController {
   public String contact() {
     return "contact";
   }
+
+  @GetMapping("/err")
+  public String err() {
+    throw new RuntimeException();
+  }
 }

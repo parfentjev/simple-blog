@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+  <head>
+    <title>New Post</title>
+  </head>
 
-<head>
-  <title>New Post</title>
-</head>
-
-<body>
-<div layout:fragment="admin-content">
-  <div class="text-center">
-    <h1>Post Editor</h1>
-  </div>
-  <form class="editor-form" method="POST" th:action="@{/admin/post}">
-    <div>
-      <input autoComplete="off" name="title" placeholder="title" required type="text"/>
+  <body>
+    <div layout:fragment="admin-content">
+      <div class="text-center">
+        <h1>Post Editor</h1>
+      </div>
+      <form class="editor-form" method="POST" th:action="@{/admin/post}">
+        <div>
+          <input autocomplete="off" name="title" placeholder="title" required type="text" />
+        </div>
+        <div>
+          <textarea name="summary" placeholder="summary" required rows="5"></textarea>
+        </div>
+        <div>
+          <textarea name="text" placeholder="text" rows="30"></textarea>
+        </div>
+        <div class="post-options">
+          <input id="visible" name="visible" type="checkbox" />
+          <label for="visible">Post is visible</label>
+          <input id="updateDate" name="updateDate" type="checkbox" />
+          <label for="updateDate">Update date</label>
+        </div>
+        <div class="text-center">
+          <button class="primary-button" type="submit">Save</button>
+        </div>
+      </form>
+      <script th:src="@{/js/editor.js}"></script>
     </div>
-    <div>
-      <textarea name="summary" placeholder="summary" required rows="5"></textarea>
-    </div>
-    <div>
-      <textarea name="text" placeholder="text" rows="30"></textarea>
-    </div>
-    <div class="post-options">
-      <input id="visible" name="visible" type="checkbox"/>
-      <label for="visible">Post is visible</label>
-      <input id="updateDate" name="updateDate" type="checkbox"/>
-      <label for="updateDate">Update date</label>
-    </div>
-    <div class="text-center">
-      <button class="primary-button" type="submit">Save</button>
-    </div>
-  </form>
-  <script src="/js/editor.js"></script>
-</div>
-</body>
-
+  </body>
 </html>

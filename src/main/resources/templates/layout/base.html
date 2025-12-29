@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title layout:title-pattern="$CONTENT_TITLE - Fake Plastic Trees">Fake Plastic Trees</title>
+    <title layout:title-pattern="$CONTENT_TITLE — Fake Plastic Trees">Fake Plastic Trees</title>
     <meta charset="UTF-8" />
     <meta content="A simple blog about technical topics, life and other things." name="description" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
@@ -16,23 +16,23 @@
       <nav class="navbar">
         <div>
           <a th:href="@{/}">
-            <img alt="Site logo" class="logo" src="/images/layout/logo.gif" />
+            <img alt="Site logo" class="logo" th:src="@{/images/layout/logo.gif}" />
           </a>
         </div>
         <ul>
           <li>
             <a th:href="@{/}">
-              <img alt="Posts" src="/images/layout/menu-posts.gif" />
+              <img alt="Posts" th:src="@{/images/layout/menu-posts.gif}" />
             </a>
           </li>
           <li>
             <a th:href="@{/search}">
-              <img alt="Search" src="/images/layout/menu-search.gif" />
+              <img alt="Search" th:src="@{/images/layout/menu-search.gif}" />
             </a>
           </li>
           <li>
             <a th:href="@{/feed.xml}">
-              <img alt="RSS" src="/images/layout/menu-rss.gif" />
+              <img alt="RSS" th:src="@{/images/layout/menu-rss.gif}" />
             </a>
           </li>
         </ul>
@@ -45,13 +45,13 @@
       <div>
         <a th:href="@{/contact}">contact</a>
         <a th:href="@{/license}">license</a>
-        <a href="https://codeberg.org/parfentjev/simple-blog" target="_blank">source</a>
+        <a href="https://github.com/parfentjev/simple-blog" target="_blank">source</a>
       </div>
       <div>
-        <a th:href="@{/banner}"><img alt="Banner" src="/images/banner.png" /></a>
+        <a th:href="@{/banner}"><img alt="Banner" th:src="@{/images/banner.png}" /></a>
       </div>
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-    <script src="/js/main.js"></script>
+    <script th:src="@{/js/main.js}"></script>
   </body>
 </html>
