@@ -29,10 +29,10 @@ public class FileService {
   private final FileRepository fileRepository;
   private final ResourceLoader resourceLoader;
 
-  @Value("${media.page.size:100}")
+  @Value("${files.admin.page.size:100}")
   private Integer pageSize;
 
-  @Value("${media.upload.directory}")
+  @Value("${files.upload.directory}")
   private String uploadDirectory;
 
   private static final String sortBy = "uploadedAt";

@@ -22,16 +22,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PostRssController {
   private final PostService postService;
 
-  @Value("${rss.feed.title}")
+  @Value("${posts.rss.page.size:20}")
+  private Integer pageSize;
+
+  @Value("${posts.rss.feed.title}")
   private String rssFeedTitle;
 
-  @Value("${rss.feed.description}")
+  @Value("${posts.rss.feed.description}")
   private String rssFeedDescription;
 
-  @Value("${rss.feed.website.link}")
+  @Value("${posts.rss.feed.website.link}")
   private String rssFeedWebsiteLink;
 
-  @Value("${rss.feed.website.link.format}")
+  @Value("${posts.rss.feed.website.link.format}")
   private String rssFeedLinkFormat;
 
   public PostRssController(PostService postService) {
@@ -41,7 +44,9 @@ public class PostRssController {
   @GetMapping(produces = MediaType.APPLICATION_RSS_XML_VALUE)
   public ResponseEntity<String> getRssFeed() throws FeedException {
     var entries =
-        postService.getPublishedPosts(1).posts().stream().map(this::mapPostToEntry).toList();
+        postService.getPublishedPosts(1, pageSize).posts().stream()
+            .map(this::mapPostToEntry)
+            .toList();
 
     var feed = new SyndFeedImpl();
     feed.setFeedType("rss_2.0");

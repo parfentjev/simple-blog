@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 public class PostService {
   private final PostRepository postRepository;
 
-  @Value("${post.page.size:100}")
-  private Integer pageSize;
+  @Value("${posts.admin.page.size:100}")
+  private Integer adminPageSize;
 
   private static final String sortBy = "date";
 
@@ -26,7 +26,7 @@ public class PostService {
     this.postRepository = postRepository;
   }
 
-  public PostPageDto getPublishedPosts(Integer pageNumber) {
+  public PostPageDto getPublishedPosts(Integer pageNumber, Integer pageSize) {
     var pageable = PageRequestFactory.withPage(pageNumber, pageSize, sortBy);
     var postsPage = postRepository.findByVisible(pageable, true);
 
@@ -43,7 +43,7 @@ public class PostService {
   }
 
   public PostPageDto getEditorPosts(Integer pageNumber) {
-    var pageable = PageRequestFactory.withPage(pageNumber, pageSize, sortBy);
+    var pageable = PageRequestFactory.withPage(pageNumber, adminPageSize, sortBy);
     var postsPage = postRepository.findAll(pageable);
 
     return new PostPageDto(
