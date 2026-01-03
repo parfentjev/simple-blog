@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/base}"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title>Home Page</title>
-</head>
-<body>
-<div layout:fragment="content">
-  <article class="post" th:each="post : ${page.posts}">
-    <h1 class="post-title">
-      <a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}" th:text="${post.title}">Post title</a>
-    </h1>
-    <div class="post-text" markdown:toHtml="${post.summary}">Post summary...</div>
-    <div>
-      <div class="post-date text-muted" th:text="${#dates.format(post.date(), 'dd.MM.yyyy')}">Post date</div>
-      <div class="post-read-more" th:if="${post.hasMore}">
-        <a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}">Read more...</a>
-      </div>
+<html
+  layout:decorate="~{layout/base}"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
+    <title>Home Page</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <article class="post" th:each="post : ${page.posts}">
+        <h1 class="post-title">
+          <a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}" th:text="${post.title}">Post title</a>
+        </h1>
+        <div class="post-text" markdown:toHtml="${post.summary}">Post summary...</div>
+        <div>
+          <div class="post-date text-muted" th:text="${#dates.format(post.date(), 'dd.MM.yyyy')}">Post date</div>
+          <div class="post-read-more" th:if="${post.hasMore}">
+            <a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}">Read more...</a>
+          </div>
+        </div>
+      </article>
+      <div th:replace="~{fragments/paginator :: paginator(${page}, '/posts', null)}"></div>
     </div>
-  </article>
-  <div th:replace="~{fragments/paginator :: paginator(${page}, '/posts')}"></div>
-</div>
-</body>
+  </body>
 </html>
