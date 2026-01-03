@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head></head>
-<body>
-<nav class="text-center paginator" th:fragment="paginator(page, baseUrl)" th:if="${page.totalPages > 1}">
-  <p>
-    <a th:href="@{__${baseUrl}__/{pageNumber}(pageNumber=${page.pageNumber - 1})}" th:if="${page.pageNumber > 1}">
-      ← Newer posts
-    </a>
-    <a th:href="@{__${baseUrl}__/{pageNumber}(pageNumber=${page.pageNumber + 1})}"
-       th:if="${page.pageNumber < page.totalPages}">
-      Older posts →
-    </a>
-  </p>
-  <p th:text="'Page ' + ${page.pageNumber} + ' of ' + ${page.totalPages}"></p>
-</nav>
-</body>
+  <head></head>
+  <body>
+    <nav class="text-center paginator" th:fragment="paginator(page, baseUrl, q)" th:if="${page.totalPages > 1}">
+      <p>
+        <a
+          th:href="@{__${baseUrl}__/{pageNumber}(pageNumber=${page.pageNumber - 1},q=${q})}"
+          th:if="${page.pageNumber > 1}"
+        >
+          ← Newer items
+        </a>
+        <a
+          th:href="@{__${baseUrl}__/{pageNumber}(pageNumber=${page.pageNumber + 1},q=${q})}"
+          th:if="${page.pageNumber < page.totalPages}"
+        >
+          Older items →
+        </a>
+      </p>
+      <p th:text="'Page ' + ${page.pageNumber} + ' of ' + ${page.totalPages}"></p>
+    </nav>
+  </body>
 </html>

@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FileRepository extends CrudRepository<File, String> {
   Page<File> findAll(Pageable pageable);
+
+  Page<File> findByOriginalFilenameContainingIgnoreCase(String originalFilename, Pageable pageable);
 }

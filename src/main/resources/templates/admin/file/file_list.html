@@ -1,49 +1,59 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-  <title>File List</title>
-</head>
-<body>
-<div layout:fragment="admin-content">
-  <h1>Files</h1>
-  <h2>Upload</h2>
-  <div>
-    <form enctype="multipart/form-data" method="POST" th:action="@{/admin/files}">
+  <head>
+    <title>Files</title>
+  </head>
+  <body>
+    <div layout:fragment="admin-content">
+      <h1>Files</h1>
       <div>
-        <input name="file" required type="file"/>
-        <button class="primary-button" type="submit">Upload</button>
+        <details>
+          <summary>Upload file</summary>
+          <form enctype="multipart/form-data" method="POST" th:action="@{/admin/files}">
+            <div>
+              <input name="file" required type="file" />
+              <button class="primary-button" type="submit">Upload</button>
+            </div>
+          </form>
+        </details>
+        <details>
+          <summary>Find file</summary>
+          <form method="GET" th:action="@{/admin/files}">
+            <input type="text" name="q" placeholder="Filename contains..." />
+            <button class="primary-button" type="submit">Find</button>
+          </form>
+        </details>
+        <p class="text-success" th:if="${param.newFileId}">
+          File uploaded:
+          <a
+            target="_blank"
+            th:href="@{/media/{fileId}(fileId=${param.newFileId})}"
+            th:text="@{/media/{fileId}(fileId=${param.newFileId})}"
+            >Link</a
+          >
+        </p>
       </div>
-      <p class="text-success" th:if="${param.newFileId}">
-        File uploaded: <a target="_blank"
-                          th:href="@{/media/{fileId}(fileId=${param.newFileId})}"
-                          th:text="@{/media/{fileId}(fileId=${param.newFileId})}">Link</a>
-      </p>
-    </form>
-  </div>
-  <h2>List</h2>
-  <table class="text-center">
-    <thead>
-    <tr>
-      <th>Filename</th>
-      <th>Upload date</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="file : ${page.files}">
-      <td>
-        <a target="_blank" th:href="@{/media/{fileId}(fileId=${file.id})}" th:text="${file.filename}">Link</a>
-      </td>
-      <td th:text="${#dates.format(file.date, 'dd.MM.yyyy HH:MM')}">Upload date</td>
-      <td>
-        <a th:href="@{/admin/file/{fileId}(fileId=${file.id})}">
-          ✏️
-        </a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-  <div th:replace="~{fragments/paginator :: paginator(${page}, '/admin/files')}"></div>
-</div>
-</body>
+      <table class="text-center">
+        <thead>
+          <tr>
+            <th>Filename</th>
+            <th>Upload date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="file : ${page.files}">
+            <td>
+              <a target="_blank" th:href="@{/media/{fileId}(fileId=${file.id})}" th:text="${file.filename}">Link</a>
+            </td>
+            <td th:text="${#dates.format(file.date, 'dd.MM.yyyy HH:MM')}">Upload date</td>
+            <td>
+              <a th:href="@{/admin/file/{fileId}(fileId=${file.id})}"> ✏️ </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div th:replace="~{fragments/paginator :: paginator(${page}, '/admin/files', ${q})}"></div>
+    </div>
+  </body>
 </html>

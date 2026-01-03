@@ -1,6 +1,6 @@
 package ee.fakeplastictrees.blog.user.service;
 
-import ee.fakeplastictrees.blog.user.exception.CreateUserException;
+import ee.fakeplastictrees.blog.user.exception.UserServiceException;
 import ee.fakeplastictrees.blog.user.model.User;
 import ee.fakeplastictrees.blog.user.repository.UserRepository;
 import java.time.Instant;
@@ -22,13 +22,13 @@ public class UserService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  public void createUser(String username, String password) throws CreateUserException {
+  public void createUser(String username, String password) throws UserServiceException {
     if (isRegistrationDisabled()) {
-      throw new CreateUserException("Registration is disabled.");
+      throw new UserServiceException(UserServiceException.REGISTRATION_DISABLED);
     }
 
     if (userRepository.findByUsername(username).isPresent()) {
-      throw new CreateUserException("Username is already taken.");
+      throw new UserServiceException(UserServiceException.USERNAME_ALREADY_TAKEN);
     }
 
     var user = new User();

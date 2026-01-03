@@ -1,6 +1,6 @@
 package ee.fakeplastictrees.blog.user.service;
 
-import ee.fakeplastictrees.blog.core.exception.ResourceNotFoundException;
+import ee.fakeplastictrees.blog.core.exception.HTTPNotFoundException;
 import ee.fakeplastictrees.blog.user.model.UserRole;
 import ee.fakeplastictrees.blog.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,12 +23,12 @@ public class ExtendedUserDetailsService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     if (failedAuthenticationService.isBlocked()) {
-      throw new ResourceNotFoundException();
+      throw new HTTPNotFoundException();
     }
 
     var user = userRepository.findByUsername(username);
     if (user.isEmpty() || !user.get().getActive()) {
-      throw new ResourceNotFoundException();
+      throw new HTTPNotFoundException();
     }
 
     return org.springframework.security.core.userdetails.User.withUsername(user.get().getUsername())

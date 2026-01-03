@@ -17,10 +17,10 @@ public interface PostRepository extends CrudRepository<Post, String> {
   @Query(
       value =
           """
-            select * from posts
-            where id = :id
-            and visible = 1
-            """,
+          select * from posts
+          where id = :id
+          and visible = 1
+          """,
       nativeQuery = true)
   Optional<Post> findVisibleById(String id);
 }

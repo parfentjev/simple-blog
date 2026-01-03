@@ -34,4 +34,5 @@ CREATE TABLE files (
   PRIMARY KEY (id)
 );
 
-CREATE INDEX idx_media_uploaded_at ON files (uploaded_at);
+CREATE INDEX idx_files_original_filename ON files (original_filename);
+CREATE INDEX idx_files_uploaded_at ON files (uploaded_at);

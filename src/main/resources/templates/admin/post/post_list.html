@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/admin}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-  <title>Post List</title>
-</head>
-<body>
-<div layout:fragment="admin-content">
-  <h1>Post List</h1>
-  <ul>
-    <li th:each="post : ${page.posts}">
-      <a th:href="@{/admin/post/{id}(id=${post.id})}" th:text="${post.title}">Post title</a>
-    </li>
-  </ul>
-  <div th:replace="~{fragments/paginator :: paginator(${page}, '/admin/posts')}"></div>
-</div>
-</body>
+  <head>
+    <title>Posts</title>
+  </head>
+  <body>
+    <div layout:fragment="admin-content">
+      <h1>Posts</h1>
+      <div>
+        <a th:href="@{/admin/new-post}">New Post</a>
+      </div>
+      <table class="text-center">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="post : ${page.posts}">
+            <td>
+              <a target="_blank" th:href="@{/post/{postId}(postId=${post.id})}" th:text="${post.title}">Link</a>
+            </td>
+            <td th:text="${#dates.format(post.date, 'dd.MM.yyyy HH:MM')}">Date</td>
+            <td>
+              <a th:href="@{/admin/post/{postId}(postId=${post.id})}"> ✏️ </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div th:replace="~{fragments/paginator :: paginator(${page}, '/admin/posts', null)}"></div>
+    </div>
+  </body>
 </html>

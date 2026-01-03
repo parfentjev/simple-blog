@@ -2,14 +2,15 @@ package ee.fakeplastictrees.blog.file.service;
 
 import static java.lang.String.format;
 
-import ee.fakeplastictrees.blog.core.exception.ResourceNotFoundException;
+import ee.fakeplastictrees.blog.core.exception.HTTPNotFoundException;
 import ee.fakeplastictrees.blog.core.model.factory.PageRequestFactory;
-import ee.fakeplastictrees.blog.file.exception.DeleteFileException;
+import ee.fakeplastictrees.blog.file.exception.FileServiceException;
 import ee.fakeplastictrees.blog.file.model.File;
 import ee.fakeplastictrees.blog.file.model.FileDto;
 import ee.fakeplastictrees.blog.file.model.FileEditorDto;
 import ee.fakeplastictrees.blog.file.model.FilePageDto;
 import ee.fakeplastictrees.blog.file.model.ResourceDto;
+import ee.fakeplastictrees.blog.file.model.factory.FilePageDtoFactory;
 import ee.fakeplastictrees.blog.file.model.mapper.FileMapper;
 import ee.fakeplastictrees.blog.file.repository.FileRepository;
 import java.io.IOException;
@@ -25,51 +26,38 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileService {
-  private static final int PAGE_SIZE = 100;
   private final FileRepository fileRepository;
   private final ResourceLoader resourceLoader;
 
+  @Value("${media.page.size:100}")
+  private Integer pageSize;
+
   @Value("${media.upload.directory}")
   private String uploadDirectory;
+
+  private static final String sortBy = "uploadedAt";
 
   public FileService(FileRepository fileRepository, ResourceLoader resourceLoader) {
     this.fileRepository = fileRepository;
     this.resourceLoader = resourceLoader;
   }
 
-  public String saveFile(MultipartFile inputFile) {
-    if (inputFile == null || inputFile.isEmpty()) {
-      throw new RuntimeException();
+  public String saveFile(MultipartFile input) {
+    if (input == null || input.isEmpty()) {
+      throw new FileServiceException(FileServiceException.EMPTY_FILE);
     }
 
-    var media = new File();
-    media.setOriginalFilename(inputFile.getOriginalFilename());
-    media.setPath(saveToDisk(inputFile).toAbsolutePath().toString());
-    media.setContentType(inputFile.getContentType());
-    media.setUploadedAt(Instant.now());
+    var file = new File();
+    file.setOriginalFilename(input.getOriginalFilename());
+    file.setPath(saveToDisk(input).toAbsolutePath().toString());
+    file.setContentType(input.getContentType());
+    file.setUploadedAt(Instant.now());
 
-    return fileRepository.save(media).getId();
-  }
-
-  private Path saveToDisk(MultipartFile inputFile) {
-    var outputFile =
-        Paths.get(this.uploadDirectory)
-            .resolve(Paths.get(format("%d-%s", Instant.now().toEpochMilli(), UUID.randomUUID())))
-            .normalize()
-            .toAbsolutePath();
-
-    try (var inputStream = inputFile.getInputStream()) {
-      Files.copy(inputStream, outputFile);
-    } catch (IOException e) {
-      throw new RuntimeException();
-    }
-
-    return outputFile;
+    return fileRepository.save(file).getId();
   }
 
   public void updateFile(FileEditorDto fileEditorDto) {
-    var file =
-        fileRepository.findById(fileEditorDto.id()).orElseThrow(ResourceNotFoundException::new);
+    var file = fileRepository.findById(fileEditorDto.id()).orElseThrow(HTTPNotFoundException::new);
     file.setOriginalFilename(fileEditorDto.filename());
     fileRepository.save(file);
   }
@@ -82,30 +70,52 @@ public class FileService {
         return;
       }
 
-      throw new DeleteFileException();
+      throw new FileServiceException(FileServiceException.FAILED_TO_DELETE);
     } catch (IOException e) {
-      throw new DeleteFileException(e);
+      throw new FileServiceException(FileServiceException.FAILED_TO_DELETE, e);
     }
   }
 
-  public FileDto getFile(String id) throws ResourceNotFoundException {
-    var entity = fileRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+  public FileDto getFile(String id) throws HTTPNotFoundException {
+    var entity = fileRepository.findById(id).orElseThrow(HTTPNotFoundException::new);
 
     return FileMapper.fileToDto(entity);
   }
 
-  public ResourceDto getResource(String id) throws ResourceNotFoundException {
-    var entity = fileRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+  public ResourceDto getResource(String id) throws HTTPNotFoundException {
+    var entity = fileRepository.findById(id).orElseThrow(HTTPNotFoundException::new);
     var resource = resourceLoader.getResource("file:" + entity.getPath());
 
     return new ResourceDto(resource, entity.getContentType());
   }
 
   public FilePageDto getEditorFiles(Integer pageNumber) {
-    var filePage =
-        fileRepository.findAll(PageRequestFactory.withPage(pageNumber, PAGE_SIZE, "uploadedAt"));
+    var pageable = PageRequestFactory.withPage(pageNumber, pageSize, sortBy);
+    var items = fileRepository.findAll(pageable);
 
-    return new FilePageDto(
-        pageNumber, filePage.getTotalPages(), filePage.get().map(FileMapper::fileToDto).toList());
+    return FilePageDtoFactory.from(pageNumber, items);
+  }
+
+  public FilePageDto getEditorFilesByName(String nameContaining, Integer pageNumber) {
+    var pageable = PageRequestFactory.withPage(pageNumber, pageSize, sortBy);
+    var items = fileRepository.findByOriginalFilenameContainingIgnoreCase(nameContaining, pageable);
+
+    return FilePageDtoFactory.from(pageNumber, items);
+  }
+
+  private Path saveToDisk(MultipartFile inputFile) {
+    var outputFile =
+        Paths.get(this.uploadDirectory)
+            .resolve(Paths.get(format("%d-%s", Instant.now().toEpochMilli(), UUID.randomUUID())))
+            .normalize()
+            .toAbsolutePath();
+
+    try (var inputStream = inputFile.getInputStream()) {
+      Files.copy(inputStream, outputFile);
+    } catch (IOException e) {
+      throw new FileServiceException(FileServiceException.FAILED_TO_SAVE, e);
+    }
+
+    return outputFile;
   }
 }
