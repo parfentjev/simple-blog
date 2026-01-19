@@ -1,10 +1,11 @@
 package ee.fakeplastictrees.blog.post.service;
 
 import ee.fakeplastictrees.blog.core.exception.HTTPNotFoundException;
+import ee.fakeplastictrees.blog.core.model.PageDto;
 import ee.fakeplastictrees.blog.core.model.factory.PageRequestFactory;
 import ee.fakeplastictrees.blog.post.model.PostDto;
 import ee.fakeplastictrees.blog.post.model.PostEditorDto;
-import ee.fakeplastictrees.blog.post.model.PostPageDto;
+import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
 import ee.fakeplastictrees.blog.post.model.mapper.PostMapper;
 import ee.fakeplastictrees.blog.post.repository.PostRepository;
 import java.net.URLEncoder;
@@ -26,14 +27,22 @@ public class PostService {
     this.postRepository = postRepository;
   }
 
-  public PostPageDto getPublishedPosts(Integer pageNumber, Integer pageSize) {
+  public PageDto<PostPreviewDto> getPublishedPostsPreview(Integer pageNumber, Integer pageSize) {
     var pageable = PageRequestFactory.withPage(pageNumber, pageSize, sortBy);
     var postsPage = postRepository.findByVisible(pageable, true);
 
-    return new PostPageDto(
+    return new PageDto<PostPreviewDto>(
         pageNumber,
         postsPage.getTotalPages(),
         postsPage.get().map(PostMapper::postToPreviewDto).toList());
+  }
+
+  public PageDto<PostDto> getPublishedPostsFull(Integer pageNumber, Integer pageSize) {
+    var pageable = PageRequestFactory.withPage(pageNumber, pageSize, sortBy);
+    var postsPage = postRepository.findByVisible(pageable, true);
+
+    return new PageDto<PostDto>(
+        pageNumber, postsPage.getTotalPages(), postsPage.get().map(PostMapper::postToDto).toList());
   }
 
   public PostDto getPublishedPost(String id) {
@@ -42,11 +51,11 @@ public class PostService {
     return PostMapper.postToDto(post);
   }
 
-  public PostPageDto getEditorPosts(Integer pageNumber) {
+  public PageDto<PostPreviewDto> getEditorPosts(Integer pageNumber) {
     var pageable = PageRequestFactory.withPage(pageNumber, adminPageSize, sortBy);
     var postsPage = postRepository.findAll(pageable);
 
-    return new PostPageDto(
+    return new PageDto<PostPreviewDto>(
         pageNumber,
         postsPage.getTotalPages(),
         postsPage.get().map(PostMapper::postToPreviewDto).toList());

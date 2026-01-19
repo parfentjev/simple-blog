@@ -6,7 +6,7 @@ import com.rometools.rome.feed.synd.SyndEntryImpl;
 import com.rometools.rome.feed.synd.SyndFeedImpl;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedOutput;
-import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
+import ee.fakeplastictrees.blog.post.model.PostDto;
 import ee.fakeplastictrees.blog.post.service.PostService;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -44,7 +44,7 @@ public class PostRssController {
   @GetMapping(produces = MediaType.APPLICATION_RSS_XML_VALUE)
   public ResponseEntity<String> getRssFeed() throws FeedException {
     var entries =
-        postService.getPublishedPosts(1, pageSize).posts().stream()
+        postService.getPublishedPostsFull(1, pageSize).posts().stream()
             .map(this::mapPostToEntry)
             .toList();
 
@@ -58,8 +58,13 @@ public class PostRssController {
     return ResponseEntity.ok(new SyndFeedOutput().outputString(feed));
   }
 
-  private SyndEntry mapPostToEntry(PostPreviewDto post) {
-    var parsedSummary = Parser.builder().build().parse(post.summary());
+  private SyndEntry mapPostToEntry(PostDto post) {
+    var text = post.text();
+    if (text == null || text.isBlank()) {
+      text = post.summary();
+    }
+
+    var parsedSummary = Parser.builder().build().parse(text);
     var htmlSummary = HtmlRenderer.builder().build().render(parsedSummary);
 
     var description = new SyndContentImpl();

@@ -20,7 +20,7 @@ public class PostController {
 
   @GetMapping({"/", "/posts/{pageNumber}"})
   public String getPosts(@PathVariable(required = false) Integer pageNumber, Model model) {
-    var page = postService.getPublishedPosts(pageNumber == null ? 1 : pageNumber, pageSize);
+    var page = postService.getPublishedPostsPreview(pageNumber == null ? 1 : pageNumber, pageSize);
     model.addAttribute("page", page);
 
     return "post/index";
