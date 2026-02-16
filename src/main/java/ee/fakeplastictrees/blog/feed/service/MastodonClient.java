@@ -30,6 +30,7 @@ public class MastodonClient {
 
       return feed.getEntries().stream().map(entry -> entry.getLink()).toList();
     } catch (Exception e) {
+      // todo: use proper logger
       e.printStackTrace();
       return List.of();
     }
