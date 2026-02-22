@@ -19,10 +19,9 @@ public class MastodonClient {
     this.client = HttpClient.newHttpClient();
   }
 
-  public List<String> fetchPostLinksByUsername(String username) {
+  public List<String> fetchPostLinksByUserProfile(String mastodonProfileUrl) {
     try {
-      // todo: move host to env vars
-      var uri = new URI(format("https://mastodon.ie/@%s.rss", username));
+      var uri = new URI(format("%s.rss", mastodonProfileUrl));
       var request = HttpRequest.newBuilder().uri(uri).build();
 
       var response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
