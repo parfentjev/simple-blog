@@ -13,7 +13,7 @@ public class FeedService {
   public void updateMastodonFeed() {
     // step 1: fetch
     // todo: move username to env vars
-    var entries = mastodonClient.fetchRssFeedByUsername("placebo");
+    var entries = mastodonClient.fetchPostLinksByUsername("placebo");
     entries.forEach(System.out::println);
 
     // step 2: store in db (add a dao layer)

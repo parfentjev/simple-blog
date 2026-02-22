@@ -19,7 +19,7 @@ public class MastodonClient {
     this.client = HttpClient.newHttpClient();
   }
 
-  public List<String> fetchRssFeedByUsername(String username) {
+  public List<String> fetchPostLinksByUsername(String username) {
     try {
       // todo: move host to env vars
       var uri = new URI(format("https://mastodon.ie/@%s.rss", username));
