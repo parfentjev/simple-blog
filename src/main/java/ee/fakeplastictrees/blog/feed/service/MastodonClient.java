@@ -2,6 +2,7 @@ package ee.fakeplastictrees.blog.feed.service;
 
 import static java.lang.String.format;
 
+import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import java.net.URI;
@@ -19,15 +20,15 @@ public class MastodonClient {
     this.client = HttpClient.newHttpClient();
   }
 
-  public List<String> fetchPostLinksByUserProfile(String mastodonProfileUrl) {
+  public List<SyndEntry> getPosts(String profileUrl) {
     try {
-      var uri = new URI(format("%s.rss", mastodonProfileUrl));
+      var uri = new URI(format("%s.rss", profileUrl));
       var request = HttpRequest.newBuilder().uri(uri).build();
 
       var response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
       var feed = new SyndFeedInput().build(new XmlReader(response.body()));
 
-      return feed.getEntries().stream().map(entry -> entry.getLink()).toList();
+      return feed.getEntries();
     } catch (Exception e) {
       // todo: use proper logger
       e.printStackTrace();
