@@ -7,24 +7,18 @@ import java.time.Instant;
 public class Post {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(unique = true)
   private String id;
 
-  @Column(nullable = false)
   private String title;
 
-  @Column(nullable = false)
   private String slug;
 
-  @Column(columnDefinition = "TEXT")
   private String summary;
 
-  @Column(columnDefinition = "TEXT")
   private String text;
 
   private Instant date;
 
-  @Column(nullable = false)
   private Boolean visible;
 
   public String getId() {

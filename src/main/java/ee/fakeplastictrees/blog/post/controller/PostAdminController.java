@@ -3,6 +3,7 @@ package ee.fakeplastictrees.blog.post.controller;
 import ee.fakeplastictrees.blog.core.annotation.ProtectedRoute;
 import ee.fakeplastictrees.blog.post.model.PostEditorDto;
 import ee.fakeplastictrees.blog.post.service.PostService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class PostAdminController {
   private final PostService postService;
 
+  @Value("${posts.admin.page.size:100}")
+  private Integer pageSize;
+
   public PostAdminController(PostService postService) {
     this.postService = postService;
   }
@@ -19,7 +23,7 @@ public class PostAdminController {
   @GetMapping({"/posts", "/posts/{pageNumber}"})
   @ProtectedRoute
   public String getPostList(@PathVariable(required = false) Integer pageNumber, Model model) {
-    var page = postService.getEditorPosts(pageNumber == null ? 1 : pageNumber);
+    var page = postService.getEditorPosts(pageNumber == null ? 1 : pageNumber, pageSize);
     model.addAttribute("page", page);
 
     return "admin/post/post_list";

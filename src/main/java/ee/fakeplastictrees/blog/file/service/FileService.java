@@ -90,14 +90,14 @@ public class FileService {
   }
 
   public FilePageDto getEditorFiles(Integer pageNumber) {
-    var pageable = PageRequestFactory.withPage(pageNumber, pageSize, sortBy);
+    var pageable = PageRequestFactory.pageable(pageNumber, pageSize, sortBy);
     var items = fileRepository.findAll(pageable);
 
     return FilePageDtoFactory.from(pageNumber, items);
   }
 
   public FilePageDto getEditorFilesByName(String nameContaining, Integer pageNumber) {
-    var pageable = PageRequestFactory.withPage(pageNumber, pageSize, sortBy);
+    var pageable = PageRequestFactory.pageable(pageNumber, pageSize, sortBy);
     var items = fileRepository.findByOriginalFilenameContainingIgnoreCase(nameContaining, pageable);
 
     return FilePageDtoFactory.from(pageNumber, items);

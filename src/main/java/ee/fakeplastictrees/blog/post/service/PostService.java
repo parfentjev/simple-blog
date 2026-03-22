@@ -1,25 +1,25 @@
 package ee.fakeplastictrees.blog.post.service;
 
+import static ee.fakeplastictrees.blog.core.model.factory.PageRequestFactory.pageable;
+import static ee.fakeplastictrees.blog.post.model.mapper.PostMapper.postToDto;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import ee.fakeplastictrees.blog.core.exception.HTTPNotFoundException;
 import ee.fakeplastictrees.blog.core.model.PageDto;
-import ee.fakeplastictrees.blog.core.model.factory.PageRequestFactory;
 import ee.fakeplastictrees.blog.post.model.PostDto;
 import ee.fakeplastictrees.blog.post.model.PostEditorDto;
 import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
+import ee.fakeplastictrees.blog.post.model.Tag;
 import ee.fakeplastictrees.blog.post.model.mapper.PostMapper;
 import ee.fakeplastictrees.blog.post.repository.PostRepository;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import org.springframework.beans.factory.annotation.Value;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PostService {
   private final PostRepository postRepository;
-
-  @Value("${posts.admin.page.size:100}")
-  private Integer adminPageSize;
 
   private static final String sortBy = "date";
 
@@ -28,8 +28,8 @@ public class PostService {
   }
 
   public PageDto<PostPreviewDto> getPublishedPostsPreview(Integer pageNumber, Integer pageSize) {
-    var pageable = PageRequestFactory.withPage(pageNumber, pageSize, sortBy);
-    var postsPage = postRepository.findByVisible(pageable, true);
+    var pageable = pageable(pageNumber, pageSize, sortBy);
+    var postsPage = postRepository.findVisible(pageable);
 
     return new PageDto<PostPreviewDto>(
         pageNumber,
@@ -38,8 +38,8 @@ public class PostService {
   }
 
   public PageDto<PostDto> getPublishedPostsFull(Integer pageNumber, Integer pageSize) {
-    var pageable = PageRequestFactory.withPage(pageNumber, pageSize, sortBy);
-    var postsPage = postRepository.findByVisible(pageable, true);
+    var pageable = pageable(pageNumber, pageSize, sortBy);
+    var postsPage = postRepository.findVisible(pageable);
 
     return new PageDto<PostDto>(
         pageNumber, postsPage.getTotalPages(), postsPage.get().map(PostMapper::postToDto).toList());
@@ -48,11 +48,11 @@ public class PostService {
   public PostDto getPublishedPost(String id) {
     var post = postRepository.findVisibleById(id).orElseThrow(HTTPNotFoundException::new);
 
-    return PostMapper.postToDto(post);
+    return postToDto(post);
   }
 
-  public PageDto<PostPreviewDto> getEditorPosts(Integer pageNumber) {
-    var pageable = PageRequestFactory.withPage(pageNumber, adminPageSize, sortBy);
+  public PageDto<PostPreviewDto> getEditorPosts(Integer pageNumber, Integer pageSize) {
+    var pageable = pageable(pageNumber, pageSize, sortBy);
     var postsPage = postRepository.findAll(pageable);
 
     return new PageDto<PostPreviewDto>(
@@ -64,7 +64,7 @@ public class PostService {
   public PostDto getEditorPost(String id) {
     var post = postRepository.findById(id).orElseThrow(HTTPNotFoundException::new);
 
-    return PostMapper.postToDto(post);
+    return postToDto(post);
   }
 
   public PostDto createPost(PostEditorDto postEditorDto) {
@@ -72,7 +72,7 @@ public class PostService {
     post.setSlug(encodeTitle(post.getTitle()));
     post.setDate(Instant.now());
 
-    return PostMapper.postToDto(postRepository.save(post));
+    return postToDto(postRepository.save(post));
   }
 
   public PostDto updatePost(PostEditorDto postEditorDto) {
@@ -89,11 +89,16 @@ public class PostService {
     post.setVisible(postEditorDto.visible() != null && postEditorDto.visible());
     post.setDate(date);
 
-    return PostMapper.postToDto(postRepository.save(post));
+    return postToDto(postRepository.save(post));
   }
 
   public void deletePost(String id) {
     postRepository.deleteById(id);
+  }
+
+  public List<Tag> getTags(String postId) {
+    // todo: call PostTagRepository
+    return null;
   }
 
   private String encodeTitle(String title) {
@@ -108,8 +113,8 @@ public class PostService {
             .replaceAll(":", "")
             .replaceAll(",", "")
             .replaceAll("\"", "")
-            .replaceAll("&", "and")
+            .replaceAll("&", "-")
             .toLowerCase(),
-        StandardCharsets.UTF_8);
+        UTF_8);
   }
 }

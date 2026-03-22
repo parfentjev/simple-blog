@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface PostRepository extends CrudRepository<Post, String> {
   Page<Post> findAll(Pageable pageable);
 
-  Page<Post> findByVisible(Pageable pageable, boolean visible);
+  Page<Post> findVisible(Pageable pageable);
 
   @Query(
       value =
@@ -20,6 +20,7 @@ public interface PostRepository extends CrudRepository<Post, String> {
           select * from posts
           where id = :id
           and visible = 1
+          limit 1
           """,
       nativeQuery = true)
   Optional<Post> findVisibleById(String id);
