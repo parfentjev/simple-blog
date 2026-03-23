@@ -30,7 +30,10 @@ public class PostController {
   public String getPostById(
       @PathVariable String postId, @PathVariable(required = false) String slug, Model model) {
     var post = postService.getPublishedPost(postId);
+    var tags = postService.getTags(postId);
+
     model.addAttribute("post", post);
+    model.addAttribute("tags", tags);
 
     return "post/full_post";
   }

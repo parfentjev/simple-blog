@@ -1,21 +1,30 @@
-<!DOCTYPE html>
-<html layout:decorate="~{layout/base}"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title th:text="${post.title}">Post title</title>
-</head>
-<body>
-<div layout:fragment="content">
-  <article class="post">
-    <h1 class="post-title"><a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}" th:text="${post.title}">Post
-      title</a></h1>
-    <div class="post-text" markdown:toHtml="${post.text}" th:if="${post.hasMore}">Post text...</div>
-    <div class="post-text" markdown:toHtml="${post.summary}" th:unless="${post.hasMore}">Post summary...</div>
-    <div>
-      <div class="post-date text-muted" th:text="${#dates.format(post.date(), 'dd.MM.yyyy')}">Post date</div>
+<!doctype html>
+<html
+  layout:decorate="~{layout/base}"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
+    <title th:text="${post.title}">Post title</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <article class="post">
+        <h1 class="post-title">
+          <a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}" th:text="${post.title}">Post title</a>
+        </h1>
+        <div class="post-text" markdown:toHtml="${post.text}" th:if="${post.hasMore}">Post text...</div>
+        <div class="post-text" markdown:toHtml="${post.summary}" th:unless="${post.hasMore}">Post summary...</div>
+        <div>
+          <div class="post-date text-muted" th:text="${#dates.format(post.date(), 'dd.MM.yyyy')}">Post date</div>
+          <!-- todo: add controller for tags
+            <a class="post-tags-item" th:each="tag : ${tags}" th:text="${tag.name}" th:href="@{/tag/{slug}(slug=${tag.slug})}">Tag</a>
+          -->
+          <div class="post-tags text-muted" th:if="${tags}">
+            <span class="post-tags-item" th:each="tag : ${tags}" th:text="${tag.name}">Tag</span>
+          </div>
+        </div>
+      </article>
     </div>
-  </article>
-</div>
-</body>
+  </body>
 </html>

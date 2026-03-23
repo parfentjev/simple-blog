@@ -4,10 +4,16 @@ import ee.fakeplastictrees.blog.post.model.Post;
 import ee.fakeplastictrees.blog.post.model.PostDto;
 import ee.fakeplastictrees.blog.post.model.PostEditorDto;
 import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
+import ee.fakeplastictrees.blog.post.model.PostTagDto;
+import java.util.List;
 import java.util.Optional;
 
 public class PostMapper {
   public static PostPreviewDto postToPreviewDto(Post post) {
+    return postToPreviewDto(post, List.of());
+  }
+
+  public static PostPreviewDto postToPreviewDto(Post post, List<PostTagDto> tags) {
     return new PostPreviewDto(
         post.getId(),
         post.getTitle(),
@@ -15,7 +21,8 @@ public class PostMapper {
         post.getSummary(),
         post.getDate(),
         post.getVisible(),
-        hasMore(post));
+        hasMore(post),
+        tags);
   }
 
   public static PostDto postToDto(Post post) {

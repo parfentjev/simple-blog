@@ -204,17 +204,26 @@ footer div {
   margin: 1rem auto;
 }
 
+.post-read-more {
+  text-align: right;
+  margin: 1rem;
+}
+
 .post-date {
   display: inline-block;
   width: 49%;
   margin: 0;
 }
 
-.post-read-more {
+.post-tags {
   text-align: right;
   display: inline-block;
   width: 49%;
   margin: 0;
+}
+
+.post-tags-item:not(:last-child)::after {
+  content: ", ";
 }
 
 .post img {

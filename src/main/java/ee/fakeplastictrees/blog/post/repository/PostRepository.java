@@ -12,16 +12,23 @@ import org.springframework.stereotype.Repository;
 public interface PostRepository extends CrudRepository<Post, String> {
   Page<Post> findAll(Pageable pageable);
 
-  Page<Post> findVisible(Pageable pageable);
+  @Query(
+      value =
+          """
+          select * from posts p
+          where p.visible = 1
+          """,
+      nativeQuery = true)
+  Page<Post> findPublished(Pageable pageable);
 
   @Query(
       value =
           """
-          select * from posts
-          where id = :id
-          and visible = 1
+          select * from posts p
+          where p.id = :id
+          and p.visible = 1
           limit 1
           """,
       nativeQuery = true)
-  Optional<Post> findVisibleById(String id);
+  Optional<Post> findPublishedById(String id);
 }
