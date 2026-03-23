@@ -15,6 +15,16 @@ public interface PostTagRepository extends CrudRepository<PostTag, PostTagId> {
           """
           select pt.post_id, t.id, t.name, t.slug from post_tags pt
           join tags t on t.id = pt.tag_id
+          where pt.post_id = :postId
+          """,
+      nativeQuery = true)
+  List<PostTagDto> findByPostId(String postId);
+
+  @Query(
+      value =
+          """
+          select pt.post_id, t.id, t.name, t.slug from post_tags pt
+          join tags t on t.id = pt.tag_id
           where pt.post_id in (:postIds)
           """,
       nativeQuery = true)

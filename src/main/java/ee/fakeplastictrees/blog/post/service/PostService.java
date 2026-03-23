@@ -111,7 +111,7 @@ public class PostService {
   }
 
   public List<PostTagDto> getTags(String postId) {
-    return postTagRepository.findByPostIds(List.of(postId));
+    return postTagRepository.findByPostId(postId);
   }
 
   private String encodeTitle(String title) {
