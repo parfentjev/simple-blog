@@ -2,5 +2,4 @@
 .env
 target/
 notes.md
-integration-tests/
-
+pom.xml.versionsBackup
