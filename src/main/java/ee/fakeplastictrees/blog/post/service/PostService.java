@@ -11,26 +11,23 @@ import ee.fakeplastictrees.blog.post.model.Post;
 import ee.fakeplastictrees.blog.post.model.PostDto;
 import ee.fakeplastictrees.blog.post.model.PostEditorDto;
 import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
-import ee.fakeplastictrees.blog.post.model.PostTagDto;
 import ee.fakeplastictrees.blog.post.model.mapper.PostMapper;
 import ee.fakeplastictrees.blog.post.repository.PostRepository;
-import ee.fakeplastictrees.blog.post.repository.PostTagRepository;
 import java.net.URLEncoder;
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PostService {
-  private final PostRepository postRepository;
-  private final PostTagRepository postTagRepository;
-
   private static final String sortBy = "date";
 
-  public PostService(PostRepository postRepository, PostTagRepository postTagRepository) {
+  private final PostRepository postRepository;
+  private final TagService tagService;
+
+  public PostService(PostRepository postRepository, TagService tagService) {
     this.postRepository = postRepository;
-    this.postTagRepository = postTagRepository;
+    this.tagService = tagService;
   }
 
   public PageDto<PostPreviewDto> getPublishedPostsPreview(Integer pageNumber, Integer pageSize) {
@@ -38,9 +35,7 @@ public class PostService {
     var postsPage = postRepository.findPublished(pageable);
 
     var postIds = postsPage.getContent().stream().map(Post::getId).toList();
-    var tags =
-        postTagRepository.findByPostIds(postIds).stream()
-            .collect(Collectors.groupingBy(PostTagDto::postId));
+    var tags = tagService.getByPostId(postIds);
 
     return new PageDto<PostPreviewDto>(
         pageNumber,
@@ -108,10 +103,6 @@ public class PostService {
 
   public void deletePost(String id) {
     postRepository.deleteById(id);
-  }
-
-  public List<PostTagDto> getTags(String postId) {
-    return postTagRepository.findByPostId(postId);
   }
 
   private String encodeTitle(String title) {
