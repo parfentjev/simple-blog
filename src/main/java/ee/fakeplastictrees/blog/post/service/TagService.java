@@ -26,8 +26,9 @@ public class TagService {
     return postTagRepository.findByPostId(postId);
   }
 
-  public Map<String, List<PostTagDto>> getTagsByPostId(List<String> postIds) {
-    return postTagRepository.findByPostId(postIds).stream().collect(groupingBy(PostTagDto::postId));
+  public Map<String, List<PostTagDto>> getTagsByPostIds(List<String> postIds) {
+    return postTagRepository.findByPostIds(postIds).stream()
+        .collect(groupingBy(PostTagDto::postId));
   }
 
   public Page<String> getPostIdsBySlug(String slug, Integer pageNumber) {

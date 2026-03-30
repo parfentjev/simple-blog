@@ -35,7 +35,7 @@ public class PostService {
     var postsPage = postRepository.findPublished(pageable);
 
     var postIds = postsPage.getContent().stream().map(Post::getId).toList();
-    var tags = tagService.getTagsByPostId(postIds);
+    var tags = tagService.getTagsByPostIds(postIds);
 
     return new PageDto<PostPreviewDto>(
         pageNumber,
@@ -47,8 +47,8 @@ public class PostService {
   }
 
   public List<PostPreviewDto> getPublishedPostsPreview(List<String> postIds) {
-    var posts = postRepository.findPublishedById(postIds);
-    var tags = tagService.getTagsByPostId(postIds);
+    var posts = postRepository.findPublishedByIds(postIds);
+    var tags = tagService.getTagsByPostIds(postIds);
 
     return posts.stream()
         .map(post -> postToPreviewDto(post, tags.getOrDefault(post.getId(), List.of())))

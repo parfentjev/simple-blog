@@ -42,5 +42,5 @@ public interface PostRepository extends CrudRepository<Post, String> {
           order by p.date desc
           """,
       nativeQuery = true)
-  List<Post> findPublishedById(List<String> postIds);
+  List<Post> findPublishedByIds(List<String> postIds);
 }

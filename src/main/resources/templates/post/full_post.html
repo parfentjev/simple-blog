@@ -20,7 +20,7 @@
           <div class="post-tags" th:if="${tags}">
             <a
               class="post-tags-item"
-              th:each="tag : ${post.tags}"
+              th:each="tag : ${tags}"
               th:text="${tag.name}"
               th:href="@{/tag/{slug}(slug=${tag.slug})}"
               >Tag</a

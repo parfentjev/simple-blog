@@ -30,7 +30,7 @@ public interface PostTagRepository extends CrudRepository<PostTag, PostTagId> {
           where pt.post_id in (:postIds)
           """,
       nativeQuery = true)
-  List<PostTagDto> findByPostId(List<String> postIds);
+  List<PostTagDto> findByPostIds(List<String> postIds);
 
   @Query(
       value =
@@ -39,6 +39,7 @@ public interface PostTagRepository extends CrudRepository<PostTag, PostTagId> {
           join tags t on t.id = pt.tag_id
           join posts p on p.id = pt.post_id
           where t.slug = :slug
+          and p.visible = 1
           """,
       countQuery =
           """
@@ -46,6 +47,7 @@ public interface PostTagRepository extends CrudRepository<PostTag, PostTagId> {
           join tags t on t.id = pt.tag_id
           join posts p on p.id = pt.post_id
           where t.slug = :slug
+          and p.visible = 1
           """,
       nativeQuery = true)
   Page<String> findPostIdsBySlug(String slug, Pageable pageable);
