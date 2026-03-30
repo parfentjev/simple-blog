@@ -5,19 +5,21 @@
   xmlns:th="http://www.thymeleaf.org"
 >
   <head>
-    <title th:text="${post.title}">Post title</title>
+    <title>Home Page</title>
   </head>
   <body>
     <div layout:fragment="content">
-      <article class="post">
+      <article class="post" th:each="post : ${page.posts}">
         <h1 class="post-title">
           <a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}" th:text="${post.title}">Post title</a>
         </h1>
-        <div class="post-text" markdown:toHtml="${post.text}" th:if="${post.hasMore}">Post text...</div>
-        <div class="post-text" markdown:toHtml="${post.summary}" th:unless="${post.hasMore}">Post summary...</div>
+        <div class="post-text" markdown:toHtml="${post.summary}">Post summary...</div>
+        <div class="post-read-more" th:if="${post.hasMore}">
+          <a th:href="@{/post/{id}/{slug}(id=${post.id},slug=${post.slug})}">Read more...</a>
+        </div>
         <div>
           <div class="post-date text-muted" th:text="${#dates.format(post.date(), 'dd.MM.yyyy')}">Post date</div>
-          <div class="post-tags" th:if="${tags}">
+          <div class="post-tags" th:if="${post.tags}">
             <a
               class="post-tags-item"
               th:each="tag : ${post.tags}"
@@ -28,6 +30,7 @@
           </div>
         </div>
       </article>
+      <div th:replace="~{fragments/paginator :: paginator(${page}, '/posts', null)}"></div>
     </div>
   </body>
 </html>

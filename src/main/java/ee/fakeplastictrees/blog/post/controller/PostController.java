@@ -26,14 +26,14 @@ public class PostController {
     var page = postService.getPublishedPostsPreview(pageNumber == null ? 1 : pageNumber, pageSize);
     model.addAttribute("page", page);
 
-    return "post/index";
+    return "post/preview_list";
   }
 
   @GetMapping({"/post/{postId}", "/post/{postId}/{slug}"})
   public String getPostById(
       @PathVariable String postId, @PathVariable(required = false) String slug, Model model) {
-    var post = postService.getPublishedPost(postId);
-    var tags = tagService.getByPostId(postId);
+    var post = postService.getPublishedPostFull(postId);
+    var tags = tagService.getTagsByPostId(postId);
 
     model.addAttribute("post", post);
     model.addAttribute("tags", tags);

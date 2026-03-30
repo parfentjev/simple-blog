@@ -1,6 +1,7 @@
 package ee.fakeplastictrees.blog.post.repository;
 
 import ee.fakeplastictrees.blog.post.model.Post;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +27,20 @@ public interface PostRepository extends CrudRepository<Post, String> {
       value =
           """
           select * from posts p
-          where p.id = :id
+          where p.id = :postId
           and p.visible = 1
           """,
       nativeQuery = true)
-  Optional<Post> findPublishedById(String id);
+  Optional<Post> findPublishedById(String postId);
+
+  @Query(
+      value =
+          """
+          select * from posts p
+          where p.id in (:postIds)
+          and p.visible = 1
+          order by p.date desc
+          """,
+      nativeQuery = true)
+  List<Post> findPublishedById(List<String> postIds);
 }

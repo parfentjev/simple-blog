@@ -4,6 +4,8 @@ import ee.fakeplastictrees.blog.post.model.PostTag;
 import ee.fakeplastictrees.blog.post.model.PostTag.PostTagId;
 import ee.fakeplastictrees.blog.post.model.PostTagDto;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -28,5 +30,23 @@ public interface PostTagRepository extends CrudRepository<PostTag, PostTagId> {
           where pt.post_id in (:postIds)
           """,
       nativeQuery = true)
-  List<PostTagDto> findByPostIds(List<String> postIds);
+  List<PostTagDto> findByPostId(List<String> postIds);
+
+  @Query(
+      value =
+          """
+          select pt.post_id from post_tags pt
+          join tags t on t.id = pt.tag_id
+          join posts p on p.id = pt.post_id
+          where t.slug = :slug
+          """,
+      countQuery =
+          """
+          select count(*) from post_tags pt
+          join tags t on t.id = pt.tag_id
+          join posts p on p.id = pt.post_id
+          where t.slug = :slug
+          """,
+      nativeQuery = true)
+  Page<String> findPostIdsBySlug(String slug, Pageable pageable);
 }

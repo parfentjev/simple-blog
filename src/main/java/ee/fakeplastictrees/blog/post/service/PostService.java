@@ -35,7 +35,7 @@ public class PostService {
     var postsPage = postRepository.findPublished(pageable);
 
     var postIds = postsPage.getContent().stream().map(Post::getId).toList();
-    var tags = tagService.getByPostId(postIds);
+    var tags = tagService.getTagsByPostId(postIds);
 
     return new PageDto<PostPreviewDto>(
         pageNumber,
@@ -46,6 +46,15 @@ public class PostService {
             .toList());
   }
 
+  public List<PostPreviewDto> getPublishedPostsPreview(List<String> postIds) {
+    var posts = postRepository.findPublishedById(postIds);
+    var tags = tagService.getTagsByPostId(postIds);
+
+    return posts.stream()
+        .map(post -> postToPreviewDto(post, tags.getOrDefault(post.getId(), List.of())))
+        .toList();
+  }
+
   public PageDto<PostDto> getPublishedPostsFull(Integer pageNumber, Integer pageSize) {
     var pageable = pageable(pageNumber, pageSize, sortBy);
     var postsPage = postRepository.findPublished(pageable);
@@ -54,8 +63,8 @@ public class PostService {
         pageNumber, postsPage.getTotalPages(), postsPage.get().map(PostMapper::postToDto).toList());
   }
 
-  public PostDto getPublishedPost(String id) {
-    var post = postRepository.findPublishedById(id).orElseThrow(HTTPNotFoundException::new);
+  public PostDto getPublishedPostFull(String postId) {
+    var post = postRepository.findPublishedById(postId).orElseThrow(HTTPNotFoundException::new);
 
     return postToDto(post);
   }
