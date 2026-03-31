@@ -36,4 +36,12 @@ public class TagService {
 
     return postTagRepository.findPostIdsBySlug(slug, pageable);
   }
+
+  public void attach(String postId, String tagId) {
+    postTagRepository.attach(postId, tagId);
+  }
+
+  public void detach(String postId, String tagId) {
+    postTagRepository.detach(postId, tagId);
+  }
 }
