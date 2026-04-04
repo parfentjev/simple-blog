@@ -22,11 +22,10 @@ public class ErrorLoggingFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-
     try {
       filterChain.doFilter(request, response);
     } catch (Exception e) {
-      log(Level.ERROR, "uncaught exception", null, request);
+      log(Level.ERROR, "uncaught exception", null, request, e);
       throw e;
     }
 
@@ -34,24 +33,26 @@ public class ErrorLoggingFilter extends OncePerRequestFilter {
     if (status < 400) {
       return;
     } else if (status >= 500) {
-      log(Level.ERROR, "server error", status, request);
+      log(Level.ERROR, "server error", status, request, null);
     } else if (status != 404) {
-      log(Level.WARN, "client error", status, request);
+      log(Level.WARN, "client error", status, request, null);
     }
   }
 
-  private void log(Level level, String description, Integer status, HttpServletRequest request) {
+  private void log(
+      Level level, String description, Integer status, HttpServletRequest request, Exception e) {
     logger
         .atLevel(level)
         .log(
-            "{}: status '{}'; uri: '{} {}'; ip: '{}'; user-agent: '{}'; query: '{}'",
+            "{}: status '{}'; uri: '{} {}'; ip: '{}'; user-agent: '{}'; query: '{}', exception: {}",
             description,
             status,
             request.getMethod(),
             request.getRequestURI(),
             getIp(request),
             request.getHeader("User-Agent"),
-            request.getQueryString());
+            request.getQueryString(),
+            e);
   }
 
   private String getIp(HttpServletRequest request) {

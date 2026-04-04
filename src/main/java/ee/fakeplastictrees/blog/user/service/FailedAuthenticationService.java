@@ -1,12 +1,12 @@
 package ee.fakeplastictrees.blog.user.service;
 
+import static java.util.Optional.ofNullable;
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class FailedAuthenticationService {
     if (cache == null) {
       cache =
           CacheBuilder.newBuilder()
-              .expireAfterWrite(timeoutDuration, TimeUnit.MINUTES)
+              .expireAfterWrite(timeoutDuration, MINUTES)
               .build(
                   new CacheLoader<>() {
                     @Override
@@ -42,14 +42,15 @@ public class FailedAuthenticationService {
     return cache;
   }
 
-  public void consume(String key) {
-    var attempts = new AtomicInteger(0);
-    Optional.ofNullable(getCache().getIfPresent(key)).ifPresent(attempts::set);
-    getCache().put(key, attempts.incrementAndGet());
+  public void consume(String clientIdentifier) {
+    var authAttempts = ofNullable(getCache().getIfPresent(clientIdentifier)).orElse(0);
+    authAttempts++;
+
+    getCache().put(clientIdentifier, authAttempts);
   }
 
   public boolean isBlocked() {
-    return Optional.ofNullable(getCache().getIfPresent(getKey())).orElse(0) >= maxAttempts;
+    return ofNullable(getCache().getIfPresent(getKey())).orElse(0) >= maxAttempts;
   }
 
   private String getKey() {

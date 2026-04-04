@@ -1,8 +1,9 @@
 package ee.fakeplastictrees.blog.user.service;
 
-import ee.fakeplastictrees.blog.core.exception.HTTPNotFoundException;
 import ee.fakeplastictrees.blog.user.model.UserRole;
 import ee.fakeplastictrees.blog.user.repository.UserRepository;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,12 +24,12 @@ public class ExtendedUserDetailsService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     if (failedAuthenticationService.isBlocked()) {
-      throw new HTTPNotFoundException();
+      throw new LockedException("Client is blocked.");
     }
 
     var user = userRepository.findByUsername(username);
     if (user.isEmpty() || !user.get().getActive()) {
-      throw new HTTPNotFoundException();
+      throw new BadCredentialsException("Bad credentials.");
     }
 
     return org.springframework.security.core.userdetails.User.withUsername(user.get().getUsername())
