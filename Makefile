@@ -1,7 +1,7 @@
 .PHONY: dev versions
 
 dev:
-	export $(cat .env | xargs)
+	export $(cat .env | xargs) > /dev/null
 	mvn spring-boot:run
 
 versions:
