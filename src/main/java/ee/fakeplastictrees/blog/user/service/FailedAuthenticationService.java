@@ -7,11 +7,15 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FailedAuthenticationService {
+  private static final Logger logger = LoggerFactory.getLogger(FailedAuthenticationService.class);
+
   private static LoadingCache<String, Integer> cache;
   private final HttpServletRequest request;
 
@@ -50,14 +54,19 @@ public class FailedAuthenticationService {
   }
 
   public boolean isBlocked() {
-    return ofNullable(getCache().getIfPresent(getKey())).orElse(0) >= maxAttempts;
+    return ofNullable(getCache().getIfPresent(getIdentifier())).orElse(0) >= maxAttempts;
   }
 
-  private String getKey() {
-    final var xfHeader = request.getHeader("X-Forwarded-For");
-    if (xfHeader != null) {
-      return xfHeader.split(",")[0];
+  private String getIdentifier() {
+    var realIp = request.getHeader("X-Real-IP");
+    logger.info("X-Real-IP: {}", realIp);
+
+    if (realIp != null && !realIp.isBlank()) {
+      return realIp;
     }
+
+    var remoteAddr = request.getRemoteAddr();
+    logger.info("X-Real-IP is missing, falling back to remoteAddr: {}", remoteAddr);
 
     return request.getRemoteAddr();
   }
