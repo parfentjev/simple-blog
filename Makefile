@@ -1,8 +1,4 @@
-.PHONY: dev versions
-
-dev:
-	export $(cat .env | xargs) > /dev/null
-	mvn spring-boot:run
+.PHONY: versions
 
 versions:
 	mvn versions:use-next-releases

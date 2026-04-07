@@ -10,33 +10,34 @@
         <h1>Post Editor</h1>
       </div>
       <details>
-        <summary>Configuration</summary>
-        <div class="post-configuration">
-          <h2>Core</h2>
-          <input id="visible" name="visible" th:checked="${post.visible}" type="checkbox" />
-          <label for="visible">Post is visible</label>
-          <input id="updateDate" name="updateDate" type="checkbox" />
-          <label for="updateDate">Update date</label>
-          <h2>Tags</h2>
-          <div th:if="${tags}">
-            <form method="POST" th:action="@{/admin/tag/detach}">
-              <input name="post_id" type="hidden" th:value="${post.id}" />
-              <button
-                class="primary-button"
-                title="Detach"
-                name="tag_id"
-                th:each="tag : ${tags}"
-                th:text="${tag.name}"
-                th:value="${tag.id}"
-              >
-                Tag
-              </button>
-            </form>
-          </div>
-          <!-- todo: add a form to attach or create and attach a tag -->
+        <summary>Tags</summary>
+        <div class="post-configuration" th:if="${tags}">
+          <form method="POST" th:action="@{/admin/tag/detach}">
+            <input name="post_id" type="hidden" th:value="${post.id}" />
+            <button
+              class="primary-button"
+              title="Detach"
+              name="tag_id"
+              th:each="tag : ${tags}"
+              th:text="${tag.name}"
+              th:value="${tag.id}"
+            >
+              Tag
+            </button>
+          </form>
         </div>
+        <!-- todo: add a form to attach or create and attach a tag -->
       </details>
       <form class="editor-form" method="POST" th:action="@{/admin/post/{id}(id=${post.id})}">
+        <details>
+          <summary>Options</summary>
+          <div class="post-configuration">
+            <input id="visible" name="visible" th:checked="${post.visible}" type="checkbox" />
+            <label for="visible">Post is visible</label>
+            <input id="updateDate" name="updateDate" type="checkbox" />
+            <label for="updateDate">Update date</label>
+          </div>
+        </details>
         <input name="id" required th:value="${post.id}" type="hidden" />
         <div>
           <input autocomplete="off" name="title" placeholder="title" required th:value="${post.title}" type="text" />
