@@ -1,6 +1,7 @@
 package ee.fakeplastictrees.blog.post.controller;
 
 import ee.fakeplastictrees.blog.core.annotation.ProtectedRoute;
+import ee.fakeplastictrees.blog.core.exception.HTTPNotFoundException;
 import ee.fakeplastictrees.blog.post.service.TagService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,13 @@ public class TagAdminController {
   @PostMapping("/tag/attach")
   @ProtectedRoute
   public String attachTag(
-      @RequestParam("post_id") String postId, @RequestParam("tag_id") String tagId) {
-    tagService.attach(postId, tagId);
+      @RequestParam("post_id") String postId, @RequestParam("tag_name") String tagName) {
+    var tag = tagService.getTagByName(tagName);
+    if (tag.isEmpty()) {
+      throw new HTTPNotFoundException("todo: suggest to create it...");
+    }
+
+    tagService.attach(postId, tag.get().id());
 
     return "redirect:/admin/post/" + postId;
   }

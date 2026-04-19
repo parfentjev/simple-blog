@@ -11,6 +11,13 @@
       </div>
       <details>
         <summary>Tags</summary>
+        <div class="post-configuration">
+          <form method="POST" th:action="@{/admin/tag/attach}">
+            <input name="post_id" type="hidden" th:value="${post.id}" />
+            <input name="tag_name" type="text" placeholder="Tag..." required />
+            <button class="primary-button" type="submit">Attach</button>
+          </form>
+        </div>
         <div class="post-configuration" th:if="${tags}">
           <form method="POST" th:action="@{/admin/tag/detach}">
             <input name="post_id" type="hidden" th:value="${post.id}" />
@@ -26,7 +33,6 @@
             </button>
           </form>
         </div>
-        <!-- todo: add a form to attach or create and attach a tag -->
       </details>
       <form class="editor-form" method="POST" th:action="@{/admin/post/{id}(id=${post.id})}">
         <details>
@@ -40,13 +46,29 @@
         </details>
         <input name="id" required th:value="${post.id}" type="hidden" />
         <div>
-          <input autocomplete="off" name="title" placeholder="title" required th:value="${post.title}" type="text" />
+          <input
+            class="width-100-p"
+            autocomplete="off"
+            name="title"
+            placeholder="title"
+            required
+            th:value="${post.title}"
+            type="text"
+          />
         </div>
         <div>
-          <textarea name="summary" placeholder="summary" required rows="5" th:text="${post.summary}"></textarea>
+          <textarea
+            class="width-100-p"
+            name="summary"
+            placeholder="summary"
+            required
+            rows="5"
+            th:text="${post.summary}"
+          ></textarea>
         </div>
         <div>
-          <textarea name="text" placeholder="text" rows="30" th:text="${post.text}"></textarea>
+          width: 50%
+          <textarea class="width-100-p" name="text" placeholder="text" rows="30" th:text="${post.text}"></textarea>
         </div>
         <div class="text-center">
           <button class="primary-button" type="submit">Save</button>
