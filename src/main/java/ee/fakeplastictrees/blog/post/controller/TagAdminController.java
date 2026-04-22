@@ -20,13 +20,19 @@ public class TagAdminController {
   @PostMapping("/tag/attach")
   @ProtectedRoute
   public String attachTag(
-      @RequestParam("post_id") String postId, @RequestParam("tag_name") String tagName) {
-    var tag = tagService.getTagByName(tagName);
-    if (tag.isEmpty()) {
-      throw new HTTPNotFoundException("todo: suggest to create it...");
-    }
+      @RequestParam("post_id") String postId,
+      @RequestParam(name = "tag_id", required = false) String tagId,
+      @RequestParam(name = "tag_name", required = false) String tagName) {
+    if (tagId != null && !tagId.isBlank()) {
+      tagService.attach(postId, tagId);
+    } else if (tagName != null && !tagName.isBlank()) {
+      var tag = tagService.getTagByName(tagName);
+      if (tag.isEmpty()) {
+        throw new HTTPNotFoundException("todo: suggest to create it...");
+      }
 
-    tagService.attach(postId, tag.get().id());
+      tagService.attach(postId, tag.get().id());
+    }
 
     return "redirect:/admin/post/" + postId;
   }

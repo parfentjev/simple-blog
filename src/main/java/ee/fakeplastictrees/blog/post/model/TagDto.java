@@ -1,3 +1,3 @@
 package ee.fakeplastictrees.blog.post.model;
 
-public record TagDto(String id) {}
+public record TagDto(String id, String name) {}

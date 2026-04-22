@@ -5,6 +5,6 @@ import ee.fakeplastictrees.blog.post.model.TagDto;
 
 public class TagMapper {
   public static TagDto tagToTagDto(Tag tag) {
-    return new TagDto(tag.getId());
+    return new TagDto(tag.getId(), tag.getName());
   }
 }

@@ -3,6 +3,7 @@ package ee.fakeplastictrees.blog.post.repository;
 import ee.fakeplastictrees.blog.post.model.PostTag;
 import ee.fakeplastictrees.blog.post.model.PostTag.PostTagId;
 import ee.fakeplastictrees.blog.post.model.PostTagDto;
+import ee.fakeplastictrees.blog.post.model.Tag;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -80,4 +81,20 @@ public interface PostTagRepository extends CrudRepository<PostTag, PostTagId> {
   @Modifying
   @Transactional
   void detach(String postId, String tagId);
+
+  @Query(
+      value =
+          """
+          select t.id, t.name, t.slug, count(*) as score
+          from post_tags pt1
+          join post_tags pt2 on pt1.post_id = pt2.post_id
+          join tags t on t.id = pt2.tag_id
+          where pt1.tag_id in (:attachedTagIds)
+          and pt2.tag_id not in (:attachedTagIds)
+          group by t.id
+          order by score desc
+          limit 10;
+          """,
+      nativeQuery = true)
+  List<Tag> findRecommendedTags(List<String> attachedTagIds);
 }

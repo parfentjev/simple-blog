@@ -2,6 +2,7 @@ package ee.fakeplastictrees.blog.post.controller;
 
 import ee.fakeplastictrees.blog.core.annotation.ProtectedRoute;
 import ee.fakeplastictrees.blog.post.model.PostEditorDto;
+import ee.fakeplastictrees.blog.post.model.PostTagDto;
 import ee.fakeplastictrees.blog.post.service.PostService;
 import ee.fakeplastictrees.blog.post.service.TagService;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,9 +42,11 @@ public class PostAdminController {
   public String getPostById(@PathVariable String postId, Model model) {
     var post = postService.getEditorPost(postId);
     var tags = tagService.getTagsByPostId(postId);
+    var recommendedTags = tagService.getRecommendedTags(tags.stream().map(PostTagDto::id).toList());
 
     model.addAttribute("post", post);
     model.addAttribute("tags", tags);
+    model.addAttribute("recommendedTags", recommendedTags);
 
     return "admin/post/post_editor";
   }

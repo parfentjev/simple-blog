@@ -13,13 +13,31 @@
         <summary>Tags</summary>
         <div class="post-configuration">
           <form method="POST" th:action="@{/admin/tag/attach}">
+            <p>Attach tag</p>
             <input name="post_id" type="hidden" th:value="${post.id}" />
             <input name="tag_name" type="text" placeholder="Tag..." required />
             <button class="primary-button" type="submit">Attach</button>
           </form>
         </div>
+        <div class="post-configuration">
+          <form method="POST" th:action="@{/admin/tag/attach}">
+            <p>Recommended tags</p>
+            <input name="post_id" type="hidden" th:value="${post.id}" />
+            <button
+              class="primary-button"
+              title="Attach"
+              name="tag_id"
+              th:each="tag : ${recommendedTags}"
+              th:text="${tag.name}"
+              th:value="${tag.id}"
+            >
+              Tag
+            </button>
+          </form>
+        </div>
         <div class="post-configuration" th:if="${tags}">
           <form method="POST" th:action="@{/admin/tag/detach}">
+            <p>Attached tags</p>
             <input name="post_id" type="hidden" th:value="${post.id}" />
             <button
               class="primary-button"
@@ -67,7 +85,6 @@
           ></textarea>
         </div>
         <div>
-          width: 50%
           <textarea class="width-100-p" name="text" placeholder="text" rows="30" th:text="${post.text}"></textarea>
         </div>
         <div class="text-center">

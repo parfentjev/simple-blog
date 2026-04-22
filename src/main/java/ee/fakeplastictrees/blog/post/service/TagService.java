@@ -47,6 +47,16 @@ public class TagService {
     return tagRepository.findByName(name).map(TagMapper::tagToTagDto);
   }
 
+  public List<TagDto> getRecommendedTags(List<String> attachedTagIds) {
+    if (attachedTagIds == null || attachedTagIds.isEmpty()) {
+      return List.of();
+    }
+
+    return postTagRepository.findRecommendedTags(attachedTagIds).stream()
+        .map(TagMapper::tagToTagDto)
+        .toList();
+  }
+
   public void attach(String postId, String tagId) {
     postTagRepository.attach(postId, tagId);
   }
