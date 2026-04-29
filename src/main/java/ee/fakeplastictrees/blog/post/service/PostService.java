@@ -5,6 +5,12 @@ import static ee.fakeplastictrees.blog.post.model.mapper.PostMapper.postToDto;
 import static ee.fakeplastictrees.blog.post.model.mapper.PostMapper.postToPreviewDto;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import java.net.URLEncoder;
+import java.time.Instant;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import ee.fakeplastictrees.blog.core.exception.HTTPNotFoundException;
 import ee.fakeplastictrees.blog.core.model.PageDto;
 import ee.fakeplastictrees.blog.post.model.Post;
@@ -13,10 +19,6 @@ import ee.fakeplastictrees.blog.post.model.PostEditorDto;
 import ee.fakeplastictrees.blog.post.model.PostPreviewDto;
 import ee.fakeplastictrees.blog.post.model.mapper.PostMapper;
 import ee.fakeplastictrees.blog.post.repository.PostRepository;
-import java.net.URLEncoder;
-import java.time.Instant;
-import java.util.List;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PostService {
@@ -102,8 +104,8 @@ public class PostService {
             : post.getDate();
 
     post.setTitle(postEditorDto.title());
-    post.setSummary(postEditorDto.summary());
-    post.setText(postEditorDto.text());
+    post.setPreviewText(postEditorDto.summary());
+    post.setFullText(postEditorDto.text());
     post.setVisible(postEditorDto.visible() != null && postEditorDto.visible());
     post.setDate(date);
 

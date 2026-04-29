@@ -3,3 +3,4 @@
 target/
 notes.md
 pom.xml.versionsBackup
+helm/secrets.yaml

@@ -17,9 +17,9 @@ public interface PostRepository extends CrudRepository<Post, String> {
       value =
           """
           select * from posts p
-          where p.visible = 1
+          where p.visible = true
           """,
-      countQuery = "select count(*) from posts p where p.visible = 1",
+      countQuery = "select count(*) from posts p where p.visible = true",
       nativeQuery = true)
   Page<Post> findPublished(Pageable pageable);
 
@@ -28,7 +28,7 @@ public interface PostRepository extends CrudRepository<Post, String> {
           """
           select * from posts p
           where p.id = :postId
-          and p.visible = 1
+          and p.visible = true
           """,
       nativeQuery = true)
   Optional<Post> findPublishedById(String postId);
@@ -38,7 +38,7 @@ public interface PostRepository extends CrudRepository<Post, String> {
           """
           select * from posts p
           where p.id in (:postIds)
-          and p.visible = 1
+          and p.visible = true
           order by p.date desc
           """,
       nativeQuery = true)

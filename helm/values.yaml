@@ -1,0 +1,19 @@
+namespace: simple-blog
+
+image:
+  repository: ghcr.io/parfentjev/simple-blog
+
+deployment:
+  replicaCount: 1
+  strategy: RollingUpdate
+  secretRef: simple-blog-secrets
+
+service:
+  port: 80
+  targetPort: 8080
+
+ingress:
+  host: "fakeplastictrees.ee"
+
+media:
+  storage: 5Gi

@@ -1,0 +1,16 @@
+[tools]
+java = "25"
+maven = "3"
+helm = "4.1.4"
+sops = "3.12.2"
+
+[env]
+_.file = ".env"
+
+[tasks."start"]
+run = "mvn spring-boot:run"
+description = "Launch the service"
+
+[tasks."versions"]
+run = "mvn versions:use-next-releases"
+description = "Update dependencies"

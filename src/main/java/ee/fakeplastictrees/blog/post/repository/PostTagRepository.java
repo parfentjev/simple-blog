@@ -1,10 +1,7 @@
 package ee.fakeplastictrees.blog.post.repository;
 
-import ee.fakeplastictrees.blog.post.model.PostTag;
-import ee.fakeplastictrees.blog.post.model.PostTag.PostTagId;
-import ee.fakeplastictrees.blog.post.model.PostTagDto;
-import ee.fakeplastictrees.blog.post.model.Tag;
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,6 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import ee.fakeplastictrees.blog.post.model.PostTag;
+import ee.fakeplastictrees.blog.post.model.PostTag.PostTagId;
+import ee.fakeplastictrees.blog.post.model.PostTagDto;
+import ee.fakeplastictrees.blog.post.model.Tag;
 
 @Repository
 public interface PostTagRepository extends CrudRepository<PostTag, PostTagId> {
@@ -42,7 +44,7 @@ public interface PostTagRepository extends CrudRepository<PostTag, PostTagId> {
           join tags t on t.id = pt.tag_id
           join posts p on p.id = pt.post_id
           where t.slug = :slug
-          and p.visible = 1
+          and p.visible = true
           """,
       countQuery =
           """
@@ -50,7 +52,7 @@ public interface PostTagRepository extends CrudRepository<PostTag, PostTagId> {
           join tags t on t.id = pt.tag_id
           join posts p on p.id = pt.post_id
           where t.slug = :slug
-          and p.visible = 1
+          and p.visible = true
           """,
       nativeQuery = true)
   Page<String> findPostIdsBySlug(String slug, Pageable pageable);

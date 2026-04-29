@@ -1,7 +1,11 @@
 package ee.fakeplastictrees.blog.post.model;
 
-import jakarta.persistence.*;
 import java.time.Instant;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity(name = "posts")
 public class Post {
@@ -11,11 +15,11 @@ public class Post {
 
   private String title;
 
+  private String previewText;
+
+  private String fullText;
+
   private String slug;
-
-  private String summary;
-
-  private String text;
 
   private Instant date;
 
@@ -45,20 +49,20 @@ public class Post {
     this.slug = slug;
   }
 
-  public String getSummary() {
-    return summary;
+  public String getPreviewText() {
+    return previewText;
   }
 
-  public void setSummary(String summary) {
-    this.summary = summary;
+  public void setPreviewText(String summary) {
+    this.previewText = summary;
   }
 
-  public String getText() {
-    return text;
+  public String getFullText() {
+    return fullText;
   }
 
-  public void setText(String text) {
-    this.text = text;
+  public void setFullText(String text) {
+    this.fullText = text;
   }
 
   public Instant getDate() {

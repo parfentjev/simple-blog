@@ -1,12 +1,12 @@
 package ee.fakeplastictrees.blog.user.service;
 
 import static java.util.Optional.ofNullable;
-import static java.util.concurrent.TimeUnit.MINUTES;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +51,7 @@ public class FailedAuthenticationService {
     if (cache == null) {
       cache =
           CacheBuilder.newBuilder()
-              .expireAfterWrite(timeoutDuration, MINUTES)
+              .expireAfterWrite(Duration.ofMinutes(timeoutDuration))
               .build(
                   new CacheLoader<>() {
                     @Override
