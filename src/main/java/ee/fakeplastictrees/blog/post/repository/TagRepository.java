@@ -12,7 +12,7 @@ public interface TagRepository extends CrudRepository<Tag, String> {
       value =
           """
           select * from tags
-          where name = :name
+          where lower(name) = lower(:name)
           limit 1
           """,
       nativeQuery = true)
